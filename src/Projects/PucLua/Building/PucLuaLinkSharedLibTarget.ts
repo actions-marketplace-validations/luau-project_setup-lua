@@ -133,12 +133,6 @@ export class PucLuaLinkSharedLibTarget implements ITarget {
                 }
                 else if (process.platform === 'darwin')
                 {
-                    linker.addFlag("-install_name");
-                    linker.addFlag(join(this.project.getInstallLibDir(), libBaseName));
-                    linker.addFlag("-compatibility_version");
-                    linker.addFlag(version.getString());
-                    linker.addFlag("-current_version");
-                    linker.addFlag(version.getString());
                     linker.addLinkLibrary("readline");
                 }
                 else if (process.platform === "sunos") {

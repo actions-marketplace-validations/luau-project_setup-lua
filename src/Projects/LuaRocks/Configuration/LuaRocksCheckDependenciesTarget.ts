@@ -1,4 +1,3 @@
-import { executeProcess } from "../../../Util/ExecuteProcess";
 import { findProgram } from "../../../Util/FindProgram";
 import { sequentialPromises } from "../../../Util/SequentialPromises";
 import { IProject } from "../../IProject";
@@ -35,7 +34,9 @@ export class LuaRocksCheckDependenciesTarget implements ITarget {
                 resolve();
             }
             else {
-                sequentialPromises([
+                sequentialPromises(process.platform === 'darwin' ? [
+                    () => findProgram("unzip")
+                ] : [
                     () => findProgram("unzip"),
                     () => findProgram("gmake")
                 ])
