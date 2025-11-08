@@ -79,9 +79,22 @@ export class GccLinker implements ILinker, IWin32ImportLibraryDecorator {
                 const args: string[] = [];
                 const arrays: IToolchainCompositeArgument[][] = [];
                 if (this.outputMode && this.outputMode === "shared") {
-                    arrays.push(
-                        [new ToolchainCompositeArgument([new ToolchainRawArgument("-shared")])]
-                    );
+                    if (process.platform === 'darwin') {
+                        arrays.push(
+                            [new ToolchainCompositeArgument([new ToolchainRawArgument("-bundle")])]
+                        );
+                        arrays.push(
+                            [new ToolchainCompositeArgument([new ToolchainRawArgument("-undefined"), new ToolchainRawArgument("dynamic_lookup")])]
+                        );
+                        arrays.push(
+                            [new ToolchainCompositeArgument([new ToolchainRawArgument("-all_load")])]
+                        );
+                    }
+                    else {
+                        arrays.push(
+                            [new ToolchainCompositeArgument([new ToolchainRawArgument("-shared")])]
+                        );
+                    }
                 }
                 if (this.outImplib) {
                     arrays.push([this.outImplib]);
