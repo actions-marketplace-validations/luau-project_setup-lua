@@ -108,7 +108,8 @@ export class PucLuaLinkSharedLibTarget implements ITarget {
             }
             else
             {
-                const libBaseName = `lib${libName}.so`;
+                const libExt = process.platform === 'darwin' ? 'dylib' : 'so';
+                const libBaseName = `lib${libName}.${libExt}`;
                 const libraryPath = join(this.project.getSharedLibBuildDir(), libBaseName);
                 linker.setOutputFile(libraryPath);
                 linker.setOutputMode("shared");
@@ -132,6 +133,12 @@ export class PucLuaLinkSharedLibTarget implements ITarget {
                 }
                 else if (process.platform === 'darwin')
                 {
+                    linker.addFlag("-install_name");
+                    linker.addFlag(join(this.project.getInstallLibDir(), libBaseName));
+                    linker.addFlag("-compatibility_version");
+                    linker.addFlag(version.getString());
+                    linker.addFlag("-current_version");
+                    linker.addFlag(version.getString());
                     linker.addLinkLibrary("readline");
                 }
                 else if (process.platform === "sunos") {
@@ -154,23 +161,29 @@ export class PucLuaLinkSharedLibTarget implements ITarget {
                 }
                 linker.execute()
                     .then(() => {
-                        if (isGccLike) {
-                            const gccLikeToolchain = <IGccLikeToolchain>toolchain;
-                            const strip = gccLikeToolchain.getStrip();
-                            strip.reset();
-                            strip.addStripUnneeded();
-                            strip.setInputFile(libraryPath);
-                            strip.execute()
-                                .then(() => {
-                                    this.sharedLibrary = libraryPath;
-                                    resolve();
-                                })
-                                .catch(reject);
-                        }
-                        else
-                        {
+                        if (process.platform === 'darwin') {
                             this.sharedLibrary = libraryPath;
                             resolve();
+                        }
+                        else {
+                            if (isGccLike) {
+                                const gccLikeToolchain = <IGccLikeToolchain>toolchain;
+                                const strip = gccLikeToolchain.getStrip();
+                                strip.reset();
+                                strip.addStripUnneeded();
+                                strip.setInputFile(libraryPath);
+                                strip.execute()
+                                    .then(() => {
+                                        this.sharedLibrary = libraryPath;
+                                        resolve();
+                                    })
+                                    .catch(reject);
+                            }
+                            else
+                            {
+                                this.sharedLibrary = libraryPath;
+                                resolve();
+                            }
                         }
                     })
                     .catch(reject);
