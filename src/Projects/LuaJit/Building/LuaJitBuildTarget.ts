@@ -2,7 +2,7 @@ import { mkdtemp, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { EOL } from "node:os";
 import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
-import { executeProcess } from "../../../Util/ExecuteProcess";
+import { executeProcess, getStdOutFromProcessExecution } from "../../../Util/ExecuteProcess";
 import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { LuaJitSourcesInfo } from "../Configuration/LuaJitSourcesInfo";
@@ -106,14 +106,14 @@ export class LuaJitBuildTarget implements ITarget {
                 resolve(this.parseMacOSXDeploymentTarget(deploymentTarget));
             }
             else {
-                executeProcess("sw_vers", {
+                getStdOutFromProcessExecution("sw_vers", {
                     args: ["-productVersion"],
-                    verbose: true,
-                    stdout: defaultStdOutHandler
+                    verbose: true
                 })
-                    .then(() => {
-                        if (deploymentTarget) {
-                            resolve(this.parseMacOSXDeploymentTarget(deploymentTarget));
+                    .then(result => {
+                        if (result.lines.length > 0) {
+                            deploymentTarget = result.lines[0];
+                            resolve(this.parseMacOSXDeploymentTarget(deploymentTarget))
                         }
                         else {
                             reject(new Error("Internal error: Unable to set MACOSX_DEPLOYMENT_TARGET"));
