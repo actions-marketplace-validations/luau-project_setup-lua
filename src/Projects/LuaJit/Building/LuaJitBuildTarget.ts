@@ -140,7 +140,7 @@ export class LuaJitBuildTarget implements ITarget {
                 const _importLibrary = join(luaJitSrcDir,
                     isGccLike ?
                         `libluajit-${luaJitVersion.getABI()}.dll.a`:
-                        "luajit.lib"
+                        "lua51.lib"
                 );
                 const filesToCheck: string[] = [
                     _sharedLibrary,

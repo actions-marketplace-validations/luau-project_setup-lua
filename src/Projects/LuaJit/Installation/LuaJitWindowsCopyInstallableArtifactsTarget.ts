@@ -6,7 +6,6 @@ import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitWindowsCreateInstallationDirectoriesTarget } from "./LuaJitWindowsCreateInstallationDirectoriesTarget";
 import { sequentialPromises } from "../../../Util/SequentialPromises";
 import { LuaJitPostInstallTarget } from "./LuaJitPostInstallTarget";
-import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 
 export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
     private project: LuaJitProject;
@@ -74,21 +73,9 @@ export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
                 const libDir = this.project.getInstallLibDir();
                 const impLib = join(libDir, basename(builtImpLib));
 
-                if (process.platform !== 'win32' || isGccLikeToolchain(this.project.getToolchain())) {
-                    cp(builtImpLib, impLib, { force: true })
-                        .then(resolve)
-                        .catch(reject);
-                }
-                else {
-                    cp(builtImpLib, impLib, { force: true })
-                        .then(() => {
-                            const luaLikeImpLib = join(libDir, "lua51.lib");
-                            cp(builtImpLib, luaLikeImpLib, { force: true })
-                                .then(resolve)
-                                .catch(reject);
-                        })
-                        .catch(reject);
-                }
+                cp(builtImpLib, impLib, { force: true })
+                    .then(resolve)
+                    .catch(reject);
             }
             else {
                 resolve();
