@@ -6,6 +6,7 @@ import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitWindowsCreateInstallationDirectoriesTarget } from "./LuaJitWindowsCreateInstallationDirectoriesTarget";
 import { sequentialPromises } from "../../../Util/SequentialPromises";
 import { LuaJitPostInstallTarget } from "./LuaJitPostInstallTarget";
+import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 
 export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
     private project: LuaJitProject;
@@ -60,7 +61,7 @@ export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
         return new Promise<void>((resolve, reject) => {
             const builtSharedLib = this.parent.getBuildInfo().getSharedLibrary();
             const sharedLib = join(this.project.getInstallBinDir(), basename(builtSharedLib));
-    
+
             cp(builtSharedLib, sharedLib, { force: true })
                 .then(resolve)
                 .catch(reject);
@@ -72,10 +73,22 @@ export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
             if (builtImpLib) {
                 const libDir = this.project.getInstallLibDir();
                 const impLib = join(libDir, basename(builtImpLib));
-        
-                cp(builtImpLib, impLib, { force: true })
-                    .then(resolve)
-                    .catch(reject);
+
+                if (process.platform !== 'win32' || isGccLikeToolchain(this.project.getToolchain())) {
+                    cp(builtImpLib, impLib, { force: true })
+                        .then(resolve)
+                        .catch(reject);
+                }
+                else {
+                    cp(builtImpLib, impLib, { force: true })
+                        .then(() => {
+                            const luaLikeImpLib = join(libDir, "lua51.lib");
+                            cp(builtImpLib, luaLikeImpLib, { force: true })
+                                .then(resolve)
+                                .catch(reject);
+                        })
+                        .catch(reject);
+                }
             }
             else {
                 resolve();
