@@ -18,34 +18,40 @@ jobs:
 
       matrix:
         os:
-          # - ubuntu-latest
+          - ubuntu-latest
           - windows-latest
           - macos-latest
 
         lua-version:
-          # - 5.1
-          # - 5.2
-          # - 5.3
-          # - 5.4
+          - 5.1
+          - 5.2
+          - 5.3
+          - 5.4
           - luajit
-          # - luajit@v2.0
-          # - luajit@v2.0.5
-          # - luajit@871db2c84ecefd70a850e03a6c340214a81739f0
-          # - openresty
-          # - openresty@2.1-20231117.x
-          # - openresty@v2.1-20250117
-          # - openresty@dcc9c9ee67e1a5d3d636bd7745e95ddb4a1c70bc
+          - luajit@v2.0
+          - luajit@v2.0.5
+          - luajit@871db2c84ecefd70a850e03a6c340214a81739f0
+          - openresty
+          - openresty@2.1-20231117.x
+          - openresty@v2.1-20250117
+          - openresty@dcc9c9ee67e1a5d3d636bd7745e95ddb4a1c70bc
 
         is-msvc:
           - true
           - false
 
         exclude:
-          # - os: ubuntu-latest
-          #   is-msvc: true
+          - os: ubuntu-latest
+            is-msvc: true
 
           - os: macos-latest
             is-msvc: true
+
+          - os: macos-latest
+            lua-version: luajit@v2.0
+
+          - os: macos-latest
+            lua-version: luajit@v2.0.5
 
     steps:
       - name: Checkout
