@@ -1,0 +1,67 @@
+name: Install Lua / LuaJIT / OpenResty + LuaRocks
+description: Downloads, builds and installs Lua / LuaJIT / OpenResty + LuaRocks in a single step.
+
+branding:
+  color: blue
+  icon: moon
+
+inputs:
+  lua-version:
+    description: The version of Lua / LuaJIT / OpenResty to install.
+    required: false
+  luarocks-version:
+    description: The version of LuaRocks to use as a package manager for Lua / LuaJIT / OpenResty. A version 3.9.1 or newer is required on both Windows and Unix.
+    required: false
+  cc:
+    description: The C compiler used to build Lua / LuaJIT / OpenResty.
+    required: false
+  ld:
+    description: The linker used to build Lua / LuaJIT / OpenResty.
+    required: false
+  ar:
+    description: The archiver used to create a static library for Lua / LuaJIT / OpenResty.
+    required: false
+  ranlib: 
+    description: The tool employed to generate an index for the static library of Lua / LuaJIT / OpenResty.
+    required: false
+  strip:
+    description: The tool to strip sections and symbols from the shared library of Lua / LuaJIT / OpenResty.
+    required: false
+  rc:
+    description: The resource compiler used by LuaRocks.
+    required: false
+  toolchain-prefix:
+    description: The prefix common to all the tools above to setup Lua / LuaJIT / OpenResty and LuaRocks.
+    required: false
+  make:
+    description: The make tool used to build LuaJIT / OpenResty.
+    required: false
+  use-cache:
+    description: Uses GitHub Cache Service to store tarballs and zip files downloaded from Lua and LuaRocks website.
+    default: 'true'
+    required: false
+  cflags-extra:
+    description: Uses additional compiler flags to compile Lua / LuaJIT / OpenResty.
+    required: false
+  incdirs-extra:
+    description: Uses additional include directories to compile Lua / LuaJIT / OpenResty.
+    required: false
+  ldflags-extra:
+    description: Uses additional linker flags to link Lua.
+    required: false
+  libdirs-extra:
+    description: Uses additional library directories to link Lua.
+    required: false
+  libs-extra:
+    description: Links Lua with additional libraries.
+    required: false
+  lua-patches:
+    description: Apply patches to Lua / LuaJIT / OpenResty after fetching the source code.
+    required: false
+  luarocks-patches:
+    description: Apply patches to LuaRocks after fetching the source code.
+    required: false
+
+runs:
+  using: 'node24'
+  main: 'dist/github/index.js'

@@ -1,0 +1,122 @@
+name: New Release Branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: The kind of a new release
+        type: choice
+        required: true
+        options:
+          - 'major'
+          - 'minor'
+          - 'patch'
+
+jobs:
+
+  version-info:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      new-version: ${{ steps.version.outputs.new-version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Extract version from package.json
+        id: version
+        run: |
+          version=$(cat package.json | grep -oP '\"version\": \"([0-9]+)\.([0-9]+)\.([0-9]+)\"' | grep -oP '([0-9]+)\.([0-9]+)\.([0-9]+)')
+
+          if [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]];
+          then
+            major=$(echo "${version}" | cut -d. -f1)
+            minor=$(echo "${version}" | cut -d. -f2)
+            patch=$(echo "${version}" | cut -d. -f3)
+            if [ "${{ inputs.kind }}" = "major" ];
+            then
+              ((major++))
+            elif [ "${{ inputs.kind }}" = "minor" ];
+            then
+              ((minor++))
+            elif [ "${{ inputs.kind }}" = "patch" ];
+            then
+              ((patch++))
+            else
+              echo "Unknown kind of tag"
+              exit 1
+            fi
+            echo "version=${version}" >> "$GITHUB_OUTPUT"
+            echo "new-version=${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=none" >> "$GITHUB_OUTPUT"
+            echo "new-version=none" >> "$GITHUB_OUTPUT"
+          fi
+
+  new-version-changes:
+    runs-on: ubuntu-latest
+    needs: version-info
+    if: |
+      ${{
+        github.actor == 'luau-project' &&
+        github.triggering_actor == 'luau-project' &&
+        github.repository == 'luau-project/setup-lua' &&
+        needs.version-info.outputs.version != 'none' &&
+        needs.version-info.outputs.new-version != 'none' }}
+
+    env:
+      NEW_BRANCH: release-${{ needs.version-info.outputs.new-version }}
+      NEW_COMMIT_MSG: Release v${{ needs.version-info.outputs.new-version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Create a new branch
+        run: git checkout -b ${{ env.NEW_BRANCH }}
+
+      - name: Change version on package.json
+        run: |
+          sed -e "s/\"version\": \"${{ needs.version-info.outputs.version }}\"/\"version\": \"${{ needs.version-info.outputs.new-version }}\"/g" -i package.json
+
+      - name: Change version on GitHub docs
+        run: |
+          sed -e "s/setup\-lua\@v${{ needs.version-info.outputs.version }}/setup-lua@v${{ needs.version-info.outputs.new-version }}/g" -i docs/GitHub.md
+
+      - name: Enable dist changes on .gitignore
+        run: |
+          sed -i '1d' .gitignore
+
+      - name: Setup node 24
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: 24
+
+      - name: Install packages
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Set user name and email on commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Stage changes
+        run: git add .
+
+      - name: Commit changes
+        run: git commit "--message=${{ env.NEW_COMMIT_MSG }}"
+
+      - name: Print diff
+        run: git show
+
+      - name: Push changes
+        run: git push --set-upstream origin ${{ env.NEW_BRANCH }}

@@ -1,0 +1,39 @@
+{
+  "name": "setup-lua",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@actions/core": "1.11.1",
+    "@actions/cache": "4.1.0",
+    "@types/node": "24.1.0",
+    "@vercel/ncc": "0.38.4",
+    "typescript": "5.9.3",
+    "undici-types": "7.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile-github": "ncc build src/main.ts -o dist/github",
+    "compile-cli": "ncc build src/main.ts -o dist/cli",
+    "generate-github": "node generate-missing-files.js GITHUB",
+    "generate-cli": "node generate-missing-files.js CLI",
+    "build-github": "npm run generate-github && npm run compile-github",
+    "build-cli": "npm run generate-cli && npm run compile-cli",
+    "build": "npm run build-github && npm run build-cli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luau-project/setup-lua.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luau-project/setup-lua/issues"
+  },
+  "homepage": "https://github.com/luau-project/setup-lua",
+  "keywords": [
+    "Lua",
+    "LuaJIT",
+    "OpenResty",
+    "LuaRocks"
+  ],
+  "author": "luau-project <luau.project@gmail.com>",
+  "license": "MIT",
+  "description": "Install Lua / LuaJIT / OpenResty + LuaRocks in a single step"
+}
