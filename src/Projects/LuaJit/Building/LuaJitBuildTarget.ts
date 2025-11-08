@@ -97,7 +97,7 @@ export class LuaJitBuildTarget implements ITarget {
             version.push(10);
             version.push(3);
         }
-        return `${version[0], version[1]}`;
+        return `${version[0]}.${version[1]}`;
     }
     private getMacOSXDeloymentTarget(): Promise<string> {
         return new Promise<string>((resolve, reject) => {
