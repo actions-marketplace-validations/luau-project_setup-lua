@@ -174,3 +174,91 @@ jobs:
       - name: Test LuaSocket
         working-directory: luasocket-3.1.0/test
         run: lua hello.lua
+
+      - name: Restore zlib tarball
+        id: restore-zlib-tarball
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: 1.3.1.tar.gz
+          key: 1.3.1
+
+      - name: Download zlib tarball
+        if: ${{ steps.restore-zlib-tarball.outputs.cache-hit != 'true' }}
+        run: |
+          curl -LO "https://zlib.net/fossils/zlib-1.3.1.tar.gz"
+
+      - name: Save zlib tarball
+        if: ${{ steps.restore-zlib-tarball.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: 1.3.1.tar.gz
+          key: 1.3.1
+
+      - name: Extract zlib
+        run: tar -xf "1.3.1.tar.gz"
+
+      - name: Build and install zlib, and configure it for LuaRocks
+        shell: pwsh
+        run: |
+          if ("${{ runner.os }}" -eq "Windows") {
+            if ($${{ matrix.is-msvc }}) {
+              $generator = "NMake Makefiles";
+            }
+            else {
+              $generator = "MinGW Makefiles";
+            }
+            $install_prefix = Join-Path -Path "${{ github.workspace }}" -ChildPath "external";
+          }
+          else {
+            $generator = "Unix Makefiles";
+            $install_prefix = Join-Path -Path "${{ github.workspace }}" -ChildPath "external";
+          }
+
+          cmake -G "${generator}" `
+            "-DCMAKE_BUILD_TYPE=Release" `
+            "-DBUILD_SHARED_LIBS=ON" `
+            "--install-prefix" "${install_prefix}" `
+            "-S" "zlib-1.3.1" `
+            "-B" "build-zlib" && `
+          cmake "--build" "build-zlib" "--config" "Release";
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Failed to build zlib";
+            exit 1;
+          }
+
+          cmake "--install" "build-zlib" "--config" "Release";
+
+          $install_prefix_bin = Join-Path -Path "${install_prefix}" -ChildPath "bin";
+          Add-Content "${{ github.path }}" "${install_prefix_bin}";
+          luarocks config "variables.ZLIB_DIR" "${install_prefix}";
+
+      - name: Restore lua-zlib tarball
+        id: restore-lua-zlib-tarball
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: v1.3.tar.gz
+          key: v1.3
+
+      - name: Download lua-zlib tarball
+        if: ${{ steps.restore-lua-zlib-tarball.outputs.cache-hit != 'true' }}
+        run: |
+          curl -LO "https://github.com/brimworks/lua-zlib/archive/refs/tags/v1.3.tar.gz"
+
+      - name: Save lua-zlib tarball
+        if: ${{ steps.restore-lua-zlib-tarball.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: v1.3.tar.gz
+          key: v1.3
+
+      - name: Extract lua-zlib
+        run: tar -xf "v1.3.tar.gz"
+
+      - name: Install lua-zlib
+        working-directory: lua-zlib-1.3
+        run: luarocks make "lua-zlib-scm-0.rockspec"
+
+      - name: Test lua-zlib
+        working-directory: lua-zlib-1.3
+        run: lua test.lua
