@@ -85,8 +85,9 @@ jobs:
         run: |
           sed -e "s/\"version\": \"${{ needs.version-info.outputs.version }}\"/\"version\": \"${{ needs.version-info.outputs.new-version }}\"/g" -i package.json
 
-      - name: Change version on GitHub docs
+      - name: Change version on docs
         run: |
+          sed -e "s/setup\-lua\@v${{ needs.version-info.outputs.version }}/setup-lua@v${{ needs.version-info.outputs.new-version }}/g" -i README.md
           sed -e "s/setup\-lua\@v${{ needs.version-info.outputs.version }}/setup-lua@v${{ needs.version-info.outputs.new-version }}/g" -i docs/GitHub.md
 
       - name: Enable dist changes on .gitignore
