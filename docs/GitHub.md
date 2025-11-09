@@ -218,7 +218,7 @@ To install OpenResty from a specific commit, use the format `openresty@COMMIT_ID
 
 > [!TIP]
 > 
-> If you use the branch name after `@`, the latest commit on that branch is going to be installed. Thus, `lua-version: openresty@2.1-20231117.x` installs the latest commit on v2.0 branch. It is also possible to provide a tag.
+> If you use the branch name after `@`, the latest commit on that branch is going to be installed. Thus, `lua-version: openresty@2.1-20231117.x` installs the latest commit on 2.1-20231117.x branch. It is also possible to provide a tag.
 
 ### Install specific versions of Lua and LuaRocks
 

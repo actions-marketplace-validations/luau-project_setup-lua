@@ -203,22 +203,15 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            if ($${{ matrix.is-msvc }}) {
-              $cc = "cl";
-              $generator = "NMake Makefiles";
-            }
-            else {
-              $cc = "gcc";
-              $generator = "MinGW Makefiles";
-            }
-            $install_prefix = Join-Path -Path "${{ github.workspace }}" -ChildPath "external";
+          if ($${{ matrix.is-msvc }}) {
+            $cc = "cl";
+            $generator = "NMake Makefiles";
           }
           else {
-            $cc = "cc";
-            $generator = "Unix Makefiles";
-            $install_prefix = Join-Path -Path "${{ github.workspace }}" -ChildPath "external";
+            $cc = "gcc";
+            $generator = "MinGW Makefiles";
           }
+          $install_prefix = Join-Path -Path "${{ github.workspace }}" -ChildPath "external";
 
           cmake -G "${generator}" `
             "-DCMAKE_C_COMPILER=${cc}" `
@@ -227,13 +220,7 @@ jobs:
             "--install-prefix" "${install_prefix}" `
             "-S" "zlib-1.3.1" `
             "-B" "build-zlib" && `
-          cmake "--build" "build-zlib" "--config" "Release";
-
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "Failed to build zlib";
-            exit 1;
-          }
-
+          cmake "--build" "build-zlib" "--config" "Release" && `
           cmake "--install" "build-zlib" "--config" "Release";
 
           $install_prefix_bin = Join-Path -Path "${install_prefix}" -ChildPath "bin";
