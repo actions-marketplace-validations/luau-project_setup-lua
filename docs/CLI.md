@@ -10,12 +10,12 @@ On the command line (or terminal), `setup-lua` is aware of predefined environmen
 
 > [!TIP]
 > 
-> `setup-lua` also as a GitHub Action (see the [GitHub Actions docs](./GitHub.md)).
+> `setup-lua` also works as a GitHub Action (see the [GitHub Actions docs](./GitHub.md)).
 
 ## Table of Contents
 
 * [Introduction](#introduction)
-* [Platforms](#platforms)
+* [Features](#features)
 * [Inputs as Environment Variables](#inputs-as-environment-variables)
 * [Building](#building)
 * [Usage](#usage)
@@ -43,25 +43,55 @@ There is support to install three Lua interpreters:
 * LuaJIT ([https://luajit.org/](https://luajit.org/))
 * OpenResty ([https://openresty.org/](https://openresty.org/))
 
-By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always gets installed, but you can turn off LuaRocks installation (see [here](#install-lua-but-skip-luarocks-installation)).
+By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always gets installed, but you can turn off the installation (see [here](#install-lua-but-skip-luarocks-installation)).
 
-## Platforms
+## Features
 
-As a standalone tool, `setup-lua` was built from the ground up to support the following platforms:
+### Supported operating systems
 
 * Windows
 * Linux
 * macOS
-* BSD-like distros:
-  * FreeBSD
-  * NetBSD
-  * OpenBSD
+* BSD
+    * FreeBSD
+    * NetBSD
+    * OpenBSD
 
-Platforms known to **NOT** work:
+### Interpreters
 
-* Cygwin
-* AIX
-* SunOS
+* Lua
+    * Release versions (&ge; 5.1.1) available at [https://lua.org/ftp/](https://lua.org/ftp/)
+    * All work versions (&ge; 5.1.1):
+        * Current work at [https://lua.org/ftp/work/](https://lua.org/ftp/work/)
+        * Archived works at [https://lua.org/ftp/work/old/](https://lua.org/ftp/work/old/)
+* LuaJIT (&ge; v2.0.0)
+* OpenResty (&ge; v2.0.0)
+
+### LuaRocks
+
+* On Unix:
+    * Release versions (&ge; 3.9.1) available at [https://luarocks.github.io/luarocks/releases/](https://luarocks.github.io/luarocks/releases/)
+    * By commit id, directly fetched from [https://github.com/luarocks/luarocks/](https://github.com/luarocks/luarocks/)
+* On Windows (&ge; 3.9.1)
+
+### File integrity check
+
+* Each Lua tarball downloaded is matched against its published `sha256` hash
+* Each LuaRocks released tarball or zip file downloaded is matched against a `sha256` hash
+
+### File caching
+
+Downloads of official released versions of Lua and LuaRocks are cached by default to speed up the installation process (*but can be turned off*).
+
+### Advanced Features
+
+* Applies user-provided `cflags` during the compilation of Lua / LuaJIT / OpenResty;
+* Applies user-provided include directories during the compilation of Lua / LuaJIT / OpenResty;
+* Applies user-provided `ldflags` during the linking of Lua;
+* Applies user-provided library directories during the linking of Lua;
+* Links to user-provided libraries during the linking of Lua;
+* Applies custom patches to Lua / LuaJIT / OpenResty after fetching source code;
+* Applies custom patches to LuaRocks after fetching source code.
 
 ## Inputs as Environment Variables
 
@@ -490,4 +520,4 @@ In this example, we apply patches provided in the files `my-great-change.patch` 
   node dist/cli/index.js
   ```
 
-[Back to home](../README.md)
+[Back to home](../)

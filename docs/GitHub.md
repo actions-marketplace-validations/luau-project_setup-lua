@@ -4,11 +4,12 @@ Installs Lua / LuaJIT / OpenResty + LuaRocks in a single step inside the `.lua` 
 
 > [!TIP]
 > 
-> `setup-lua` also as a standalone CLI nodejs application (see the [CLI docs](./CLI.md)).
+> `setup-lua` also works as a standalone CLI nodejs application (see the [CLI docs](./CLI.md)).
 
 ## Table of Contents
 
 * [Introduction](#introduction)
+* [Features](#features)
 * [Inputs](#inputs)
 * [Building](#building)
 * [Usage](#usage)
@@ -38,7 +39,55 @@ There is support to install three Lua interpreters:
 * LuaJIT ([https://luajit.org/](https://luajit.org/))
 * OpenResty ([https://openresty.org/](https://openresty.org/))
 
-By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always gets installed, but you can turn off LuaRocks installation (see [here](#install-lua-but-skip-luarocks-installation)).
+By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always gets installed, but you can turn off the installation (see [here](#install-lua-but-skip-luarocks-installation)).
+
+## Features
+
+### Supported operating systems
+
+* Windows
+* Linux
+* macOS
+* BSD
+    * FreeBSD
+    * NetBSD
+    * OpenBSD
+
+### Interpreters
+
+* Lua
+    * Release versions (&ge; 5.1.1) available at [https://lua.org/ftp/](https://lua.org/ftp/)
+    * All work versions (&ge; 5.1.1):
+        * Current work at [https://lua.org/ftp/work/](https://lua.org/ftp/work/)
+        * Archived works at [https://lua.org/ftp/work/old/](https://lua.org/ftp/work/old/)
+* LuaJIT (&ge; v2.0.0)
+* OpenResty (&ge; v2.0.0)
+
+### LuaRocks
+
+* On Unix:
+    * Release versions (&ge; 3.9.1) available at [https://luarocks.github.io/luarocks/releases/](https://luarocks.github.io/luarocks/releases/)
+    * By commit id, directly fetched from [https://github.com/luarocks/luarocks/](https://github.com/luarocks/luarocks/)
+* On Windows (&ge; 3.9.1)
+
+### File integrity check
+
+* Each Lua tarball downloaded is matched against its published `sha256` hash
+* Each LuaRocks released tarball or zip file downloaded is matched against a `sha256` hash
+
+### File caching
+
+Downloads of official released versions of Lua and LuaRocks are cached by default to speed up the installation process (*but can be turned off*).
+
+### Advanced Features
+
+* Applies user-provided `cflags` during the compilation of Lua / LuaJIT / OpenResty;
+* Applies user-provided include directories during the compilation of Lua / LuaJIT / OpenResty;
+* Applies user-provided `ldflags` during the linking of Lua;
+* Applies user-provided library directories during the linking of Lua;
+* Links to user-provided libraries during the linking of Lua;
+* Applies custom patches to Lua / LuaJIT / OpenResty after fetching source code;
+* Applies custom patches to LuaRocks after fetching source code.
 
 ## Inputs
 
@@ -88,8 +137,6 @@ By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always get
 
 ### Minimal working example
 
-By default, on each platform, `setup-lua` uses `cc` as the default C compiler and linker to build Lua. However, on Windows, in the presence of Microsoft Visual Studio C/C++ compiler (MSVC), `setup-lua` uses MSVC as the toolchain.
-
 ```yaml
 jobs:
   install-lua:
@@ -133,17 +180,13 @@ jobs:
         run: luarocks --version
 ```
 
+**Explanation**: The above snippet installs Lua (or LuaJIT or OpenResty, depending on the matrix) `+` LuaRocks, and configures the environment for the toolchain that was used to build Lua. When the `lua-version` field of the matrix assumes `luajit` or `openresty` values, it fetches the latest source code from their GitHub repositories, [https://github.com/LuaJIT/LuaJIT/](https://github.com/LuaJIT/LuaJIT/) and [https://github.com/openresty/luajit2/](https://github.com/openresty/luajit2/), respectively.
+
 > [!NOTE]
 > 
-> On Windows, if you want to build Lua, LuaJIT or OpenResty with Microsoft Visual Studio C/C++ compiler (MSVC), you must setup Visual Studio developer command prompt in a earlier step.
-
-```yaml
-      - uses: actions/checkout@v5
-      - name: Setup MSVC developer prompt
-        uses: ilammy/msvc-dev-cmd@v1
-      - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
-```
+> * On most operating systems, `setup-lua` uses `cc` as the default C compiler and linker to build Lua / LuaJIT / OpenResty, which is often `GCC` or `Clang`.
+> 
+> * On Windows, when you load Visual Studio developer prompt details (e.g.: [ilammy/msvc-dev-cmd](https://github.com/ilammy/msvc-dev-cmd)) for the Microsoft Visual Studio C/C++ compiler (MSVC), `setup-lua` adopts MSVC as the selected toolchain to build Lua / LuaJIT / OpenResty. Otherwise, if you don't load Visual Studio developer prompt, `setup-lua` examines environment variables to decide between the use of `gcc` or `cc` to build Lua / LuaJIT / OpenResty.
 
 ### Install the latest Lua and LuaRocks
 
@@ -183,7 +226,7 @@ For a LuaJIT installation from the latest commit available on the GitHub mirror 
           lua-version: luajit
 ```
 
-To install LuaJIT from a specific commit, use the format `luajit@COMMIT_ID` as shown below:
+To install LuaJIT from a specific commit, use the format `luajit@ref` as shown below:
 
 ```yaml
       - name: Install LuaJIT
@@ -207,7 +250,7 @@ For a OpenResty installation from the latest commit available on the GitHub mirr
           lua-version: openresty
 ```
 
-To install OpenResty from a specific commit, use the format `openresty@COMMIT_ID` as shown below:
+To install OpenResty from a specific commit, use the format `openresty@ref` as shown below:
 
 ```yaml
       - name: Install OpenResty
@@ -236,7 +279,7 @@ Specific versions for Lua and LuaRocks can be installed by using `lua-version` a
           luarocks-version: 3.9.2
 ```
 
-On Unix, LuaRocks can also be installed from a specific commit or tag. To do that, use the format `luarocks-version: @COMMIT_ID`:
+On Unix, LuaRocks can also be installed from a specific commit or tag. To do that, use the format `luarocks-version: @ref`:
 
 ```yaml
       - name: Install Lua
@@ -415,4 +458,4 @@ In this example, we apply patches provided in the files `my-great-change.patch` 
             luarocks-patches: my-great-change.patch;my-small-change.patch
   ```
 
-[Back to home](../README.md)
+[Back to home](../)
