@@ -21,7 +21,6 @@ Installs Lua / LuaJIT / OpenResty + LuaRocks in a single step inside the `.lua` 
   * [Install Lua, but skip LuaRocks installation](#install-lua-but-skip-luarocks-installation)
   * [Miscellaneous](#miscellaneous)
     * [Install Lua using Clang](#install-lua-using-clang)
-    * [Install Lua using MSYS2 toolchains](#install-lua-using-msys2-toolchains)
 * [Advanced Usage](#advanced-usage)
   * [Install Lua using additional cflags](#install-lua-using-additional-cflags)
   * [Install Lua using additional include directories](#install-lua-using-additional-include-directories)
@@ -350,28 +349,6 @@ For this, we are going to assume that Clang is installed at a custom location no
 > [!IMPORTANT]
 > 
 > Due a limitation in the build process of LuaJIT and OpenResty on Windows with MSVC-compatible tools, the build ignores `clang-cl`. Therefore, in the presence of MSVC, `cl` and `link` are used instead.
-
-
-#### Install Lua using MSYS2 toolchains
-
-```yaml
-  strategy:
-    matrix:
-      lua-version: [ "5.1", "5.2", "5.3", "5.4", "luajit", "openresty" ]
-      msys2:
-        - { sys: "mingw64", env: "x86_64" }
-        - { sys: "mingw32", env: "i686" }
-        - { sys: "ucrt64",  env: "ucrt-x86_64" }
-        - { sys: "clang64", env: "clang-x86_64" }
-  steps:
-    - uses: msys2/setup-msys2@v2
-      with:
-        msystem: ${{ matrix.msys2.sys }}
-        install: mingw-w64-${{ matrix.msys2.env }}-cc mingw-w64-${{ matrix.msys2.env }}-make
-    - uses: actions/checkout@v5
-    - name: Install Lua
-      uses: luau-project/setup-lua@v0.0.0
-```
 
 ## Advanced Usage
 
