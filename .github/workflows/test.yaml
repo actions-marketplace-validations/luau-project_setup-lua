@@ -86,20 +86,43 @@ jobs:
       - name: Display LuaRocks version
         run: luarocks --version
 
+      - name: Restore LuaFileSystem tarball
+        id: restore-lfs-tarball
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: v1_8_0.tar.gz
+          key: v1_8_0
+
+      - name: Download LuaFileSystem tarball
+        if: ${{ steps.restore-lfs-tarball.outputs.cache-hit != 'true' }}
+        run: |
+          curl -LO "https://github.com/lunarmodules/luafilesystem/archive/refs/tags/v1_8_0.tar.gz"
+
+      - name: Save LuaFileSystem tarball
+        if: ${{ steps.restore-lfs-tarball.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: v1_8_0.tar.gz
+          key: v1_8_0
+
+      - name: Extract LuaFileSystem
+        run: tar -xf "v1_8_0.tar.gz"
+
       - name: Install LuaFileSystem
-        run: luarocks install luafilesystem
+        working-directory: luafilesystem-1_8_0
+        run: luarocks make "luafilesystem-scm-1.rockspec"
 
       # https://lunarmodules.github.io/luafilesystem/examples.html
       - name: Create a test file for LuaFileSystem
         shell: pwsh
         run: |
           $test_script = @'
-          local lfs = require"lfs"
+          local lfs = require("lfs")
 
           function attrdir (path)
               for file in lfs.dir(path) do
                   if file ~= "." and file ~= ".." then
-                      local f = path..'/'..file
+                      local f = path.."/"..file
                       print ("\t "..f)
                       local attr = lfs.attributes (f)
                       assert (type(attr) == "table")
@@ -122,9 +145,32 @@ jobs:
       - name: Test LuaFileSystem
         run: lua "lfs-test.lua"
 
+      - name: Restore LuaSocket tarball
+        id: restore-luasocket-tarball
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: v3.1.0.tar.gz
+          key: v3.1.0
+
+      - name: Download LuaSocket tarball
+        if: ${{ steps.restore-luasocket-tarball.outputs.cache-hit != 'true' }}
+        run: |
+          curl -LO "https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.1.0.tar.gz"
+
+      - name: Save LuaSocket tarball
+        if: ${{ steps.restore-luasocket-tarball.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: v3.1.0.tar.gz
+          key: v3.1.0
+
+      - name: Extract LuaSocket
+        run: tar -xf "v3.1.0.tar.gz"
+
       - name: Install LuaSocket
-        run: luarocks install luasocket
+        working-directory: luasocket-3.1.0
+        run: luarocks make "rockspecs/luasocket-3.1.0-1.rockspec"
 
       - name: Test LuaSocket
-        run: |
-          lua -e "local socket = require('socket'); local mime = require('mime'); print('socket: ' .. socket._VERSION .. ', mime: ' .. mime._VERSION);"
+        working-directory: luasocket-3.1.0/test
+        run: lua hello.lua
