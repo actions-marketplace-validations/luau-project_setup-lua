@@ -90,7 +90,7 @@ jobs:
         run: luarocks install luafilesystem
 
       # https://lunarmodules.github.io/luafilesystem/examples.html
-      - name: Create a Test file for LuaFileSystem
+      - name: Create a test file for LuaFileSystem
         shell: pwsh
         run: |
           $test_script = @'
@@ -121,3 +121,10 @@ jobs:
 
       - name: Test LuaFileSystem
         run: lua "lfs-test.lua"
+
+      - name: Install LuaSocket
+        run: luarocks install luasocket
+
+      - name: Test LuaSocket
+        run: |
+          lua -e "local socket = require('socket'); local mime = require('mime'); print('socket: ' .. socket._VERSION .. ', mime: ' .. mime._VERSION);"
