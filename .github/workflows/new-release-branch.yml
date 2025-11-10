@@ -30,7 +30,7 @@ jobs:
       - name: Extract version from package.json
         id: version
         run: |
-          version=$(cat package.json | grep -oP '\"version\": \"([0-9]+)\.([0-9]+)\.([0-9]+)\"' | grep -oP '([0-9]+)\.([0-9]+)\.([0-9]+)')
+          version=$(jq -j '.version' package.json)
 
           if [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]];
           then
@@ -40,9 +40,12 @@ jobs:
             if [ "${{ inputs.kind }}" = "major" ];
             then
               ((major++))
+              minor="0"
+              patch="0"
             elif [ "${{ inputs.kind }}" = "minor" ];
             then
               ((minor++))
+              patch="0"
             elif [ "${{ inputs.kind }}" = "patch" ];
             then
               ((patch++))
