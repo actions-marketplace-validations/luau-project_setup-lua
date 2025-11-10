@@ -8,9 +8,9 @@ on:
         type: choice
         required: true
         options:
-          - 'major'
-          - 'minor'
-          - 'patch'
+          - major
+          - minor
+          - patch
 
 jobs:
 
@@ -29,48 +29,53 @@ jobs:
 
       - name: Extract version from package.json
         id: version
+        shell: pwsh
         run: |
-          version=$(jq -j '.version' package.json)
+          if (-not (Test-Path "package.json")) {
+            Write-Host "package.json not found";
+            exit 1;
+          }
 
-          if [[ $version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]];
-          then
-            major=$(echo "${version}" | cut -d. -f1)
-            minor=$(echo "${version}" | cut -d. -f2)
-            patch=$(echo "${version}" | cut -d. -f3)
-            if [ "${{ inputs.kind }}" = "major" ];
-            then
-              ((major++))
-              minor="0"
-              patch="0"
-            elif [ "${{ inputs.kind }}" = "minor" ];
-            then
-              ((minor++))
-              patch="0"
-            elif [ "${{ inputs.kind }}" = "patch" ];
-            then
-              ((patch++))
-            else
-              echo "Unknown kind of tag"
-              exit 1
-            fi
-            echo "version=${version}" >> "$GITHUB_OUTPUT"
-            echo "new-version=${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=none" >> "$GITHUB_OUTPUT"
-            echo "new-version=none" >> "$GITHUB_OUTPUT"
-          fi
+          $version = & jq -j '.version' "package.json";
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Unable to find the package version";
+            exit 1;
+          }
+
+          if (-not ($version -match "^(\d+)\.(\d+)\.(\d+)$")) {
+            Write-Host "Invalid version format";
+            exit 1;
+          }
+
+          $major = [int]::Parse($Matches[1]);
+          $minor = [int]::Parse($Matches[2]);
+          $patch = [int]::Parse($Matches[3]);
+
+          if ("${{ inputs.kind }}" -eq "major") {
+            $major++;
+            $minor = 0;
+            $patch = 0;
+          }
+          elseif ("${{ inputs.kind }}" -eq "minor") {
+            $minor++;
+            $patch = 0;
+          }
+          elseif ("${{ inputs.kind }}" -eq "patch") {
+            $patch++;
+          }
+          else {
+            Write-Host "Unknown kind of tag";
+            exit 1;
+          }
+
+          Add-Content "$env:GITHUB_OUTPUT" "version=${version}";
+          Add-Content "$env:GITHUB_OUTPUT" "new-version=${major}.${minor}.${patch}";
 
   new-version-changes:
     runs-on: ubuntu-latest
     needs: version-info
-    if: |
-      ${{
-        github.actor == 'luau-project' &&
-        github.triggering_actor == 'luau-project' &&
-        github.repository == 'luau-project/setup-lua' &&
-        needs.version-info.outputs.version != 'none' &&
-        needs.version-info.outputs.new-version != 'none'
-      }}
+    if: ${{ github.actor == 'luau-project' && github.triggering_actor == 'luau-project' && github.repository == 'luau-project/setup-lua' }}
 
     env:
       NEW_BRANCH: release-${{ needs.version-info.outputs.new-version }}
