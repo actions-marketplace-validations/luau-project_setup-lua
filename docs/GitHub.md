@@ -168,7 +168,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         if: ${{ runner.os == 'Windows' && matrix.is-msvc }}
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: ${{ matrix.lua-version }}
       - name: Display the Lua version
@@ -193,14 +193,14 @@ If you just want to install the latest versions of Lua and LuaRocks, you are all
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
 ```
 
 It is possible to install a specific Lua version using the format `X.Y.Z`:
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.3.3
 ```
@@ -209,7 +209,7 @@ There are shorthands to install the latest version within a minor Lua release. F
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.2
 ```
@@ -220,7 +220,7 @@ For a LuaJIT installation from the latest commit available on the GitHub mirror 
 
 ```yaml
       - name: Install LuaJIT
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: luajit
 ```
@@ -229,7 +229,7 @@ To install LuaJIT from a specific commit, use the format `luajit@ref` as shown b
 
 ```yaml
       - name: Install LuaJIT
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: luajit@871db2c84ecefd70a850e03a6c340214a81739f0
 ```
@@ -244,7 +244,7 @@ For a OpenResty installation from the latest commit available on the GitHub mirr
 
 ```yaml
       - name: Install OpenResty
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: openresty
 ```
@@ -253,7 +253,7 @@ To install OpenResty from a specific commit, use the format `openresty@ref` as s
 
 ```yaml
       - name: Install OpenResty
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: openresty@dcc9c9ee67e1a5d3d636bd7745e95ddb4a1c70bc
 ```
@@ -272,7 +272,7 @@ Specific versions for Lua and LuaRocks can be installed by using `lua-version` a
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.2.1
           luarocks-version: 3.9.2
@@ -282,7 +282,7 @@ On Unix, LuaRocks can also be installed from a specific commit or tag. To do tha
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.4.3
           luarocks-version: @23179297c03878d437e15fc84afc26199082ab09
@@ -294,7 +294,7 @@ To skip LuaRocks installation, you have to supply `luarocks-version: none` to th
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           luarocks-version: none
 ```
@@ -313,7 +313,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             cc: clang
             ld: clang
@@ -326,7 +326,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
     ```yaml
           - name: Install Lua
-            uses: luau-project/setup-lua@v0.0.0
+            uses: luau-project/setup-lua@v1.0.0
             with:
               cc: clang
               ld: clang
@@ -339,7 +339,7 @@ For this, we are going to assume that Clang is installed at a custom location no
           - name: Setup MSVC developer prompt
             uses: ilammy/msvc-dev-cmd@v1
           - name: Install Lua
-            uses: luau-project/setup-lua@v0.0.0
+            uses: luau-project/setup-lua@v1.0.0
             with:
               cc: clang-cl
               ld: llvm-link
@@ -360,7 +360,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             cflags-extra: -DMY_GREAT_MACRO=1
   ```
@@ -369,7 +369,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             incdirs-extra: /opt/include/a;/opt/include/b
   ```
@@ -382,7 +382,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             ldflags-extra: -static-libgcc
   ```
@@ -395,7 +395,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             libdirs-extra: /opt/lib/a;/opt/lib/b
   ```
@@ -408,7 +408,7 @@ For this, we are going to assume that Clang is installed at a custom location no
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             libs-extra: history;ncurses
   ```
@@ -419,7 +419,7 @@ In this example, we apply patches provided in the files `my-great-change.patch` 
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             lua-patches: my-great-change.patch;my-small-change.patch
   ```
@@ -430,7 +430,7 @@ In this example, we apply patches provided in the files `my-great-change.patch` 
 
   ```yaml
         - name: Install Lua
-          uses: luau-project/setup-lua@v0.0.0
+          uses: luau-project/setup-lua@v1.0.0
           with:
             luarocks-patches: my-great-change.patch;my-small-change.patch
   ```

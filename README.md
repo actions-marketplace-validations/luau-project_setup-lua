@@ -36,7 +36,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         if: ${{ runner.os == 'Windows' && matrix.is-msvc }}
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: ${{ matrix.lua-version }}
       - name: Display the Lua version
@@ -71,7 +71,7 @@ In `setup-lua`, the most important inputs are `lua-version` and `luarocks-versio
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.3.4
           luarocks-version: 3.12.0
@@ -83,7 +83,7 @@ In order to skip LuaRocks installation, use `none` as the value for the `luarock
 
 ```yaml
       - name: Install Lua
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.4.7
           luarocks-version: none
@@ -99,7 +99,7 @@ Thus, you can test your project on the upcoming Lua 5.5.0. However, be aware tha
 
 ```yaml
       - name: Install Lua 5.5.0 (beta)
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: 5.5.0-beta
           luarocks-version: none
@@ -111,7 +111,7 @@ Use the syntax `luajit@ref` with `ref` meaning a branch name, a tag or the `sha`
 
 ```yaml
       - name: Install LuaJIT
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: luajit@871db2c84ecefd70a850e03a6c340214a81739f0
           luarocks-version: 3.12.1
@@ -123,7 +123,7 @@ Use the syntax `openresty@ref` with `ref` meaning a branch name, a tag or the `s
 
 ```yaml
       - name: Install OpenResty
-        uses: luau-project/setup-lua@v0.0.0
+        uses: luau-project/setup-lua@v1.0.0
         with:
           lua-version: openresty@v2.1-20250826
           luarocks-version: 3.12.2
