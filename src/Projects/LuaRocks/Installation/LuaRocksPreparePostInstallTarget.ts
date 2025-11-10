@@ -1,5 +1,5 @@
-import { basename, join } from "node:path";
-import { stat } from "node:fs/promises";
+import { basename, dirname, join } from "node:path";
+import { readdir, stat } from "node:fs/promises";
 import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { LuaRocksProject } from "../LuaRocksProject";
@@ -14,6 +14,7 @@ import { ReadOnlyArray } from "../../../Util/ReadOnlyArray";
 import { IReadOnlyArray } from "../../../Util/IReadOnlyArray";
 import { LuaRocksPostInstallTarget } from "./LuaRocksPostInstallTarget";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
+import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 
 const LUA_INTERPRETER_CANDIDATES: IReadOnlyArray<string> = new ReadOnlyArray<string>([
     "lua.exe",
@@ -123,8 +124,102 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
                 .catch(reject);
         });
     }
+    private getWindowsGccExternalDepsDirs(): Promise<string[]> {
+        return new Promise<string[]>((resolve, reject) => {
+            const maxDepth: number = 10;
+            const matchFile = (dir: string, depth: number, predicate: (filename: string) => boolean) => {
+                return new Promise<string>((_resolve, _reject) => {
+                    if (depth > maxDepth) {
+                        _reject(new Error(`Not searching further than ${maxDepth} directories deep`));
+                    }
+                    else {
+                        readdir(dir)
+                            .then(files => {
+                                const file_iter = (i: number) => {
+                                    if (i < files.length) {
+                                        const fileBasename = files[i];
+                                        const file = join(dir, fileBasename);
+                                        stat(file)
+                                            .then(fileStat => {
+                                                if (fileStat.isFile() && predicate(file)) {
+                                                    _resolve(file);
+                                                }
+                                                else if (fileStat.isDirectory()) {
+                                                    matchFile(file, depth + 1, predicate)
+                                                        .then(_resolve)
+                                                        .catch(matchErr => {
+                                                            file_iter(i + 1);
+                                                        });
+                                                }
+                                                else {
+                                                    file_iter(i + 1);
+                                                }
+                                            })
+                                            .catch(fileStatErr => {
+                                                file_iter(i + 1);
+                                            });
+                                    }
+                                    else {
+                                        _reject(new Error("Match not found"));
+                                    }
+                                };
+    
+                                file_iter(0);
+                            })
+                            .catch(_reject);
+                    }
+                });
+            };
+            const externalDepsDirs: string[] = [];
+            getFirstLineFromProcessExecution("where", [ToolchainEnvironmentVariables.instance().getCC()], true)
+                .then(ccPath => {
+                    const ccBinDir = dirname(ccPath);
+                    if (basename(ccBinDir).toLowerCase() === 'bin') {
+                        const ccDir = dirname(ccBinDir);
+                        const ccInclude = join(ccDir, "include");
+                        stat(ccInclude)
+                            .then(ccIncludeStat => {
+                                if (ccIncludeStat.isDirectory()) {
+                                    externalDepsDirs.push(ccDir);
+                                    getFirstLineFromProcessExecution(ToolchainEnvironmentVariables.instance().getCC(), ["-dumpmachine"])
+                                        .then(dumpMachine => {
+                                            matchFile(ccDir, 0, file => basename(file).toLowerCase() === 'windows.h')
+                                                .then(windowsH => {
+                                                    const windowsHeadersDir = dirname(windowsH);
+                                                    if (basename(windowsHeadersDir).toLowerCase() === "include") {
+                                                        const windowsHeadersParentDir = dirname(windowsHeadersDir);
+                                                        externalDepsDirs.push(windowsHeadersParentDir);
+                                                    }
+                                                    resolve(externalDepsDirs);
+                                                })
+                                                .catch(matchErr => {
+                                                    resolve(externalDepsDirs);
+                                                });
+                                        })
+                                        .catch(dumpMachineErr => {
+                                            resolve(externalDepsDirs);
+                                        });
+                                }
+                                else {
+                                    resolve(externalDepsDirs);
+                                }
+                            })
+                            .catch(ccIncludeStatErr => {
+                                resolve(externalDepsDirs);
+                            });
+                    }
+                    else {
+                        resolve(externalDepsDirs);
+                    }
+                })
+                .catch(whereErr => {
+                    resolve(externalDepsDirs);
+                });
+        });
+    }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
+            const isGccLike = isGccLikeToolchain(this.project.getToolchain());
             const buildInfo = this.parent.getLuaRocksBuildInfo();
             const srcInfo = buildInfo.getSourcesInfo();
             const infoDetails = srcInfo.getDetails();
@@ -132,7 +227,6 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
             if (infoDetails instanceof LuaRocksWindowsSourcesInfoDetails) {
                 const installDir = this.project.getInstallDir();
                 const luarocks = join(binDir, basename(infoDetails.getLuaRocks()));
-                const peParser = infoDetails.getPeParser();
                 checkFiles([luarocks])
                     .then(() => {
                         const candidateInterpreter_iter = (idx: number) => {
@@ -147,17 +241,9 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
                                         if (candidateInterpreterBasenameStat.isFile()) {
                                             getFirstLineFromProcessExecution(interpreter, ["-e", "print(_VERSION:sub(5))"], true)
                                                 .then(luaVersion => {
-                                                    if (peParser) { /* run pe-parser only on MinGW / MinGW-w64 toolchains */
-                                                        const msvcrtScript: string[] = [
-                                                            `local pe = assert(loadfile([[${peParser}]]))();`,
-                                                            `local rt, _ = pe.msvcrt([[${interpreter}]]);`,
-                                                            `print(rt or [[nil]]);`
-                                                        ];
-                                                        getFirstLineFromProcessExecution(interpreter, [
-                                                            "-e",
-                                                            msvcrtScript.join(' ')
-                                                        ], true)
-                                                            .then(msvcrt => {
+                                                    if (isGccLike) {
+                                                        this.getWindowsGccExternalDepsDirs()
+                                                            .then(externalDepsDirs => {
                                                                 const toolchainEnvVars: EnvVar[] = [
                                                                     { key: "MAKE", value: ToolchainEnvironmentVariables.instance().getMake() },
                                                                     { key: "CC", value: ToolchainEnvironmentVariables.instance().getCC() },
@@ -167,16 +253,18 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
                                                                     { key: "RANLIB", value: ToolchainEnvironmentVariables.instance().getRANLIB() },
                                                                     { key: "RC", value: ToolchainEnvironmentVariables.instance().getRC() }
                                                                 ];
-                                                                sequentialPromises<void>((msvcrt === "nil" || msvcrt === "") ? [
+                                                                const configChanges = [
                                                                     () => this.setLuaRocksConfigSetupOnWindows(luarocks, luaVersion, installDir),
                                                                     () => this.setLuaRocksToolchainEnvVars(luarocks, toolchainEnvVars),
                                                                     () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
-                                                                ] :  [
-                                                                    () => this.setLuaRocksConfigSetupOnWindows(luarocks, luaVersion, installDir),
-                                                                    () => this.setLuaRocksConfigVariable(luarocks, "MSVCRT", msvcrt),
-                                                                    () => this.setLuaRocksToolchainEnvVars(luarocks, toolchainEnvVars),
-                                                                    () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
-                                                                ])
+                                                                ];
+                                                                const externalDepsDirsPromisesGen = (k: number) => {
+                                                                    return () => this.setLuaRocksConfig(luarocks, `external_deps_dirs[${k + 2}]`, externalDepsDirs[k]);
+                                                                };
+                                                                for (let idxExternalDepsDirs = 0; idxExternalDepsDirs < externalDepsDirs.length; idxExternalDepsDirs++) {
+                                                                    configChanges.push(externalDepsDirsPromisesGen(idxExternalDepsDirs));
+                                                                }
+                                                                sequentialPromises<void>(configChanges)
                                                                     .then(_values => {
                                                                         resolve();
                                                                     })
@@ -184,7 +272,7 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
                                                             })
                                                             .catch(advanceCandidate);
                                                     }
-                                                    else { /* MSVC / clang-cl */
+                                                    else {
                                                         if (candidateInterpreterBasename === "luajit.exe") {
                                                             /*
                                                             ** For a LuaJIT build using MSVC,

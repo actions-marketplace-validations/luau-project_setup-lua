@@ -1,7 +1,6 @@
 export class LuaRocksWindowsSourcesInfoDetails {
     private luarocks: string;
     private luarocksAdmin: string;
-    private peParser?: string;
 
     getLuaRocks(): string {
         return this.luarocks;
@@ -9,14 +8,10 @@ export class LuaRocksWindowsSourcesInfoDetails {
     getLuaRocksAdmin(): string {
         return this.luarocksAdmin;
     }
-    getPeParser(): string | undefined {
-        return this.peParser;
-    }
 
-    constructor(luarocks: string, luarocksAdmin: string, peParser?: string) {
+    constructor(luarocks: string, luarocksAdmin: string) {
         this.luarocks = luarocks;
         this.luarocksAdmin = luarocksAdmin;
-        this.peParser = peParser;
     }
 }
 

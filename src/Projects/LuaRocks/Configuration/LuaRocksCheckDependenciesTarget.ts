@@ -3,7 +3,6 @@ import { sequentialPromises } from "../../../Util/SequentialPromises";
 import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { LuaRocksProject } from "../LuaRocksProject";
-import { LuaRocksFetchPeParserTarget } from "./LuaRocksFetchPeParserTarget";
 import { LuaRocksFetchTarget } from "./LuaRocksFetchTarget";
 
 export class LuaRocksCheckDependenciesTarget implements ITarget {
@@ -26,7 +25,7 @@ export class LuaRocksCheckDependenciesTarget implements ITarget {
         return this.parent;
     }
     getNext(): ITarget | null {
-        return (process.platform === 'win32') ? new LuaRocksFetchPeParserTarget(this.project, this) : new LuaRocksFetchTarget(this.project, this);
+        return new LuaRocksFetchTarget(this.project, this);
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

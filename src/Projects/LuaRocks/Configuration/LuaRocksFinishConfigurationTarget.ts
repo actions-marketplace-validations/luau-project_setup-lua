@@ -34,10 +34,6 @@ export class LuaRocksFinishConfigurationTarget implements ITarget {
             if (details instanceof LuaRocksWindowsSourcesInfoDetails) {
                 console.log(`[LuaRocks] ${details.getLuaRocks()}`);
                 console.log(`[LuaRocks admin] ${details.getLuaRocksAdmin()}`);
-                const peParser = details.getPeParser();
-                if (peParser) {
-                    console.log(`[pe-parser] ${peParser}`);
-                }
             }
             else {
                 console.log(`[Configure script] ${details.getConfigureScript()}`);

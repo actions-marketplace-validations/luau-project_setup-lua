@@ -8,16 +8,15 @@ import { extractTarGz } from "../../../Util/ExtractTarGz";
 import { extractZip } from "../../../Util/ExtractZip";
 import { checkFiles } from "../../../Util/CheckFiles";
 import { LuaRocksSourcesInfo, LuaRocksUnixSourcesInfoDetails, LuaRocksWindowsSourcesInfoDetails } from "./LuaRocksSourcesInfo";
-import { LuaRocksFetchPeParserTarget } from "./LuaRocksFetchPeParserTarget";
 import { LuaRocksCheckDependenciesTarget } from "./LuaRocksCheckDependenciesTarget";
 import { LuaRocksReleaseVersion } from "../LuaRocksVersion";
 import { LuaRocksApplyPatchesTarget } from "./LuaRocksApplyPatchesTarget";
 
 export class LuaRocksFetchTarget extends AbstractFetchCompressedTarget {
-    private parent: LuaRocksCheckDependenciesTarget | LuaRocksFetchPeParserTarget;
+    private parent: LuaRocksCheckDependenciesTarget;
     private project: LuaRocksProject;
     private luaRocksSourcesInfo?: LuaRocksSourcesInfo;
-    constructor(project: LuaRocksProject, parent: LuaRocksCheckDependenciesTarget | LuaRocksFetchPeParserTarget) {
+    constructor(project: LuaRocksProject, parent: LuaRocksCheckDependenciesTarget) {
         super(
             project.getVersion().getDownloadUrl(),
             project.getBuildDir(),
@@ -68,17 +67,11 @@ export class LuaRocksFetchTarget extends AbstractFetchCompressedTarget {
 
                             checkFiles([luarocks, luarocksAdmin])
                                 .then(() => {
-                                    const p = this.parent;
-                                    if (p instanceof LuaRocksFetchPeParserTarget) {
-                                        this.luaRocksSourcesInfo = new LuaRocksSourcesInfo(
-                                            extractedDir,
-                                            new LuaRocksWindowsSourcesInfoDetails(luarocks, luarocksAdmin, p.getPeParser())
-                                        );
-                                        resolve();
-                                    }
-                                    else {
-                                        reject(new Error("Internal error: pe-parser target expected."));
-                                    }
+                                    this.luaRocksSourcesInfo = new LuaRocksSourcesInfo(
+                                        extractedDir,
+                                        new LuaRocksWindowsSourcesInfoDetails(luarocks, luarocksAdmin)
+                                    );
+                                    resolve();
                                 })
                                 .catch(reject);
                         }
