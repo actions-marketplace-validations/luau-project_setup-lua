@@ -66,7 +66,8 @@ jobs:
         github.triggering_actor == 'luau-project' &&
         github.repository == 'luau-project/setup-lua' &&
         needs.version-info.outputs.version != 'none' &&
-        needs.version-info.outputs.new-version != 'none' }}
+        needs.version-info.outputs.new-version != 'none'
+      }}
 
     env:
       NEW_BRANCH: release-${{ needs.version-info.outputs.new-version }}

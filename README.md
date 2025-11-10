@@ -1,7 +1,3 @@
-> [!IMPORTANT]
-> 
-> This tool is still in early testing. **DO NOT** use it while this alert is here.
-
 ## Overview
 
 Installs Lua / LuaJIT / OpenResty + LuaRocks in a single step inside the `.lua` folder in the current directory.
