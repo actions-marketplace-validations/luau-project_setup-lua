@@ -79,7 +79,8 @@ jobs:
 
     env:
       NEW_BRANCH: release-${{ needs.version-info.outputs.new-version }}
-      NEW_COMMIT_MSG: Release v${{ needs.version-info.outputs.new-version }}
+      PREPARE_RELEASE_COMMIT_MSG: '[skip ci] Prepare for a release v${{ needs.version-info.outputs.new-version }}'
+      RELEASE_COMMIT_MSG: 'Release v${{ needs.version-info.outputs.new-version }}'
 
     steps:
       - name: Checkout
@@ -124,7 +125,7 @@ jobs:
         run: git add .
 
       - name: Commit changes
-        run: git commit "--message=${{ env.NEW_COMMIT_MSG }}"
+        run: git commit "--message=${{ env.PREPARE_RELEASE_COMMIT_MSG }}"
 
       - name: Print diff
         run: git show
@@ -140,7 +141,7 @@ jobs:
         run: git add .
 
       - name: Commit changes
-        run: git commit "--message=[skip ci] Post ${{ env.NEW_COMMIT_MSG }}"
+        run: git commit "--message=${{ env.RELEASE_COMMIT_MSG }}"
 
       - name: Push changes
         run: git push

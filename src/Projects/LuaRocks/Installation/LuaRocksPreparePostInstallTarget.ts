@@ -171,6 +171,14 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
                 });
             };
             const externalDepsDirs: string[] = [];
+            const systemDrive = process.env["SYSTEMDRIVE"];
+            if (systemDrive) {
+                const systemDriveTrimmed = systemDrive.trim();
+                if (systemDriveTrimmed.toLowerCase() !== "c:") {
+                    externalDepsDirs.push(join(systemDriveTrimmed, "external"));
+                }
+            }
+            externalDepsDirs.push(join("C:", "external"));
             getFirstLineFromProcessExecution("where", [ToolchainEnvironmentVariables.instance().getCC()], true)
                 .then(ccPath => {
                     const ccBinDir = dirname(ccPath);
@@ -259,7 +267,7 @@ export class LuaRocksPreparePostInstallTarget implements ITarget {
                                                                     () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
                                                                 ];
                                                                 const externalDepsDirsPromisesGen = (k: number) => {
-                                                                    return () => this.setLuaRocksConfig(luarocks, `external_deps_dirs[${k + 2}]`, externalDepsDirs[k]);
+                                                                    return () => this.setLuaRocksConfig(luarocks, `external_deps_dirs[${k + 1}]`, externalDepsDirs[k]);
                                                                 };
                                                                 for (let idxExternalDepsDirs = 0; idxExternalDepsDirs < externalDepsDirs.length; idxExternalDepsDirs++) {
                                                                     configChanges.push(externalDepsDirsPromisesGen(idxExternalDepsDirs));
