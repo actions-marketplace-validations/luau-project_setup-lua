@@ -97,9 +97,12 @@ jobs:
           sed -e "s/\"version\": \"${{ needs.version-info.outputs.version }}\"/\"version\": \"${{ needs.version-info.outputs.new-version }}\"/g" -i package.json
 
       - name: Change version on docs
+        if: ${{ inputs.kind == 'major' }}
         run: |
-          sed -e "s/setup\-lua\@v${{ needs.version-info.outputs.version }}/setup-lua@v${{ needs.version-info.outputs.new-version }}/g" -i README.md
-          sed -e "s/setup\-lua\@v${{ needs.version-info.outputs.version }}/setup-lua@v${{ needs.version-info.outputs.new-version }}/g" -i docs/GitHub.md
+          old_major=$(echo "${{ needs.version-info.outputs.version }}" | cut -d. -f1)
+          new_major=$(echo "${{ needs.version-info.outputs.new-version }}" | cut -d. -f1)
+          sed -e "s/setup\-lua\@v${old_major}/setup-lua@v${new_major}/g" -i README.md
+          sed -e "s/setup\-lua\@v${old_major}/setup-lua@v${new_major}/g" -i docs/GitHub.md
 
       - name: Enable dist changes on .gitignore
         run: |
