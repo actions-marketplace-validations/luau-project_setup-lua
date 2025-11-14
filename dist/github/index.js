@@ -41542,6 +41542,9 @@ class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     getProjectInstallDir() {
         return this.getProject().getInstallDir();
     }
+    getProjectInstallBinDir() {
+        return this.getProject().getInstallBinDir();
+    }
     activateCoreExecution() {
         return (GitHubInput_1.GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
     }
@@ -42924,6 +42927,9 @@ class LuaRocksPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Ab
     getProjectInstallDir() {
         return this.getProject().getInstallDir();
     }
+    getProjectInstallBinDir() {
+        return this.getProject().getInstallBinDir();
+    }
     activateCoreExecution() {
         return true;
     }
@@ -43114,6 +43120,14 @@ class LuaRocksPreparePostInstallTarget {
                 });
             };
             const externalDepsDirs = [];
+            const systemDrive = process.env["SYSTEMDRIVE"];
+            if (systemDrive) {
+                const systemDriveTrimmed = systemDrive.trim();
+                if (systemDriveTrimmed.toLowerCase() !== "c:") {
+                    externalDepsDirs.push((0, node_path_1.join)(systemDriveTrimmed, "external"));
+                }
+            }
+            externalDepsDirs.push((0, node_path_1.join)("C:", "external"));
             (0, ExecuteProcess_1.getFirstLineFromProcessExecution)("where", [ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getCC()], true)
                 .then(ccPath => {
                 const ccBinDir = (0, node_path_1.dirname)(ccPath);
@@ -43202,7 +43216,7 @@ class LuaRocksPreparePostInstallTarget {
                                                     () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
                                                 ];
                                                 const externalDepsDirsPromisesGen = (k) => {
-                                                    return () => this.setLuaRocksConfig(luarocks, `external_deps_dirs[${k + 2}]`, externalDepsDirs[k]);
+                                                    return () => this.setLuaRocksConfig(luarocks, `external_deps_dirs[${k + 1}]`, externalDepsDirs[k]);
                                                 };
                                                 for (let idxExternalDepsDirs = 0; idxExternalDepsDirs < externalDepsDirs.length; idxExternalDepsDirs++) {
                                                     configChanges.push(externalDepsDirsPromisesGen(idxExternalDepsDirs));
@@ -45747,7 +45761,7 @@ class PucLuaCopyInstallableArtifactsTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[Finish] Copy Lua ${this.project.getVersion().getString()} installation files`);
+            console.log(`[End] Copy Lua ${this.project.getVersion().getString()} installation files`);
             resolve();
         });
     }
@@ -45873,6 +45887,9 @@ class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     }
     getProjectInstallDir() {
         return this.getProject().getInstallDir();
+    }
+    getProjectInstallBinDir() {
+        return this.getProject().getInstallBinDir();
     }
     activateCoreExecution() {
         return (GitHubInput_1.GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
@@ -46510,7 +46527,7 @@ class AbstractPkgConfigCMakeEnvVarsTarget {
                 (0, SequentialPromises_1.sequentialPromises)([
                     () => this.setConfigPathToGitHub("PKG_CONFIG_PATH"),
                     () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH"),
-                    () => (0, GitHub_1.appendToGitHubPath)(this.getProjectInstallDir())
+                    () => (0, GitHub_1.appendToGitHubPath)(this.getProjectInstallBinDir())
                 ])
                     .then(_ => {
                     resolve();
