@@ -10,6 +10,9 @@ export class LuaRocksPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarg
     getProjectInstallDir(): string {
         return (<LuaRocksProject>this.getProject()).getInstallDir();
     }
+    getProjectInstallBinDir(): string {
+        return (<LuaRocksProject>this.getProject()).getInstallBinDir();
+    }
     activateCoreExecution(): boolean {
         return true;
     }
