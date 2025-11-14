@@ -15,6 +15,7 @@ export abstract class AbstractPkgConfigCMakeEnvVarsTarget implements ITarget {
     abstract getNext(): ITarget | null;
     abstract finalize(): Promise<void>;
     abstract getProjectInstallDir(): string;
+    abstract getProjectInstallBinDir(): string;
     abstract activateCoreExecution(): boolean;
     private setConfigPathToGitHub(envVar: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -36,7 +37,7 @@ export abstract class AbstractPkgConfigCMakeEnvVarsTarget implements ITarget {
                 sequentialPromises([
                     () => this.setConfigPathToGitHub("PKG_CONFIG_PATH"),
                     () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH"),
-                    () => appendToGitHubPath(this.getProjectInstallDir())
+                    () => appendToGitHubPath(this.getProjectInstallBinDir())
                 ])
                     .then(_ => {
                         resolve();

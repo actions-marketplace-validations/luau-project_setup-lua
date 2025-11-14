@@ -172,7 +172,7 @@ export class PucLuaCopyInstallableArtifactsTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Finish] Copy Lua ${this.project.getVersion().getString()} installation files`);
+            console.log(`[End] Copy Lua ${this.project.getVersion().getString()} installation files`);
             resolve();
         });
     }

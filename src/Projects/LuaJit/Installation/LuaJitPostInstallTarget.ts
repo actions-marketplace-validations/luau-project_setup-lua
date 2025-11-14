@@ -11,6 +11,9 @@ export class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     getProjectInstallDir(): string {
         return (<LuaJitProject>this.getProject()).getInstallDir();
     }
+    getProjectInstallBinDir(): string {
+        return (<LuaJitProject>this.getProject()).getInstallBinDir();
+    }
     activateCoreExecution(): boolean {
         return (GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
     }

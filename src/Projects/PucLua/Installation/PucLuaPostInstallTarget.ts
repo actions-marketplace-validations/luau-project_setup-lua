@@ -11,6 +11,9 @@ export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     getProjectInstallDir(): string {
         return (<PucLuaProject>this.getProject()).getInstallDir();
     }
+    getProjectInstallBinDir(): string {
+        return (<PucLuaProject>this.getProject()).getInstallBinDir();
+    }
     activateCoreExecution(): boolean {
         return (GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
     }
