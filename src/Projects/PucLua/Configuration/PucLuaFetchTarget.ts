@@ -4,6 +4,7 @@ import { AbstractFetchTarballTarget } from "../../Targets/Fetch/AbstractFetchTar
 import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaApplyPatchesTarget } from "./PucLuaApplyPatchesTarget";
+import { PucLuaWorkVersion } from "../PucLuaVersion";
 
 export class PucLuaFetchTarget extends AbstractFetchTarballTarget {
     private parent: ITarget | null;
@@ -35,7 +36,15 @@ export class PucLuaFetchTarget extends AbstractFetchTarballTarget {
         return this.parent;
     }
     getExtractedDir(): string {
-        return join(this.getWorkDir(), `lua-${this.project.getVersion().getString()}`);
+        const version = this.project.getVersion();
+        let dirName = `lua-${version.getString()}`;
+        if (version instanceof PucLuaWorkVersion) {
+            const match = /^(lua\-.*)\-rc\d+$/.exec(dirName);
+            if (match) {
+                dirName = match[1];
+            }
+        }
+        return join(this.getWorkDir(), dirName);
     }
     getNext(): ITarget | null {
         return new PucLuaApplyPatchesTarget(this.project, this);

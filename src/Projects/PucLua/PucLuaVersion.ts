@@ -1,7 +1,6 @@
 import { compareVersions } from "../../Util/CompareVersions";
 
 const LATEST_LUA_RELEASE_VERSION = "5.4.8";
-const LATEST_LUA_WORK_VERSION = "5.5.0-beta";
 
 const CONVERT_LUA_RELEASE_VERSION: {[key: string]: string} = {
     "5.1": "5.1.5",
@@ -50,6 +49,7 @@ const LUA_RELEASES: {[key: string]: LuaVersionInfo} = {
 }
 
 const LUA_WORKS: {[key: string]: LuaVersionInfo} = {
+    "5.5.0-rc1": { "version": "5.5.0-rc1", "hash": { "algorithm": "sha256", "value": "34a4dcca0c04877fbce4baff54054b9793b70bca5d8c676ca4d3504dd47c3772"} },
     "5.5.0-beta": { "version": "5.5.0-beta", "hash": { "algorithm": "sha256", "value": "30897f95fc72565cb6c1792f721ad44e1a42e7ac587f62f7587807b3cbff1645"} },
     "5.4.8-rc1": { "version": "5.4.8-rc1", "hash": { "algorithm": "sha256", "value": "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae"} },
     "5.4.7-rc4": { "version": "5.4.7-rc4", "hash": { "algorithm": "sha256", "value": "9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30"} },
@@ -224,7 +224,7 @@ export function parsePucLuaVersion(version: string): Promise<IPucLuaVersion> {
                                 major, minor, build,
                                 v.hash.algorithm, v.hash.value,
                                 suffix,
-                                workMatch[0] === LATEST_LUA_WORK_VERSION
+                                workMatch[0].startsWith("5.5.0-")
                             )
                         );
                     }

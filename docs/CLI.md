@@ -62,8 +62,8 @@ By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always get
 * Lua
     * Release versions (&ge; 5.1.1) available at [https://lua.org/ftp/](https://lua.org/ftp/)
     * All work versions (&ge; 5.1.1):
-        * Current work at [https://lua.org/ftp/work/](https://lua.org/ftp/work/)
-        * Archived works at [https://lua.org/ftp/work/old/](https://lua.org/ftp/work/old/)
+        * Current work at [https://lua.org/work/](https://lua.org/work/)
+        * Archived works at [https://lua.org/work/old/](https://lua.org/work/old/)
 * LuaJIT (&ge; v2.0.0)
 * OpenResty (&ge; v2.0.0)
 

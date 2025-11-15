@@ -57,8 +57,8 @@ By default, LuaRocks ([https://luarocks.org/](https://luarocks.org/)) always get
 * Lua
     * Release versions (&ge; 5.1.1) available at [https://lua.org/ftp/](https://lua.org/ftp/)
     * All work versions (&ge; 5.1.1):
-        * Current work at [https://lua.org/ftp/work/](https://lua.org/ftp/work/)
-        * Archived works at [https://lua.org/ftp/work/old/](https://lua.org/ftp/work/old/)
+        * Current work at [https://lua.org/work/](https://lua.org/work/)
+        * Archived works at [https://lua.org/work/old/](https://lua.org/work/old/)
 * LuaJIT (&ge; v2.0.0)
 * OpenResty (&ge; v2.0.0)
 
@@ -137,6 +137,8 @@ Downloads of official released versions of Lua and LuaRocks are cached by defaul
 ### Minimal working example
 
 ```yaml
+name: Setup Lua
+on: push
 jobs:
   install-lua:
     runs-on: ${{ matrix.os }}
@@ -179,7 +181,7 @@ jobs:
         run: luarocks --version
 ```
 
-**Explanation**: The above snippet installs Lua (or LuaJIT or OpenResty, depending on the matrix) `+` LuaRocks, and configures the environment for the toolchain that was used to build Lua. When the `lua-version` field of the matrix assumes `luajit` or `openresty` values, it fetches the latest source code from their GitHub repositories, [https://github.com/LuaJIT/LuaJIT/](https://github.com/LuaJIT/LuaJIT/) and [https://github.com/openresty/luajit2/](https://github.com/openresty/luajit2/), respectively.
+**Explanation**: This snippet installs Lua (or LuaJIT or OpenResty, depending on the matrix) `+` LuaRocks, and configures the environment for the toolchain that was used to build Lua. When the `lua-version` field of the matrix assumes `luajit` or `openresty` values, it fetches the latest source code from their GitHub repositories, [https://github.com/LuaJIT/LuaJIT/](https://github.com/LuaJIT/LuaJIT/) and [https://github.com/openresty/luajit2/](https://github.com/openresty/luajit2/), respectively.
 
 > [!NOTE]
 > 

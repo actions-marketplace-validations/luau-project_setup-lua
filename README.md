@@ -5,6 +5,8 @@ Installs Lua / LuaJIT / OpenResty + LuaRocks in a single step inside the `.lua` 
 ## Usage
 
 ```yaml
+name: Setup Lua
+on: push
 jobs:
   install-lua:
     runs-on: ${{ matrix.os }}
@@ -47,7 +49,7 @@ jobs:
         run: luarocks --version
 ```
 
-**Explanation**: The above snippet installs Lua (or LuaJIT or OpenResty, depending on the matrix) `+` LuaRocks, and configures the environment for the toolchain that was used to build Lua. When the `lua-version` field of the matrix assumes `luajit` or `openresty` values, it fetches the latest source code from their GitHub repositories, [https://github.com/LuaJIT/LuaJIT/](https://github.com/LuaJIT/LuaJIT/) and [https://github.com/openresty/luajit2/](https://github.com/openresty/luajit2/), respectively.
+**Explanation**: This snippet installs Lua (or LuaJIT or OpenResty, depending on the matrix) `+` LuaRocks, and configures the environment for the toolchain that was used to build Lua. When the `lua-version` field of the matrix assumes `luajit` or `openresty` values, it fetches the latest source code from their GitHub repositories, [https://github.com/LuaJIT/LuaJIT/](https://github.com/LuaJIT/LuaJIT/) and [https://github.com/openresty/luajit2/](https://github.com/openresty/luajit2/), respectively.
 
 > [!NOTE]
 > 
@@ -92,16 +94,16 @@ In order to skip LuaRocks installation, use `none` as the value for the `luarock
 > [!TIP]
 > 
 > `setup-lua` also handles work versions of Lua (&ge; 5.1.1):
->    * current work: [https://lua.org/ftp/work/](https://lua.org/ftp/work/)
->    * legacy work: [https://lua.org/ftp/work/old/](https://lua.org/ftp/work/old/)
+>    * current work: [https://lua.org/work/](https://lua.org/work/)
+>    * legacy work: [https://lua.org/work/old/](https://lua.org/work/old/)
 
 Thus, you can test your project on the upcoming Lua 5.5.0. However, be aware that LuaRocks does not support it yet:
 
 ```yaml
-      - name: Install Lua 5.5.0 (beta)
+      - name: Install Lua 5.5.0 (RC1)
         uses: luau-project/setup-lua@v1
         with:
-          lua-version: 5.5.0-beta
+          lua-version: 5.5.0-rc1
           luarocks-version: none
 ```
 
