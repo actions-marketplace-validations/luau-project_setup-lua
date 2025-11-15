@@ -5289,6 +5289,7 @@ exports.PucLuaFetchTarget = void 0;
 const node_path_1 = __nccwpck_require__(6760);
 const AbstractFetchTarballTarget_1 = __nccwpck_require__(1299);
 const PucLuaApplyPatchesTarget_1 = __nccwpck_require__(1371);
+const PucLuaVersion_1 = __nccwpck_require__(5991);
 class PucLuaFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarballTarget {
     constructor(project, parent) {
         super(project.getVersion().getDownloadUrl(), project.getBuildDir(), `lua-${project.getVersion().getString()}`, {
@@ -5313,7 +5314,15 @@ class PucLuaFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarbal
         return this.parent;
     }
     getExtractedDir() {
-        return (0, node_path_1.join)(this.getWorkDir(), `lua-${this.project.getVersion().getString()}`);
+        const version = this.project.getVersion();
+        let dirName = `lua-${version.getString()}`;
+        if (version instanceof PucLuaVersion_1.PucLuaWorkVersion) {
+            const match = /^(lua\-.*)\-rc\d+$/.exec(dirName);
+            if (match) {
+                dirName = match[1];
+            }
+        }
+        return (0, node_path_1.join)(this.getWorkDir(), dirName);
     }
     getNext() {
         return new PucLuaApplyPatchesTarget_1.PucLuaApplyPatchesTarget(this.project, this);
@@ -5898,7 +5907,6 @@ exports.LUA_54_VERSION = exports.LUA_53_VERSION = exports.LUA_52_VERSION = expor
 exports.parsePucLuaVersion = parsePucLuaVersion;
 const CompareVersions_1 = __nccwpck_require__(7654);
 const LATEST_LUA_RELEASE_VERSION = "5.4.8";
-const LATEST_LUA_WORK_VERSION = "5.5.0-beta";
 const CONVERT_LUA_RELEASE_VERSION = {
     "5.1": "5.1.5",
     "5.2": "5.2.4",
@@ -5934,6 +5942,7 @@ const LUA_RELEASES = {
     "5.1.1": { "version": "5.1.1", "hash": { "algorithm": "sha256", "value": "c5daeed0a75d8e4dd2328b7c7a69888247868154acbda69110e97d4a6e17d1f0" } }
 };
 const LUA_WORKS = {
+    "5.5.0-rc1": { "version": "5.5.0-rc1", "hash": { "algorithm": "sha256", "value": "34a4dcca0c04877fbce4baff54054b9793b70bca5d8c676ca4d3504dd47c3772" } },
     "5.5.0-beta": { "version": "5.5.0-beta", "hash": { "algorithm": "sha256", "value": "30897f95fc72565cb6c1792f721ad44e1a42e7ac587f62f7587807b3cbff1645" } },
     "5.4.8-rc1": { "version": "5.4.8-rc1", "hash": { "algorithm": "sha256", "value": "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae" } },
     "5.4.7-rc4": { "version": "5.4.7-rc4", "hash": { "algorithm": "sha256", "value": "9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30" } },
@@ -6086,7 +6095,7 @@ function parsePucLuaVersion(version) {
                         const build = Number(workMatch[3]);
                         const suffix = workMatch[4];
                         const v = LUA_WORKS[pucLuaVersion];
-                        resolve(new PucLuaWorkVersion(major, minor, build, v.hash.algorithm, v.hash.value, suffix, workMatch[0] === LATEST_LUA_WORK_VERSION));
+                        resolve(new PucLuaWorkVersion(major, minor, build, v.hash.algorithm, v.hash.value, suffix, workMatch[0].startsWith("5.5.0-")));
                     }
                 }
                 else {
