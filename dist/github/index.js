@@ -41534,7 +41534,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitPostInstallTarget = void 0;
 const AbstractPkgConfigCMakeEnvVarsTarget_1 = __nccwpck_require__(98628);
 const LuaJitFinishInstallationTarget_1 = __nccwpck_require__(29768);
-const GitHubInput_1 = __nccwpck_require__(51621);
 class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.AbstractPkgConfigCMakeEnvVarsTarget {
     constructor(project, parent) {
         super(project, parent);
@@ -41545,8 +41544,8 @@ class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     getProjectInstallBinDir() {
         return this.getProject().getInstallBinDir();
     }
-    activateCoreExecution() {
-        return (GitHubInput_1.GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
+    getProjectInstallPkgConfigDir() {
+        return this.getProject().getInstallPkgConfigDir();
     }
     init() {
         return new Promise((resolve, reject) => {
@@ -42826,7 +42825,7 @@ const promises_1 = __nccwpck_require__(51455);
 const LuaRocksBuildInfo_1 = __nccwpck_require__(25168);
 const ExecuteProcess_1 = __nccwpck_require__(56522);
 const LuaRocksSourcesInfo_1 = __nccwpck_require__(5724);
-const LuaRocksPreparePostInstallTarget_1 = __nccwpck_require__(69899);
+const LuaRocksPostInstallTarget_1 = __nccwpck_require__(88444);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
 class LuaRocksInstallTarget {
     constructor(project, parent, buildInfo) {
@@ -42850,7 +42849,7 @@ class LuaRocksInstallTarget {
         return this.buildInfo;
     }
     getNext() {
-        return new LuaRocksPreparePostInstallTarget_1.LuaRocksPreparePostInstallTarget(this.project, this);
+        return new LuaRocksPostInstallTarget_1.LuaRocksPostInstallTarget(this.project, this);
     }
     execute() {
         return new Promise((resolve, reject) => {
@@ -42918,51 +42917,6 @@ exports.LuaRocksInstallTarget = LuaRocksInstallTarget;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaRocksPostInstallTarget = void 0;
-const AbstractPkgConfigCMakeEnvVarsTarget_1 = __nccwpck_require__(98628);
-const LuaRocksFinishInstallationTarget_1 = __nccwpck_require__(27563);
-class LuaRocksPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.AbstractPkgConfigCMakeEnvVarsTarget {
-    constructor(project, parent) {
-        super(project, parent);
-    }
-    getProjectInstallDir() {
-        return this.getProject().getInstallDir();
-    }
-    getProjectInstallBinDir() {
-        return this.getProject().getInstallBinDir();
-    }
-    activateCoreExecution() {
-        return true;
-    }
-    init() {
-        return new Promise((resolve, reject) => {
-            const projectVersion = this.getProject().getVersion();
-            console.log(`[Start] Post install for LuaRocks ${projectVersion.getIdentifier()}`);
-            resolve();
-        });
-    }
-    getNext() {
-        return new LuaRocksFinishInstallationTarget_1.LuaRocksFinishInstallationTarget(this.getProject(), this);
-    }
-    finalize() {
-        return new Promise((resolve, reject) => {
-            const projectVersion = this.getProject().getVersion();
-            console.log(`[End] Post install for LuaRocks ${projectVersion.getIdentifier()}`);
-            resolve();
-        });
-    }
-}
-exports.LuaRocksPostInstallTarget = LuaRocksPostInstallTarget;
-
-
-/***/ }),
-
-/***/ 69899:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LuaRocksPreparePostInstallTarget = void 0;
 const node_path_1 = __nccwpck_require__(76760);
 const promises_1 = __nccwpck_require__(51455);
 const ExecuteProcess_1 = __nccwpck_require__(56522);
@@ -42972,21 +42926,21 @@ const GitHub_1 = __nccwpck_require__(65249);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
 const SequentialPromises_1 = __nccwpck_require__(10923);
 const ReadOnlyArray_1 = __nccwpck_require__(32483);
-const LuaRocksPostInstallTarget_1 = __nccwpck_require__(88444);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
+const LuaRocksFinishInstallationTarget_1 = __nccwpck_require__(27563);
 const LUA_INTERPRETER_CANDIDATES = new ReadOnlyArray_1.ReadOnlyArray([
     "lua.exe",
     "luajit.exe"
 ]);
-class LuaRocksPreparePostInstallTarget {
+class LuaRocksPostInstallTarget {
     constructor(project, parent) {
         this.project = project;
         this.parent = parent;
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Preparing the post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            console.log(`[Start] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42997,9 +42951,9 @@ class LuaRocksPreparePostInstallTarget {
         return this.parent;
     }
     getNext() {
-        return new LuaRocksPostInstallTarget_1.LuaRocksPostInstallTarget(this.project, this);
+        return new LuaRocksFinishInstallationTarget_1.LuaRocksFinishInstallationTarget(this.project, this);
     }
-    setEnvironmentVariablesOnGitHub(binDir, luarocks) {
+    setEnvironmentVariablesOnGitHub(luarocks) {
         return new Promise((resolve, reject) => {
             (0, SequentialPromises_1.sequentialPromises)([
                 () => (0, ExecuteProcess_1.getFirstLineFromProcessExecution)(luarocks, ["path", "--lr-bin"], true),
@@ -43013,8 +42967,7 @@ class LuaRocksPreparePostInstallTarget {
                 (0, SequentialPromises_1.sequentialPromises)([
                     () => (0, GitHub_1.appendToGitHubEnvironmentVariables)("LUA_PATH", lrPath),
                     () => (0, GitHub_1.appendToGitHubEnvironmentVariables)("LUA_CPATH", lrCPath),
-                    () => (0, GitHub_1.appendToGitHubPath)(lrBin),
-                    () => (0, GitHub_1.appendToGitHubPath)(binDir)
+                    () => (0, GitHub_1.appendToGitHubPath)(lrBin)
                 ])
                     .then(_values => {
                     resolve();
@@ -43213,7 +43166,7 @@ class LuaRocksPreparePostInstallTarget {
                                                 const configChanges = [
                                                     () => this.setLuaRocksConfigSetupOnWindows(luarocks, luaVersion, installDir),
                                                     () => this.setLuaRocksToolchainEnvVars(luarocks, toolchainEnvVars),
-                                                    () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
+                                                    () => this.setEnvironmentVariablesOnGitHub(luarocks)
                                                 ];
                                                 const externalDepsDirsPromisesGen = (k) => {
                                                     return () => this.setLuaRocksConfig(luarocks, `external_deps_dirs[${k + 1}]`, externalDepsDirs[k]);
@@ -43229,7 +43182,7 @@ class LuaRocksPreparePostInstallTarget {
                                             })
                                                 .catch(advanceCandidate);
                                         }
-                                        else {
+                                        else { /* MSVC */
                                             if (candidateInterpreterBasename === "luajit.exe") {
                                                 /*
                                                 ** For a LuaJIT build using MSVC,
@@ -43240,7 +43193,7 @@ class LuaRocksPreparePostInstallTarget {
                                                 */
                                                 (0, SequentialPromises_1.sequentialPromises)([
                                                     () => this.setLuaRocksConfigSetupOnWindows(luarocks, luaVersion, installDir),
-                                                    () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
+                                                    () => this.setEnvironmentVariablesOnGitHub(luarocks)
                                                 ])
                                                     .then(_values => {
                                                     resolve();
@@ -43257,7 +43210,7 @@ class LuaRocksPreparePostInstallTarget {
                                                 (0, SequentialPromises_1.sequentialPromises)([
                                                     () => this.setLuaRocksConfigSetupOnWindows(luarocks, luaVersion, installDir),
                                                     () => this.setLuaRocksToolchainEnvVars(luarocks, toolchainEnvVars),
-                                                    () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
+                                                    () => this.setEnvironmentVariablesOnGitHub(luarocks)
                                                 ])
                                                     .then(_values => {
                                                     resolve();
@@ -43294,7 +43247,7 @@ class LuaRocksPreparePostInstallTarget {
                 ];
                 (0, SequentialPromises_1.sequentialPromises)([
                     () => this.setLuaRocksToolchainEnvVars(luarocks, toolchainEnvVars),
-                    () => this.setEnvironmentVariablesOnGitHub(binDir, luarocks)
+                    () => this.setEnvironmentVariablesOnGitHub(luarocks)
                 ])
                     .then(_values => {
                     resolve();
@@ -43305,12 +43258,12 @@ class LuaRocksPreparePostInstallTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Preparing the post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            console.log(`[End] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
 }
-exports.LuaRocksPreparePostInstallTarget = LuaRocksPreparePostInstallTarget;
+exports.LuaRocksPostInstallTarget = LuaRocksPostInstallTarget;
 
 
 /***/ }),
@@ -45889,7 +45842,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaPostInstallTarget = void 0;
 const AbstractPkgConfigCMakeEnvVarsTarget_1 = __nccwpck_require__(98628);
 const PucLuaFinishInstallationTarget_1 = __nccwpck_require__(47336);
-const GitHubInput_1 = __nccwpck_require__(51621);
 class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.AbstractPkgConfigCMakeEnvVarsTarget {
     constructor(project, parent) {
         super(project, parent);
@@ -45900,8 +45852,8 @@ class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     getProjectInstallBinDir() {
         return this.getProject().getInstallBinDir();
     }
-    activateCoreExecution() {
-        return (GitHubInput_1.GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
+    getProjectInstallPkgConfigDir() {
+        return this.getProject().getInstallPkgConfigDir();
     }
     init() {
         return new Promise((resolve, reject) => {
@@ -46516,36 +46468,28 @@ class AbstractPkgConfigCMakeEnvVarsTarget {
         this.project = project;
         this.parent = parent;
     }
-    setConfigPathToGitHub(envVar) {
+    setConfigPathToGitHub(envVar, targetDir) {
         return new Promise((resolve, reject) => {
-            const pkgConfigPath = (process.env[envVar] || "").trim();
-            if (pkgConfigPath) {
-                const newPath = `${pkgConfigPath}${node_path_1.delimiter}${this.getProjectInstallDir()}`;
-                (0, GitHub_1.appendToGitHubEnvironmentVariables)(envVar, newPath)
-                    .then(resolve)
-                    .catch(reject);
-            }
-            else {
-                resolve();
-            }
+            const currentEnvVar = (process.env[envVar] || "").trim();
+            const newEnvVar = currentEnvVar ?
+                `${currentEnvVar}${node_path_1.delimiter}${targetDir}` :
+                `${targetDir}`;
+            (0, GitHub_1.appendToGitHubEnvironmentVariables)(envVar, newEnvVar)
+                .then(resolve)
+                .catch(reject);
         });
     }
     execute() {
         return new Promise((resolve, reject) => {
-            if (this.activateCoreExecution()) {
-                (0, SequentialPromises_1.sequentialPromises)([
-                    () => this.setConfigPathToGitHub("PKG_CONFIG_PATH"),
-                    () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH"),
-                    () => (0, GitHub_1.appendToGitHubPath)(this.getProjectInstallBinDir())
-                ])
-                    .then(_ => {
-                    resolve();
-                })
-                    .catch(reject);
-            }
-            else {
+            (0, SequentialPromises_1.sequentialPromises)([
+                () => this.setConfigPathToGitHub("PKG_CONFIG_PATH", this.getProjectInstallPkgConfigDir()),
+                () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH", this.getProjectInstallDir()),
+                () => (0, GitHub_1.appendToGitHubPath)(this.getProjectInstallBinDir())
+            ])
+                .then(_ => {
                 resolve();
-            }
+            })
+                .catch(reject);
         });
     }
     getProject() {
