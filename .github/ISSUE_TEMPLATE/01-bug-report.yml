@@ -1,10 +1,8 @@
 name: Bug Report
-about: Bugs and unintended behavior
-description: Report bugs
+description: Bugs and unintended behavior
 title: "[Bug]: "
 labels:
   - bug
-type: bug
 body:
   - type: markdown
     attributes:
