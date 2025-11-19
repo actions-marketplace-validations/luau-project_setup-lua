@@ -2,7 +2,6 @@ import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { AbstractPkgConfigCMakeEnvVarsTarget } from "../../Targets/AbstractPkgConfigCMakeEnvVarsTarget";
 import { PucLuaFinishInstallationTarget } from "./PucLuaFinishInstallationTarget";
-import { GitHubInput } from "../../../Util/GitHubInput";
 
 export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget {
     constructor(project: PucLuaProject, parent: ITarget | null) {
@@ -14,8 +13,8 @@ export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     getProjectInstallBinDir(): string {
         return (<PucLuaProject>this.getProject()).getInstallBinDir();
     }
-    activateCoreExecution(): boolean {
-        return (GitHubInput.instance().getInputLuaRocksVersion() || process.env["LUAROCKS_VERSION"] || "").trim() === "none";
+    getProjectInstallPkgConfigDir(): string {
+        return (<PucLuaProject>this.getProject()).getInstallPkgConfigDir();
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

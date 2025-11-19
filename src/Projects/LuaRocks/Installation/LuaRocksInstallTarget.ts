@@ -6,7 +6,7 @@ import { LuaRocksProject } from "../LuaRocksProject";
 import { LuaRocksUnixBuildInfo, LuaRocksWindowsBuildInfo } from "../Building/LuaRocksBuildInfo";
 import { executeProcess } from "../../../Util/ExecuteProcess";
 import { LuaRocksWindowsSourcesInfoDetails } from "../Configuration/LuaRocksSourcesInfo";
-import { LuaRocksPreparePostInstallTarget } from "./LuaRocksPreparePostInstallTarget";
+import { LuaRocksPostInstallTarget } from "./LuaRocksPostInstallTarget";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
 
 export class LuaRocksInstallTarget implements ITarget {
@@ -34,7 +34,7 @@ export class LuaRocksInstallTarget implements ITarget {
         return this.buildInfo;
     }
     getNext(): ITarget | null {
-        return new LuaRocksPreparePostInstallTarget(this.project, this);
+        return new LuaRocksPostInstallTarget(this.project, this);
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

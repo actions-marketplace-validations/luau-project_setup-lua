@@ -16,37 +16,29 @@ export abstract class AbstractPkgConfigCMakeEnvVarsTarget implements ITarget {
     abstract finalize(): Promise<void>;
     abstract getProjectInstallDir(): string;
     abstract getProjectInstallBinDir(): string;
-    abstract activateCoreExecution(): boolean;
-    private setConfigPathToGitHub(envVar: string): Promise<void> {
+    abstract getProjectInstallPkgConfigDir(): string;
+    private setConfigPathToGitHub(envVar: string, targetDir: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            const pkgConfigPath = (process.env[envVar] || "").trim();
-            if (pkgConfigPath) {
-                const newPath = `${pkgConfigPath}${delimiter}${this.getProjectInstallDir()}`;
-                appendToGitHubEnvironmentVariables(envVar, newPath)
-                    .then(resolve)
-                    .catch(reject);
-            }
-            else {
-                resolve();
-            }
+            const currentEnvVar = (process.env[envVar] || "").trim();
+            const newEnvVar = currentEnvVar ?
+                `${currentEnvVar}${delimiter}${targetDir}` : 
+                `${targetDir}`;
+            appendToGitHubEnvironmentVariables(envVar, newEnvVar)
+                .then(resolve)
+                .catch(reject);
         });
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            if (this.activateCoreExecution()) {
-                sequentialPromises([
-                    () => this.setConfigPathToGitHub("PKG_CONFIG_PATH"),
-                    () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH"),
-                    () => appendToGitHubPath(this.getProjectInstallBinDir())
-                ])
-                    .then(_ => {
-                        resolve();
-                    })
-                    .catch(reject);
-            }
-            else {
-                resolve();
-            }
+            sequentialPromises([
+                () => this.setConfigPathToGitHub("PKG_CONFIG_PATH", this.getProjectInstallPkgConfigDir()),
+                () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH", this.getProjectInstallDir()),
+                () => appendToGitHubPath(this.getProjectInstallBinDir())
+            ])
+                .then(_ => {
+                    resolve();
+                })
+                .catch(reject);
         });
     }
     getProject(): IProject {
