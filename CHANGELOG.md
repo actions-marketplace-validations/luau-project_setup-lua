@@ -1,3 +1,7 @@
+## setup-lua v1.0.3
+
+* Fixed a bug that didn't set `PKG_CONFIG_PATH` and `CMAKE_PREFIX_PATH` to make Lua / LuaJIT / OpenResty discoverable by `pkgconf` and `cmake`.
+
 ## setup-lua v1.0.2
 
 * Added support to use the latest release candidate of Lua 5.5.0 (`5.5.0-rc1`).
