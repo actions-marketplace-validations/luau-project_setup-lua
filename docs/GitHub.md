@@ -21,6 +21,7 @@ Installs Lua / LuaJIT / OpenResty + LuaRocks in a single step inside the `.lua` 
   * [Install Lua, but skip LuaRocks installation](#install-lua-but-skip-luarocks-installation)
   * [Miscellaneous](#miscellaneous)
     * [Install Lua using Clang](#install-lua-using-clang)
+    * [Install Lua using a C++ compiler](#install-lua-using-a-c-compiler)
 * [Advanced Usage](#advanced-usage)
   * [Install Lua using additional cflags](#install-lua-using-additional-cflags)
   * [Install Lua using additional include directories](#install-lua-using-additional-include-directories)
@@ -309,7 +310,8 @@ For this, we are going to assume that Clang is installed at a custom location no
 
 > [!NOTE]
 > 
-> On Unix, we assume that `/opt/llvm-clang` is the top installation directory such that `clang` compiler can be found at `/opt/llvm-clang/bin/clang`. On Windows, we are going to assume that `C:\llvm-clang` the top installation directory such that `clang` compiler can be found at `C:\llvm-clang\bin\clang.exe`.
+> * On Unix, we assume that `/opt/llvm-clang` is the top installation directory such that `clang` compiler can be found at `/opt/llvm-clang/bin/clang`. On Windows, we are going to assume that `C:\llvm-clang` the top installation directory such that `clang` compiler can be found at `C:\llvm-clang\bin\clang.exe`;
+> * In case `clang` is already on your system PATH environment variable, you can omit the `toolchain-prefix` input.
 
 * Unix
 
@@ -351,6 +353,19 @@ For this, we are going to assume that Clang is installed at a custom location no
 > [!IMPORTANT]
 > 
 > Due a limitation in the build process of LuaJIT and OpenResty on Windows with MSVC-compatible tools, the build ignores `clang-cl`. Therefore, in the presence of MSVC, `cl` and `link` are used instead.
+
+#### Install Lua using a C++ compiler
+
+This time, we assume that you are going to use `g++`, and also that it is on your system PATH environment variable. **Tip**: also works with `clang++`.
+
+  ```yaml
+        - name: Install Lua
+          uses: luau-project/setup-lua@v1
+          with:
+            cc: g++
+            ld: g++
+            lua-version: 5.4.8
+  ```
 
 ## Advanced Usage
 
