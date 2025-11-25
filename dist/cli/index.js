@@ -3608,7 +3608,11 @@ class PucLuaCompileCompilerTarget {
                     const file = compilerSrcFiles.getItem(i);
                     compiler.reset();
                     if (isGccLike) {
-                        compiler.addFlag("-std=gnu99");
+                        const compilerPath = compiler.path().getValue() || "";
+                        const compilerName = (0, node_path_1.basename)(compilerPath, (0, node_path_1.extname)(compilerPath)).toLowerCase();
+                        if (["gcc", "cc", "clang"].includes(compilerName)) {
+                            compiler.addFlag("-std=gnu99");
+                        }
                     }
                     compiler.setSpeedOptimizationSwitch();
                     compiler.setWarningSwitch();
@@ -3754,7 +3758,11 @@ class PucLuaCompileInterpreterTarget {
                     const file = interpreterSrcFiles.getItem(i);
                     compiler.reset();
                     if (isGccLike) {
-                        compiler.addFlag("-std=gnu99");
+                        const compilerPath = compiler.path().getValue() || "";
+                        const compilerName = (0, node_path_1.basename)(compilerPath, (0, node_path_1.extname)(compilerPath)).toLowerCase();
+                        if (["gcc", "cc", "clang"].includes(compilerName)) {
+                            compiler.addFlag("-std=gnu99");
+                        }
                     }
                     compiler.setSpeedOptimizationSwitch();
                     compiler.setWarningSwitch();
@@ -3892,7 +3900,11 @@ class PucLuaCompileSharedLibTarget {
                     const file = libSrcFiles.getItem(i);
                     compiler.reset();
                     if (isGccLike) {
-                        compiler.addFlag("-std=gnu99");
+                        const compilerPath = compiler.path().getValue() || "";
+                        const compilerName = (0, node_path_1.basename)(compilerPath, (0, node_path_1.extname)(compilerPath)).toLowerCase();
+                        if (["gcc", "cc", "clang"].includes(compilerName)) {
+                            compiler.addFlag("-std=gnu99");
+                        }
                     }
                     compiler.setSpeedOptimizationSwitch();
                     compiler.setWarningSwitch();
@@ -4043,7 +4055,11 @@ class PucLuaCompileStaticLibTarget {
                     const file = libSrcFiles.getItem(i);
                     compiler.reset();
                     if (isGccLike) {
-                        compiler.addFlag("-std=gnu99");
+                        const compilerPath = compiler.path().getValue() || "";
+                        const compilerName = (0, node_path_1.basename)(compilerPath, (0, node_path_1.extname)(compilerPath)).toLowerCase();
+                        if (["gcc", "cc", "clang"].includes(compilerName)) {
+                            compiler.addFlag("-std=gnu99");
+                        }
                     }
                     compiler.setSpeedOptimizationSwitch();
                     compiler.setWarningSwitch();
