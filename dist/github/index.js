@@ -46067,6 +46067,7 @@ const LUA_RELEASES = {
     "5.1.1": { "version": "5.1.1", "hash": { "algorithm": "sha256", "value": "c5daeed0a75d8e4dd2328b7c7a69888247868154acbda69110e97d4a6e17d1f0" } }
 };
 const LUA_WORKS = {
+    "5.5.0-rc2": { "version": "5.5.0-rc2", "hash": { "algorithm": "sha256", "value": "50b24b8fce4644a4590af0f23c65945836161515b9e87c45ee1f0e62b0255a1d" } },
     "5.5.0-rc1": { "version": "5.5.0-rc1", "hash": { "algorithm": "sha256", "value": "34a4dcca0c04877fbce4baff54054b9793b70bca5d8c676ca4d3504dd47c3772" } },
     "5.5.0-beta": { "version": "5.5.0-beta", "hash": { "algorithm": "sha256", "value": "30897f95fc72565cb6c1792f721ad44e1a42e7ac587f62f7587807b3cbff1645" } },
     "5.4.8-rc1": { "version": "5.4.8-rc1", "hash": { "algorithm": "sha256", "value": "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae" } },
