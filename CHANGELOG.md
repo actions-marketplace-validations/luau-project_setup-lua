@@ -1,3 +1,9 @@
+## setup-lua v1.0.4
+
+* Fixed a bug that caused the build of PUC-Lua to fail when the C compiler and linker was chosen as `clang++`;
+* Added a CI job to ensure that PUC-Lua, LuaJIT and OpenResty build fine using `clang` as C compiler on Ubuntu;
+* Tried to fix trigger conditions to skip CI when pushing tags, and keep ignoring changes on docs and markdown files.
+
 ## setup-lua v1.0.3
 
 * Fixed a bug that didn't set `PKG_CONFIG_PATH` and `CMAKE_PREFIX_PATH` to make Lua / LuaJIT / OpenResty discoverable by `pkgconf` and `cmake`.

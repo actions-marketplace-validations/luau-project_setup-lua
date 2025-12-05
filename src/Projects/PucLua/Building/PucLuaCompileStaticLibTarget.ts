@@ -1,4 +1,4 @@
-import { basename, join } from "node:path";
+import { basename, extname, join } from "node:path";
 import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
@@ -65,7 +65,11 @@ export class PucLuaCompileStaticLibTarget implements ITarget {
                     const file = libSrcFiles.getItem(i);
                     compiler.reset();
                     if (isGccLike) {
-                        compiler.addFlag("-std=gnu99");
+                        const compilerPath = compiler.path().getValue() || "";
+                        const compilerName = basename(compilerPath, extname(compilerPath)).toLowerCase();
+                        if (["gcc", "cc", "clang"].includes(compilerName)) {
+                            compiler.addFlag("-std=gnu99");
+                        }
                     }
                     compiler.setSpeedOptimizationSwitch();
                     compiler.setWarningSwitch();
