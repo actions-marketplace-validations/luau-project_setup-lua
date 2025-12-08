@@ -1,3 +1,11 @@
+## setup-lua v1.0.6
+
+* Added support to use the latest release candidate of Lua 5.5.0 (`5.5.0-rc3`).
+
+## setup-lua v1.0.5
+
+* Added support to use the latest release candidate of Lua 5.5.0 (`5.5.0-rc2`).
+
 ## setup-lua v1.0.4
 
 * Fixed a bug that caused the build of PUC-Lua to fail when the C compiler and linker was chosen as `clang++`;
