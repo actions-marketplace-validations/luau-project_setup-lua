@@ -100,10 +100,10 @@ In order to skip LuaRocks installation, use `none` as the value for the `luarock
 Thus, you can test your project on the upcoming Lua 5.5.0. However, be aware that LuaRocks does not support it yet:
 
 ```yaml
-      - name: Install Lua 5.5.0 (RC3)
+      - name: Install Lua 5.5.0 (RC4)
         uses: luau-project/setup-lua@v1
         with:
-          lua-version: 5.5.0-rc3
+          lua-version: 5.5.0-rc4
           luarocks-version: none
 ```
 
