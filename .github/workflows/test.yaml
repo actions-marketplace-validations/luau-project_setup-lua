@@ -66,11 +66,21 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install packages
-        run: npm install
+      - name: Install packages (non-release branches)
+        shell: pwsh
+        run: |
+          if (-not ("${{ github.ref_name }}" -match "^release-(\d+)\.(\d+)\.(\d+)$"))
+          {
+            npm install
+          }
 
-      - name: Build
-        run: npm run build
+      - name: Build (non-release branches)
+        shell: pwsh
+        run: |
+          if (-not ("${{ github.ref_name }}" -match "^release-(\d+)\.(\d+)\.(\d+)$"))
+          {
+            npm run build
+          }
 
       - name: Setup MSVC developer prompt
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1.13.0
@@ -307,11 +317,21 @@ jobs:
         if: ${{ startsWith(matrix.cc, 'clang') }}
         run: sudo apt install -y clang
 
-      - name: Install packages
-        run: npm install
+      - name: Install packages (non-release branches)
+        shell: pwsh
+        run: |
+          if (-not ("${{ github.ref_name }}" -match "^release-(\d+)\.(\d+)\.(\d+)$"))
+          {
+            npm install
+          }
 
-      - name: Build
-        run: npm run build
+      - name: Build (non-release branches)
+        shell: pwsh
+        run: |
+          if (-not ("${{ github.ref_name }}" -match "^release-(\d+)\.(\d+)\.(\d+)$"))
+          {
+            npm run build
+          }
 
       - name: Install Lua (${{ matrix.cc }})
         uses: ./
