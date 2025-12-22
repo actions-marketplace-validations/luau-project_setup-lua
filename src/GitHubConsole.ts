@@ -10,7 +10,7 @@ export class GitHubConsole implements IConsole {
         return GitHubConsole._instance;
     }
     write(message: string): void {
-        info(message);
+        info(message.replace(/(\r\n|\r|\n)$/, ""));
     }
     writeLine(message: string): void {
         info(message);
