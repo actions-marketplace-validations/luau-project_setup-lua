@@ -1,3 +1,7 @@
+## setup-lua v1.0.8
+
+* Added support to use the latest official release of Lua 5.5.0, available as labels `5.5` or `5.5.0`.
+
 ## setup-lua v1.0.7
 
 * Added support to use the latest release candidate of Lua 5.5.0 (`5.5.0-rc4`).
