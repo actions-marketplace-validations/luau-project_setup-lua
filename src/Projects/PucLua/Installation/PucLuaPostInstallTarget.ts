@@ -1,14 +1,17 @@
 import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
-import { AbstractPkgConfigCMakeEnvVarsTarget } from "../../Targets/AbstractPkgConfigCMakeEnvVarsTarget";
+import { AbstractUpdateLuaEnvVarsTarget } from "../../Targets/AbstractUpdateLuaEnvVarsTarget";
 import { PucLuaFinishInstallationTarget } from "./PucLuaFinishInstallationTarget";
 
-export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget {
+export class PucLuaPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     constructor(project: PucLuaProject, parent: ITarget | null) {
         super(project, parent);
     }
     getProjectInstallDir(): string {
         return (<PucLuaProject>this.getProject()).getInstallDir();
+    }
+    getProjectInstallLibDir(): string {
+        return (<PucLuaProject>this.getProject()).getInstallLibDir();
     }
     getProjectInstallBinDir(): string {
         return (<PucLuaProject>this.getProject()).getInstallBinDir();

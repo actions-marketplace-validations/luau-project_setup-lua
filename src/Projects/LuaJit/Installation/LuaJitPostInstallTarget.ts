@@ -1,14 +1,17 @@
 import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
-import { AbstractPkgConfigCMakeEnvVarsTarget } from "../../Targets/AbstractPkgConfigCMakeEnvVarsTarget";
+import { AbstractUpdateLuaEnvVarsTarget } from "../../Targets/AbstractUpdateLuaEnvVarsTarget";
 import { LuaJitFinishInstallationTarget } from "./LuaJitFinishInstallationTarget";
 
-export class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget {
+export class LuaJitPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     constructor(project: LuaJitProject, parent: ITarget | null) {
         super(project, parent);
     }
     getProjectInstallDir(): string {
         return (<LuaJitProject>this.getProject()).getInstallDir();
+    }
+    getProjectInstallLibDir(): string {
+        return (<LuaJitProject>this.getProject()).getInstallLibDir();
     }
     getProjectInstallBinDir(): string {
         return (<LuaJitProject>this.getProject()).getInstallBinDir();
