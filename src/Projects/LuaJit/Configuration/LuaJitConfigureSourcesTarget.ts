@@ -11,6 +11,7 @@ import { LuaJitRepositoryVersion, OpenRestyRepositoryVersion } from "../LuaJitRe
 import { LuaJitFinishConfigurationTarget } from "./LuaJitFinishConfigurationTarget";
 import { checkFiles } from "../../../Util/CheckFiles";
 import { LuaJitApplyPatchesTarget } from "./LuaJitApplyPatchesTarget";
+import { Console } from "../../../Console";
 
 export class LuaJitConfigureSourcesTarget implements ITarget {
     private parent: LuaJitApplyPatchesTarget;
@@ -46,7 +47,7 @@ export class LuaJitConfigureSourcesTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -267,7 +268,7 @@ export class LuaJitConfigureSourcesTarget implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

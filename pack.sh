@@ -29,8 +29,10 @@ else
                         --exclude=.vscode \
                         --exclude=src/CacheService.ts \
                         --exclude=src/GitHubCore.ts \
+                        --exclude=src/Console.ts \
                         --exclude=package-lock.json \
                         --exclude=node_modules \
+                        --exclude=.lua \
                         $leading_dir
                     cd $initial_dir
                 else

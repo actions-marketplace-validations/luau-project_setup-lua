@@ -15,6 +15,7 @@ import { IReadOnlyArray } from "../../../Util/IReadOnlyArray";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
 import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 import { LuaRocksFinishInstallationTarget } from "./LuaRocksFinishInstallationTarget";
+import { Console } from "../../../Console";
 
 const LUA_INTERPRETER_CANDIDATES: IReadOnlyArray<string> = new ReadOnlyArray<string>([
     "lua.exe",
@@ -35,7 +36,7 @@ export class LuaRocksPostInstallTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -356,7 +357,7 @@ export class LuaRocksPostInstallTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

@@ -2,6 +2,7 @@
 
 * Added support to apply remote patches to Lua / LuaJIT / OpenResty / LuaRocks after fetching the source code;
 * Fixed a bug that didn't set the environment variables `DYLD_LIBRARY_PATH` on macOS and `LD_LIBRARY_PATH` on Unix-like distros to make the system aware of Lua's shared library;
+* Now, as a security measure to avoid leaking secrets, all the output written on GitHub Actions goes through the method `core.info` of the package `@actions/core`;
 * Added support to use the latest official release of Lua 5.5.0, available as labels `5.5` or `5.5.0`.
 
 ## setup-lua v1.0.7

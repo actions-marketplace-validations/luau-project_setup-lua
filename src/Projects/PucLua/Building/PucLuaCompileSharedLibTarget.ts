@@ -9,6 +9,7 @@ import { PucLuaLinkSharedLibTarget } from "./PucLuaLinkSharedLibTarget";
 import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 import { LUA_52_VERSION, LUA_53_VERSION, LUA_54_VERSION } from "../PucLuaVersion";
 import { ToolchainEnvironmentVariables } from "../../../Toolchains/ToolchainEnvironmentVariables";
+import { Console } from "../../../Console";
 
 export class PucLuaCompileSharedLibTarget implements ITarget {
     private parent: ITarget | null;
@@ -23,7 +24,7 @@ export class PucLuaCompileSharedLibTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Compile Lua ${this.project.getVersion().getString()} shared library`);
+            Console.instance().writeLine(`[Start] Compile Lua ${this.project.getVersion().getString()} shared library`);
             resolve();
         });
     }
@@ -147,7 +148,7 @@ export class PucLuaCompileSharedLibTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Compile Lua ${this.project.getVersion().getString()} shared library`);
+            Console.instance().writeLine(`[End] Compile Lua ${this.project.getVersion().getString()} shared library`);
             resolve();
         });
     }

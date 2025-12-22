@@ -7,6 +7,7 @@ import { PucLuaCompileStaticLibTarget } from "./PucLuaCompileStaticLibTarget";
 import { isGccLikeToolchain, IGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 import { PucLuaSourcesInfo } from "../Configuration/PucLuaSourcesInfo";
 import { PucLuaCompileInterpreterTarget } from "./PucLuaCompileInterpreterTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaArchiveStaticLibTarget implements ITarget {
     private parent: PucLuaCompileStaticLibTarget;
@@ -20,7 +21,7 @@ export class PucLuaArchiveStaticLibTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Archive Lua ${this.project.getVersion().getString()} static library`);
+            Console.instance().writeLine(`[Start] Archive Lua ${this.project.getVersion().getString()} static library`);
             resolve();
         });
     }
@@ -93,7 +94,7 @@ export class PucLuaArchiveStaticLibTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Archive Lua ${this.project.getVersion().getString()} static library`);
+            Console.instance().writeLine(`[End] Archive Lua ${this.project.getVersion().getString()} static library`);
             resolve();
         });
     }

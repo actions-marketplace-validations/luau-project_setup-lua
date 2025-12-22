@@ -10,22 +10,22 @@ function writeMissingFile(file, program, resolve, reject) {
         .catch(reject);
 }
 
-function generateCacheService(config) {
+function generateClass(config, baseClassName, githubPrefix, cliPrefix) {
     return new Promise((resolve, reject) => {
-        const file = join(__dirname, "src", "CacheService.ts");
+        const file = join(__dirname, "src", `${baseClassName}.ts`);
         if (config === "GITHUB") {
             const program = [
-                "import { GitHubCacheService } from \"./GitHubCacheService\";",
+                `import { ${githubPrefix}${baseClassName} } from \"./${githubPrefix}${baseClassName}\";`,
                 "",
-                "export const CacheService = GitHubCacheService;"
+                `export const ${baseClassName} = ${githubPrefix}${baseClassName};`
             ];
             writeMissingFile(file, program, resolve, reject);
         }
         else if (config === "CLI") {
             const program = [
-                "import { CliCacheService } from \"./CliCacheService\";",
+                `import { ${cliPrefix}${baseClassName} } from \"./${cliPrefix}${baseClassName}\";`,
                 "",
-                "export const CacheService = CliCacheService;"
+                `export const ${baseClassName} = ${cliPrefix}${baseClassName};`
             ];
             writeMissingFile(file, program, resolve, reject);
         }
@@ -35,29 +35,16 @@ function generateCacheService(config) {
     });
 }
 
+function generateCacheService(config) {
+    return generateClass(config, "CacheService", "GitHub", "Cli");
+}
+
 function generateGitHubCore(config) {
-    return new Promise((resolve, reject) => {
-        const file = join(__dirname, "src", "GitHubCore.ts");
-        if (config === "GITHUB") {
-            const program = [
-                "import { NativeGitHubCore } from \"./NativeGitHubCore\";",
-                "",
-                "export const GitHubCore = NativeGitHubCore;"
-            ];
-            writeMissingFile(file, program, resolve, reject);
-        }
-        else if (config === "CLI") {
-            const program = [
-                "import { CliGitHubCore } from \"./CliGitHubCore\";",
-                "",
-                "export const GitHubCore = CliGitHubCore;"
-            ];
-            writeMissingFile(file, program, resolve, reject);
-        }
-        else {
-            reject(new Error(`Unknown generation config: \`${config}'`));
-        }
-    });
+    return generateClass(config, "GitHubCore", "Native", "Cli");
+}
+
+function generateConsole(config) {
+    return generateClass(config, "Console", "GitHub", "Cli");
 }
 
 function main() {
@@ -68,7 +55,15 @@ function main() {
             generateCacheService(config)
                 .then(cacheService => {
                     console.log(`> \`${cacheService}' was generated.`);
-                    
+                    generateConsole(config)
+                        .then(_console => {
+                            console.log(`> \`${_console}' was generated.`);
+                        })
+                        .catch(err => {
+                            console.log("Failed to generate the Console");
+                            console.log(err);
+                            process.exitCode = 1;
+                        });
                 })
                 .catch(err => {
                     console.log("Failed to generate the CacheService");

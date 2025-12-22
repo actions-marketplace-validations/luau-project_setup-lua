@@ -6,6 +6,7 @@ import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitWindowsCreateInstallationDirectoriesTarget } from "./LuaJitWindowsCreateInstallationDirectoriesTarget";
 import { sequentialPromises } from "../../../Util/SequentialPromises";
 import { LuaJitPostInstallTarget } from "./LuaJitPostInstallTarget";
+import { Console } from "../../../Console";
 
 export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
     private project: LuaJitProject;
@@ -17,7 +18,7 @@ export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
+            Console.instance().writeLine(`[Start] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
             resolve();
         });
     }
@@ -168,7 +169,7 @@ export class LuaJitWindowsCopyInstallableArtifactsTarget implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
+            Console.instance().writeLine(`[End] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
             resolve();
         });
     }

@@ -2,6 +2,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { AbstractUpdateLuaEnvVarsTarget } from "../../Targets/AbstractUpdateLuaEnvVarsTarget";
 import { PucLuaFinishInstallationTarget } from "./PucLuaFinishInstallationTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     constructor(project: PucLuaProject, parent: ITarget | null) {
@@ -22,7 +23,7 @@ export class PucLuaPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<PucLuaProject>this.getProject()).getVersion();
-            console.log(`[Start] Post install for Lua ${projectVersion.getString()}`);
+            Console.instance().writeLine(`[Start] Post install for Lua ${projectVersion.getString()}`);
             resolve();
         });
     }
@@ -32,7 +33,7 @@ export class PucLuaPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<PucLuaProject>this.getProject()).getVersion();
-            console.log(`[End] Post install for Lua ${projectVersion.getString()}`);
+            Console.instance().writeLine(`[End] Post install for Lua ${projectVersion.getString()}`);
             resolve();
         });
     }

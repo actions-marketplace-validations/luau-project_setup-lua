@@ -4,6 +4,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaConfigureSourcesTarget } from "./PucLuaConfigureSourcesTarget";
 import { PucLuaFetchTarget } from "./PucLuaFetchTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaApplyPatchesTarget extends AbstractApplyPatchesTarget {
     constructor(project: PucLuaProject, parent: PucLuaFetchTarget) {
@@ -11,7 +12,7 @@ export class PucLuaApplyPatchesTarget extends AbstractApplyPatchesTarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Apply patches on Lua ${(<PucLuaProject>this.getProject()).getVersion().getString()}`);
+            Console.instance().writeLine(`[Start] Apply patches on Lua ${(<PucLuaProject>this.getProject()).getVersion().getString()}`);
             resolve();
         });
     }
@@ -20,7 +21,7 @@ export class PucLuaApplyPatchesTarget extends AbstractApplyPatchesTarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Apply patches on Lua ${(<PucLuaProject>this.getProject()).getVersion().getString()}`);
+            Console.instance().writeLine(`[End] Apply patches on Lua ${(<PucLuaProject>this.getProject()).getVersion().getString()}`);
             resolve();
         });
     }

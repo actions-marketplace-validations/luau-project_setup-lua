@@ -11,6 +11,7 @@ import { LuaRocksSourcesInfo, LuaRocksUnixSourcesInfoDetails, LuaRocksWindowsSou
 import { LuaRocksCheckDependenciesTarget } from "./LuaRocksCheckDependenciesTarget";
 import { LuaRocksReleaseVersion } from "../LuaRocksVersion";
 import { LuaRocksApplyPatchesTarget } from "./LuaRocksApplyPatchesTarget";
+import { Console } from "../../../Console";
 
 export class LuaRocksFetchTarget extends AbstractFetchCompressedTarget {
     private parent: LuaRocksCheckDependenciesTarget;
@@ -35,7 +36,7 @@ export class LuaRocksFetchTarget extends AbstractFetchCompressedTarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -144,7 +145,7 @@ export class LuaRocksFetchTarget extends AbstractFetchCompressedTarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

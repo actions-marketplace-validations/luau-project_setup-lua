@@ -3,6 +3,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitConfigureSourcesTarget } from "./LuaJitConfigureSourcesTarget";
 import { LuaJitSourcesInfo } from "./LuaJitSourcesInfo";
+import { Console } from "../../../Console";
 
 export class LuaJitFinishConfigurationTarget implements ITarget {
     private parent: LuaJitConfigureSourcesTarget;
@@ -14,7 +15,7 @@ export class LuaJitFinishConfigurationTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -25,21 +26,21 @@ export class LuaJitFinishConfigurationTarget implements ITarget {
         return new Promise<void>((resolve, reject) => {
             const srcInfo = <LuaJitSourcesInfo>(this.project.configurationResult().getValue());
             let len = 0;
-            console.log(`[Delayed Header] ${srcInfo.getDelayedHeaderFile()}`);
+            Console.instance().writeLine(`[Delayed Header] ${srcInfo.getDelayedHeaderFile()}`);
             const headerFiles = srcInfo.getHeaderFiles();
             len = headerFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[Header] ${headerFiles.getItem(i)}`);
+                Console.instance().writeLine(`[Header] ${headerFiles.getItem(i)}`);
             }
             const jitFiles = srcInfo.getJitFiles();
             len = jitFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[JIT] ${jitFiles.getItem(i)}`);
+                Console.instance().writeLine(`[JIT] ${jitFiles.getItem(i)}`);
             }
             const manFiles = srcInfo.getManFiles();
             len = manFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[MAN] ${manFiles.getItem(i)}`);
+                Console.instance().writeLine(`[MAN] ${manFiles.getItem(i)}`);
             }
             resolve();
         });
@@ -47,7 +48,7 @@ export class LuaJitFinishConfigurationTarget implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

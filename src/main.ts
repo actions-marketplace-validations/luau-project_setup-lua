@@ -14,6 +14,7 @@ import { IProject } from "./Projects/IProject";
 import { IToolchain } from "./Toolchains/IToolchain";
 import { sequentialPromises } from "./Util/SequentialPromises";
 import { GitHubInput } from "./Util/GitHubInput";
+import { Console } from "./Console";
 
 function getTempDir(): Promise<string> {
     return new Promise<string>((promiseResolve, reject) => {
@@ -170,9 +171,9 @@ function main(): Promise<void> {
 
 main()
     .then(() => {
-        console.log("finished");
+        Console.instance().writeLine("finished");
     })
     .catch(err => {
-        console.log(err);
+        Console.instance().writeLine(err);
         process.exitCode = 1;
     });

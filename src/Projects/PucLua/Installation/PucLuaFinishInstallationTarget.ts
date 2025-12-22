@@ -1,6 +1,7 @@
 import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
+import { Console } from "../../../Console";
 
 export class PucLuaFinishInstallationTarget implements ITarget {
     private parent: ITarget | null;
@@ -11,7 +12,7 @@ export class PucLuaFinishInstallationTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Finish Lua ${this.project.getVersion().getString()} installation`);
+            Console.instance().writeLine(`[Start] Finish Lua ${this.project.getVersion().getString()} installation`);
             resolve();
         });
     }
@@ -20,13 +21,13 @@ export class PucLuaFinishInstallationTarget implements ITarget {
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log("<< done >>");
+            Console.instance().writeLine("<< done >>");
             resolve();
         });
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Finish Lua ${this.project.getVersion().getString()} installation`);
+            Console.instance().writeLine(`[End] Finish Lua ${this.project.getVersion().getString()} installation`);
             resolve();
         });
     }

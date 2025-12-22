@@ -10,6 +10,7 @@ import { ReadOnlyArray } from "../../../Util/ReadOnlyArray";
 import { PucLuaLinkInterpreterTarget } from "./PucLuaLinkInterpreterTarget";
 import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 import { ToolchainEnvironmentVariables } from "../../../Toolchains/ToolchainEnvironmentVariables";
+import { Console } from "../../../Console";
 
 export class PucLuaCompileInterpreterTarget implements ITarget {
     private parent: PucLuaArchiveStaticLibTarget;
@@ -24,7 +25,7 @@ export class PucLuaCompileInterpreterTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Compile Lua ${this.project.getVersion().getString()} interpreter`);
+            Console.instance().writeLine(`[Start] Compile Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }
@@ -148,7 +149,7 @@ export class PucLuaCompileInterpreterTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Compile Lua ${this.project.getVersion().getString()} interpreter`);
+            Console.instance().writeLine(`[End] Compile Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }

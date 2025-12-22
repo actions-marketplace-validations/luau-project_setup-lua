@@ -6,6 +6,7 @@ import { LuaRocksApplyPatchesTarget } from "./LuaRocksApplyPatchesTarget";
 import { LuaRocksFinishConfigurationTarget } from "./LuaRocksFinishConfigurationTarget";
 import { LuaRocksUnixSourcesInfoDetails } from "./LuaRocksSourcesInfo";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
+import { Console } from "../../../Console";
 
 export class LuaRocksConfigureSourcesTarget implements ITarget {
     private parent: LuaRocksApplyPatchesTarget;
@@ -16,7 +17,7 @@ export class LuaRocksConfigureSourcesTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -67,7 +68,7 @@ export class LuaRocksConfigureSourcesTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

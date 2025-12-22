@@ -7,6 +7,7 @@ import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaFetchTarget } from "./PucLuaFetchTarget";
 import { executeProcess } from "../../../Util/ExecuteProcess";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
+import { Console } from "../../../Console";
 
 export class PucLuaCheckDependenciesTarget implements ITarget {
     private parent: ITarget | null;
@@ -17,7 +18,7 @@ export class PucLuaCheckDependenciesTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Check dependencies for Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[Start] Check dependencies for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -137,7 +138,7 @@ export class PucLuaCheckDependenciesTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Check dependencies for Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[End] Check dependencies for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }

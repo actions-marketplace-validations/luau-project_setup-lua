@@ -5,6 +5,8 @@ import { ITarget } from "../../Targets/ITarget";
 import { LuaJitUnixBuildInfo } from "../Building/LuaJitUnixBuildInfo";
 import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitPostInstallTarget } from "./LuaJitPostInstallTarget";
+import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
+import { Console } from "../../../Console";
 
 export class LuaJitUnixInstall implements ITarget {
     private project: LuaJitProject;
@@ -18,7 +20,7 @@ export class LuaJitUnixInstall implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -33,9 +35,6 @@ export class LuaJitUnixInstall implements ITarget {
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            const defaultStdOutHandler = (chunk: any) => {
-                process.stdout.write(chunk.toString());
-            }
             const makeArguments = this.buildInfo.getMakeArguments();
             const makeArgs = makeArguments.createCopy();
             const installTarget = "install";
@@ -70,7 +69,7 @@ export class LuaJitUnixInstall implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

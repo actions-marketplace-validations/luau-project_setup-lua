@@ -8,6 +8,7 @@ import { executeProcess } from "../../../Util/ExecuteProcess";
 import { LuaRocksWindowsSourcesInfoDetails } from "../Configuration/LuaRocksSourcesInfo";
 import { LuaRocksPostInstallTarget } from "./LuaRocksPostInstallTarget";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
+import { Console } from "../../../Console";
 
 export class LuaRocksInstallTarget implements ITarget {
     private parent: ITarget | null;
@@ -20,7 +21,7 @@ export class LuaRocksInstallTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -88,7 +89,7 @@ export class LuaRocksInstallTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

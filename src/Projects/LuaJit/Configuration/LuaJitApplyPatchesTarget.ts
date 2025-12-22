@@ -4,6 +4,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitConfigureSourcesTarget } from "./LuaJitConfigureSourcesTarget";
 import { LuaJitFetchTarget } from "./LuaJitFetchTarget";
+import { Console } from "../../../Console";
 
 export class LuaJitApplyPatchesTarget extends AbstractApplyPatchesTarget {
     constructor(project: LuaJitProject, parent: LuaJitFetchTarget) {
@@ -12,7 +13,7 @@ export class LuaJitApplyPatchesTarget extends AbstractApplyPatchesTarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<LuaJitProject>this.getProject()).getVersion();
-            console.log(`[Start] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -22,7 +23,7 @@ export class LuaJitApplyPatchesTarget extends AbstractApplyPatchesTarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<LuaJitProject>this.getProject()).getVersion();
-            console.log(`[End] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

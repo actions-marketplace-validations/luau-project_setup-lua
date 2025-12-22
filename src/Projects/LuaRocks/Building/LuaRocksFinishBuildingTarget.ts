@@ -2,6 +2,7 @@ import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { LuaRocksProject } from "../LuaRocksProject";
 import { LuaRocksBuildTarget } from "./LuaRocksBuildTarget";
+import { Console } from "../../../Console";
 
 export class LuaRocksFinishBuildingTarget implements ITarget {
     private parent: LuaRocksBuildTarget;
@@ -12,7 +13,7 @@ export class LuaRocksFinishBuildingTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -27,13 +28,13 @@ export class LuaRocksFinishBuildingTarget implements ITarget {
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log("LuaRocks was built successfully.");
+            Console.instance().writeLine("LuaRocks was built successfully.");
             resolve();
         });
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

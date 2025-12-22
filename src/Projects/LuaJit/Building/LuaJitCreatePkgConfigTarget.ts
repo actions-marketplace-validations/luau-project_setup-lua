@@ -9,6 +9,7 @@ import { LuaJitWindowsBuildInfo } from "./LuaJitWindowsBuildInfo";
 import { hasWin32ImportLibraryDecorator, IWin32ImportLibraryDecorator } from "../../../Toolchains/IWin32ImportLibraryDecorator";
 import { LuaJitFinishBuildingTarget } from "./LuaJitFinishBuildingTarget";
 import { LuaJitUnixBuildInfo } from "./LuaJitUnixBuildInfo";
+import { Console } from "../../../Console";
 
 export class LuaJitCreatePkgConfigTarget implements ITarget {
     private project: LuaJitProject;
@@ -21,7 +22,7 @@ export class LuaJitCreatePkgConfigTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -159,7 +160,7 @@ export class LuaJitCreatePkgConfigTarget implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

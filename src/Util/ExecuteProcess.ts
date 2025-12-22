@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { Console } from "../Console";
 
 export interface ExecProcessInfo {
     cwd?: string | URL | undefined;
@@ -18,7 +19,7 @@ export function executeProcess(tool: string, opts?: ExecProcessInfo): Promise<nu
             for (const a of opts.args) {
                 values.push(`"${a.replace(/"/g,"\\\"")}"`);
             }
-            console.log(values.join(" "));
+            Console.instance().writeLine(values.join(" "));
         }
 
         if (opts && opts.stdout) {
@@ -64,7 +65,7 @@ export function getStdOutFromProcessExecution(tool: string, opts?: StdOutFromPro
             for (const a of opts.args) {
                 values.push(`"${a.replace(/"/g,"\\\"")}"`);
             }
-            console.log(values.join(" "));
+            Console.instance().writeLine(values.join(" "));
         }
         p.stdout.on("data", (chunk: any) => {
             stdOutput.push(<string>(chunk.toString()));

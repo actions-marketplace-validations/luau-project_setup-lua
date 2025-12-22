@@ -1,4 +1,4 @@
-import * as core from '@actions/core';
+import { getInput, addPath, exportVariable } from '@actions/core';
 import { IGitHubCore } from './Util/IGitHubCore';
 
 export class NativeGitHubCore implements IGitHubCore {
@@ -10,13 +10,13 @@ export class NativeGitHubCore implements IGitHubCore {
         return NativeGitHubCore._instance;
     }
     getInput(variable: string): string | undefined {
-        return core.getInput(variable);
+        return getInput(variable);
     }
     appendToGitHubPath(value: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             let err: any = undefined;
             try { 
-                core.addPath(value);
+                addPath(value);
             }
             catch (e) {
                 err = e;
@@ -33,7 +33,7 @@ export class NativeGitHubCore implements IGitHubCore {
         return new Promise<void>((resolve, reject) => {
             let err: any = undefined;
             try { 
-                core.exportVariable(key, value);
+                exportVariable(key, value);
             }
             catch (e) {
                 err = e;
