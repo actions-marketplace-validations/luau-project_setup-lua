@@ -341,8 +341,10 @@ const LUA_5_1_1_VERSION = LUA_RELEASES["5.1.1"];
 const LUA_5_2_0_VERSION = LUA_RELEASES["5.2.0"];
 const LUA_5_3_0_VERSION = LUA_RELEASES["5.3.0"];
 const LUA_5_4_0_VERSION = LUA_RELEASES["5.4.0"];
+const LUA_5_5_0_VERSION = LUA_RELEASES["5.5.0"];
 
 export const LUA_51_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 1, 1, LUA_5_1_1_VERSION.hash.algorithm, LUA_5_1_1_VERSION.hash.value);
 export const LUA_52_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 2, 0, LUA_5_2_0_VERSION.hash.algorithm, LUA_5_2_0_VERSION.hash.value);
 export const LUA_53_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 3, 0, LUA_5_3_0_VERSION.hash.algorithm, LUA_5_3_0_VERSION.hash.value);
 export const LUA_54_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 4, 0, LUA_5_4_0_VERSION.hash.algorithm, LUA_5_4_0_VERSION.hash.value);
+export const LUA_55_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 5, 0, LUA_5_5_0_VERSION.hash.algorithm, LUA_5_5_0_VERSION.hash.value);
