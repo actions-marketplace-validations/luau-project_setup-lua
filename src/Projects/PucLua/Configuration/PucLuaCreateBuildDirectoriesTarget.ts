@@ -13,6 +13,7 @@ export class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectorie
             project.getLibBuildDir(),
             project.getSharedLibBuildDir(),
             project.getStaticLibBuildDir(),
+            project.getRemotePatchesBuildDir(),
             project.getInterpreterBuildDir(),
             project.getCompilerBuildDir()
         ]);

@@ -503,6 +503,10 @@ In this example, we apply patches provided in the files `my-great-change.patch` 
   node dist/cli/index.js
   ```
 
+> [!TIP]
+> 
+> When the patch starts with `http://` or `https://`, `setup-lua` treats it as a remote patch and downloads it automatically. Otherwise, `setup-lua` treats it as a path in the local disk (full path or relative to the current directory).
+
 ### Install LuaRocks applying patches
 
 In this example, we apply patches provided in the files `my-great-change.patch` and `my-small-change.patch` after fetching LuaRocks source code.
@@ -519,5 +523,9 @@ In this example, we apply patches provided in the files `my-great-change.patch` 
   SET "LUAROCKS_PATCHES=my-great-change.patch;my-small-change.patch"
   node dist/cli/index.js
   ```
+
+> [!TIP]
+> 
+> When the patch starts with `http://` or `https://`, `setup-lua` treats it as a remote patch and downloads it automatically. Otherwise, `setup-lua` treats it as a path in the local disk (full path or relative to the current directory).
 
 [Back to home](../)

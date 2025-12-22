@@ -20,6 +20,7 @@ export class PucLuaProject implements IProject {
     private libBuildDir: string;
     private sharedLibBuildDir: string;
     private staticLibBuildDir: string;
+    private remotePatchesBuildDir: string;
     /* install directories */
     private installIncludeDir: string;
     private installBinDir: string;
@@ -57,6 +58,9 @@ export class PucLuaProject implements IProject {
     }
     getStaticLibBuildDir(): string {
         return this.staticLibBuildDir;
+    }
+    getRemotePatchesBuildDir(): string {
+        return this.remotePatchesBuildDir;
     }
     getInstallIncludeDir(): string {
         return this.installIncludeDir;
@@ -101,6 +105,7 @@ export class PucLuaProject implements IProject {
         this.libBuildDir = join(buildDir, "lib");
         this.sharedLibBuildDir = join(this.libBuildDir, "shared");
         this.staticLibBuildDir = join(this.libBuildDir, "static");
+        this.remotePatchesBuildDir = join(this.buildDir, "remote-patches");
         this.installIncludeDir = join(installDir, "include");
         this.installBinDir = join(installDir, "bin");
         this.installLibDir = join(installDir, "lib");

@@ -1,4 +1,5 @@
 import { isAbsolute, join } from "node:path";
+import { mkdtemp } from "node:fs/promises";
 import { defaultStdOutHandler } from "../../Util/DefaultStdOutHandler";
 import { executeProcess } from "../../Util/ExecuteProcess";
 import { findGitForWindowsInstallDir } from "../../Util/FindGitForWindowsInstallDir";
@@ -8,16 +9,19 @@ import { ITarget } from "./ITarget";
 import { IReadOnlyArray } from "../../Util/IReadOnlyArray";
 import { ReadOnlyArray } from "../../Util/ReadOnlyArray";
 import { checkFiles } from "../../Util/CheckFiles";
+import { downloadFile } from "../../Util/DownloadFile";
 
 export abstract class AbstractApplyPatchesTarget implements ITarget {
     private project: IProject;
     private parent: ITarget | null;
     private dir: string;
+    private remotePatchesDir: string;
     private patches: IReadOnlyArray<string>;
-    constructor(project: IProject, parent: ITarget | null, dir: string, patches: string[]) {
+    constructor(project: IProject, parent: ITarget | null, dir: string, remotePatchesDir: string, patches: string[]) {
         this.project = project;
         this.parent = parent;
         this.dir = dir;
+        this.remotePatchesDir = remotePatchesDir;
         this.patches = new ReadOnlyArray<string>(patches);
     }
     getProject(): IProject {
@@ -36,35 +40,52 @@ export abstract class AbstractApplyPatchesTarget implements ITarget {
         return new Promise<void>((resolve, reject) => {
             if (this.patches.getLenght() > 0) {
                 const applyPatches = (patch: string) => {
-                    const file_iter = (i: number) => {
+                    const patches_iter = (i: number) => {
                         if (i < this.patches.getLenght()) {
                             const patchName = this.patches.getItem(i);
-                            const patchPath = isAbsolute(patchName) ? patchName : join(process.cwd(), patchName);
-                            checkFiles([patchPath])
-                                .then(() => {
-                                    executeProcess(patch, {
-                                        cwd: this.dir,
-                                        args: [
-                                            "-Np1",
-                                            "--force",
-                                            "-i",
-                                            patchPath
-                                        ],
-                                        verbose: true,
-                                        stdout: defaultStdOutHandler
-                                    })
-                                        .then(code => {
-                                            file_iter(i + 1);
+                            const processPatch = (patchPath: string) => {
+                                checkFiles([patchPath])
+                                    .then(() => {
+                                        executeProcess(patch, {
+                                            cwd: this.dir,
+                                            args: [
+                                                "-Np1",
+                                                "--force",
+                                                "-i",
+                                                patchPath
+                                            ],
+                                            verbose: true,
+                                            stdout: defaultStdOutHandler
                                         })
-                                        .catch(reject);
-                                })
-                                .catch(reject);
+                                            .then(code => {
+                                                patches_iter(i + 1);
+                                            })
+                                            .catch(reject);
+                                    })
+                                    .catch(reject);
+                            };
+                            if (/^https?:\/\//.test(patchName)) {
+                                const patchPrefix = join(this.remotePatchesDir, "p-");
+                                mkdtemp(patchPrefix)
+                                    .then(patchDir => {
+                                        downloadFile(patchName, join(patchDir, "main.patch"))
+                                            .then(patchPath => {
+                                                processPatch(patchPath);
+                                            })
+                                            .catch(reject);
+                                    })
+                                    .catch(reject);
+                            }
+                            else {
+                                const patchPath = isAbsolute(patchName) ? patchName : join(process.cwd(), patchName);
+                                processPatch(patchPath);
+                            }
                         }
                         else {
                             resolve();
                         }
                     };
-                    file_iter(0);
+                    patches_iter(0);
                 };
                 if (process.platform === 'win32') {
                     findProgram("patch", true)

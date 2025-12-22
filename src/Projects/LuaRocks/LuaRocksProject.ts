@@ -14,6 +14,9 @@ export class LuaRocksProject implements IProject {
     private buildDir: string;
     private installDir: string;
     private toolchain: IToolchain;
+    /* build directories */
+    private remotePatchesBuildDir: string;
+    /* install directories */
     private installBinDir: string;
     private _configurationResult: IGetSetProperty<any>;
     private _buildResult: IGetSetProperty<any>;
@@ -23,6 +26,9 @@ export class LuaRocksProject implements IProject {
     }
     getBuildDir(): string {
         return this.buildDir;
+    }
+    getRemotePatchesBuildDir(): string {
+        return this.remotePatchesBuildDir;
     }
     getInstallDir(): string {
         return this.installDir;
@@ -50,6 +56,7 @@ export class LuaRocksProject implements IProject {
         this.buildDir = buildDir;
         this.installDir = installDir;
         this.toolchain = toolchain;
+        this.remotePatchesBuildDir = join(this.buildDir, "remote-patches");
         this.installBinDir = join(installDir, "bin");
         this._configurationResult = new GetSetProperty<any>(null);
         this._buildResult = new GetSetProperty<any>(null);

@@ -7,7 +7,7 @@ import { PucLuaFetchTarget } from "./PucLuaFetchTarget";
 
 export class PucLuaApplyPatchesTarget extends AbstractApplyPatchesTarget {
     constructor(project: PucLuaProject, parent: PucLuaFetchTarget) {
-        super(project, parent, parent.getExtractedDir(), ToolchainEnvironmentVariables.instance().getLuaPatches());
+        super(project, parent, parent.getExtractedDir(), project.getRemotePatchesBuildDir(), ToolchainEnvironmentVariables.instance().getLuaPatches());
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

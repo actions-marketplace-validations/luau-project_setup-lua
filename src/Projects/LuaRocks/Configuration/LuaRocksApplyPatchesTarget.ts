@@ -8,7 +8,7 @@ import { LuaRocksSourcesInfo } from "./LuaRocksSourcesInfo";
 
 export class LuaRocksApplyPatchesTarget extends AbstractApplyPatchesTarget {
     constructor(project: LuaRocksProject, parent: LuaRocksFetchTarget) {
-        super(project, parent, parent.getLuaRocksSourcesInfo().getDir(), ToolchainEnvironmentVariables.instance().getLuaRocksPatches());
+        super(project, parent, parent.getLuaRocksSourcesInfo().getDir(), project.getRemotePatchesBuildDir(), ToolchainEnvironmentVariables.instance().getLuaRocksPatches());
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {

@@ -8,7 +8,10 @@ export class LuaJitCreateBuildDirectoriesTarget extends AbstractCreateDirectorie
     private parent: ITarget | null;
     private project: LuaJitProject;
     constructor(project: LuaJitProject, parent: ITarget | null) {
-        super([project.getBuildDir()]);
+        super([
+            project.getBuildDir(),
+            project.getRemotePatchesBuildDir()
+        ]);
         this.project = project;
         this.parent = parent;
     }
