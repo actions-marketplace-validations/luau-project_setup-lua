@@ -3,6 +3,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { AbstractCreateDirectoriesTarget } from "../../Targets/AbstractCreateDirectoriesTarget";
 import { PucLuaCheckDependenciesTarget } from "./PucLuaCheckDependenciesTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget {
     private parent: ITarget | null;
@@ -13,6 +14,7 @@ export class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectorie
             project.getLibBuildDir(),
             project.getSharedLibBuildDir(),
             project.getStaticLibBuildDir(),
+            project.getRemotePatchesBuildDir(),
             project.getInterpreterBuildDir(),
             project.getCompilerBuildDir()
         ]);
@@ -21,7 +23,7 @@ export class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectorie
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Create build directories for Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[Start] Create build directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -36,7 +38,7 @@ export class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectorie
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Create build directories for Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[End] Create build directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }

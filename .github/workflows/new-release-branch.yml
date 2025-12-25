@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           ref: ${{ github.ref }}
 
@@ -79,12 +79,11 @@ jobs:
 
     env:
       NEW_BRANCH: release-${{ needs.version-info.outputs.new-version }}
-      PREPARE_RELEASE_COMMIT_MSG: '[skip ci] Prepare for a release v${{ needs.version-info.outputs.new-version }}'
       RELEASE_COMMIT_MSG: 'Release v${{ needs.version-info.outputs.new-version }}'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           ref: ${{ github.ref }}
           token: ${{ secrets.SETUP_LUA_UPDATE_DIST_TOKEN }}
@@ -104,12 +103,8 @@ jobs:
           sed -e "s/setup\-lua\@v${old_major}/setup-lua@v${new_major}/g" -i README.md
           sed -e "s/setup\-lua\@v${old_major}/setup-lua@v${new_major}/g" -i docs/GitHub.md
 
-      - name: Enable dist changes on .gitignore
-        run: |
-          sed -i '1d' .gitignore
-
       - name: Setup node 24
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: 24
 
@@ -128,23 +123,10 @@ jobs:
         run: git add .
 
       - name: Commit changes
-        run: git commit "--message=${{ env.PREPARE_RELEASE_COMMIT_MSG }}"
+        run: git commit "--message=${{ env.RELEASE_COMMIT_MSG }}"
 
       - name: Print diff
         run: git show
 
       - name: Push changes
         run: git push --set-upstream origin ${{ env.NEW_BRANCH }}
-
-      - name: Disable dist changes on .gitignore
-        run: |
-          sed -i '1i dist' .gitignore
-
-      - name: Stage changes
-        run: git add .
-
-      - name: Commit changes
-        run: git commit "--message=${{ env.RELEASE_COMMIT_MSG }}"
-
-      - name: Push changes
-        run: git push

@@ -6,7 +6,8 @@ const CONVERT_LUA_RELEASE_VERSION: {[key: string]: string} = {
     "5.1": "5.1.5",
     "5.2": "5.2.4",
     "5.3": "5.3.6",
-    "5.4": LATEST_LUA_RELEASE_VERSION
+    "5.4": LATEST_LUA_RELEASE_VERSION,
+    "5.5": "5.5.0"
 };
 
 interface LuaVersionHash {
@@ -20,6 +21,7 @@ interface LuaVersionInfo {
 }
 
 const LUA_RELEASES: {[key: string]: LuaVersionInfo} = {
+    "5.5.0": { "version": "5.5.0", "hash": { "algorithm": "sha256", "value": "57ccc32bbbd005cab75bcc52444052535af691789dba2b9016d5c50640d68b3d"} },
     "5.4.8": { "version": "5.4.8", "hash": { "algorithm": "sha256", "value": "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae"} },
     "5.4.7": { "version": "5.4.7", "hash": { "algorithm": "sha256", "value": "9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30"} },
     "5.4.6": { "version": "5.4.6", "hash": { "algorithm": "sha256", "value": "7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88"} },
@@ -227,7 +229,7 @@ export function parsePucLuaVersion(version: string): Promise<IPucLuaVersion> {
                                 major, minor, build,
                                 v.hash.algorithm, v.hash.value,
                                 suffix,
-                                workMatch[0].startsWith("5.5.0-")
+                                false
                             )
                         );
                     }
@@ -339,8 +341,10 @@ const LUA_5_1_1_VERSION = LUA_RELEASES["5.1.1"];
 const LUA_5_2_0_VERSION = LUA_RELEASES["5.2.0"];
 const LUA_5_3_0_VERSION = LUA_RELEASES["5.3.0"];
 const LUA_5_4_0_VERSION = LUA_RELEASES["5.4.0"];
+const LUA_5_5_0_VERSION = LUA_RELEASES["5.5.0"];
 
 export const LUA_51_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 1, 1, LUA_5_1_1_VERSION.hash.algorithm, LUA_5_1_1_VERSION.hash.value);
 export const LUA_52_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 2, 0, LUA_5_2_0_VERSION.hash.algorithm, LUA_5_2_0_VERSION.hash.value);
 export const LUA_53_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 3, 0, LUA_5_3_0_VERSION.hash.algorithm, LUA_5_3_0_VERSION.hash.value);
 export const LUA_54_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 4, 0, LUA_5_4_0_VERSION.hash.algorithm, LUA_5_4_0_VERSION.hash.value);
+export const LUA_55_VERSION: IPucLuaVersion = new PucLuaReleaseVersion(5, 5, 0, LUA_5_5_0_VERSION.hash.algorithm, LUA_5_5_0_VERSION.hash.value);

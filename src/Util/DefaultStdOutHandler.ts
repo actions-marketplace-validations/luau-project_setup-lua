@@ -1,3 +1,5 @@
+import { Console } from "../Console";
+
 export function defaultStdOutHandler(chunk: any): void {
-    process.stdout.write(chunk.toString());
+    Console.instance().write(chunk.toString());
 }

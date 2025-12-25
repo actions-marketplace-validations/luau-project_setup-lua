@@ -6,6 +6,7 @@ import { LuaJitProject } from "../LuaJitProject";
 import { AbstractFetchTarballTarget } from "../../Targets/Fetch/AbstractFetchTarballTarget";
 import { LuaJitRepositoryVersion, OpenRestyRepositoryVersion } from "../LuaJitRepositoryVersion";
 import { LuaJitApplyPatchesTarget } from "./LuaJitApplyPatchesTarget";
+import { Console } from "../../../Console";
 
 export class LuaJitFetchTarget extends AbstractFetchTarballTarget {
     private parent: ITarget | null;
@@ -23,7 +24,7 @@ export class LuaJitFetchTarget extends AbstractFetchTarballTarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
+            Console.instance().writeLine(`[Start] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
             resolve();
         });
     }
@@ -88,7 +89,7 @@ export class LuaJitFetchTarget extends AbstractFetchTarballTarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
+            Console.instance().writeLine(`[End] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
             resolve();
         });
     }

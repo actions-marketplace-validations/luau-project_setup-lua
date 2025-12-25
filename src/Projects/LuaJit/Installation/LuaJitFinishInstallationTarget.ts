@@ -1,6 +1,7 @@
 import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
+import { Console } from "../../../Console";
 
 export class LuaJitFinishInstallationTarget implements ITarget {
     private parent: ITarget | null;
@@ -12,7 +13,7 @@ export class LuaJitFinishInstallationTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
+            Console.instance().writeLine(`[Start] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
             resolve();
         });
     }
@@ -21,14 +22,14 @@ export class LuaJitFinishInstallationTarget implements ITarget {
     }
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log("<< done >>");
+            Console.instance().writeLine("<< done >>");
             resolve();
         });
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
+            Console.instance().writeLine(`[End] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
             resolve();
         });
     }

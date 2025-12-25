@@ -6,6 +6,7 @@ import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaCreateInstallationDirectoriesTarget } from "./PucLuaCreateInstallationDirectoriesTarget";
 import { sequentialPromises } from "../../../Util/SequentialPromises";
 import { PucLuaPostInstallTarget } from "./PucLuaPostInstallTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaCopyInstallableArtifactsTarget implements ITarget {
     private parent: PucLuaCreateInstallationDirectoriesTarget;
@@ -16,7 +17,7 @@ export class PucLuaCopyInstallableArtifactsTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Copy Lua ${this.project.getVersion().getString()} installation files`);
+            Console.instance().writeLine(`[Start] Copy Lua ${this.project.getVersion().getString()} installation files`);
             resolve();
         });
     }
@@ -172,7 +173,7 @@ export class PucLuaCopyInstallableArtifactsTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Copy Lua ${this.project.getVersion().getString()} installation files`);
+            Console.instance().writeLine(`[End] Copy Lua ${this.project.getVersion().getString()} installation files`);
             resolve();
         });
     }

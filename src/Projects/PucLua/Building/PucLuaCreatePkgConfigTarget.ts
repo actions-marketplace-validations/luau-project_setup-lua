@@ -7,6 +7,7 @@ import { PucLuaLinkCompilerTarget } from "./PucLuaLinkCompilerTarget";
 import { PucLuaBuildInfo } from "./PucLuaBuildInfo";
 import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 import { PucLuaFinishBuildingTarget } from "./PucLuaFinishBuildingTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaCreatePkgConfigTarget implements ITarget {
     private parent: PucLuaLinkCompilerTarget;
@@ -18,7 +19,7 @@ export class PucLuaCreatePkgConfigTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
+            Console.instance().writeLine(`[Start] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
             resolve();
         });
     }
@@ -123,7 +124,7 @@ export class PucLuaCreatePkgConfigTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
+            Console.instance().writeLine(`[End] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
             resolve();
         });
     }

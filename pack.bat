@@ -23,7 +23,7 @@
                 @FOR /F "USEBACKQ TOKENS=*" %%G IN (`where TAR`) DO (
                     @IF %ERRORLEVEL% EQU 0 (
                         @PUSHD %_QUOTED_TARGET_DIR%
-                        @TAR -czvf "%_TARGET_CURRENT_DIR%\setup-lua.tar.gz" "--exclude=.git" "--exclude=.vscode" "--exclude=src\CacheService.ts" "--exclude=src\GitHubCore.ts" "--exclude=package-lock.json" "--exclude=node_modules" %_QUOTED_TARGET_DIRNAME%
+                        @TAR -czvf "%_TARGET_CURRENT_DIR%\setup-lua.tar.gz" "--exclude=.git" "--exclude=.vscode" "--exclude=src\CacheService.ts" "--exclude=src\GitHubCore.ts" "--exclude=src\Console.ts" "--exclude=package-lock.json" "--exclude=node_modules" "--exclude=.lua" %_QUOTED_TARGET_DIRNAME%
                         @IF %ERRORLEVEL% EQU 0 (
                             @POPD %_QUOTED_TARGET_DIR%
                             @GOTO :SUCCESS

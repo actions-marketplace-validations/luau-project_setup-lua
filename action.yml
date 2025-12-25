@@ -56,10 +56,10 @@ inputs:
     description: Links Lua with additional libraries.
     required: false
   lua-patches:
-    description: Apply patches to Lua / LuaJIT / OpenResty after fetching the source code.
+    description: Patches (remote or local) to be applied to Lua / LuaJIT / OpenResty after fetching the source code.
     required: false
   luarocks-patches:
-    description: Apply patches to LuaRocks after fetching the source code.
+    description: Patches (remote or local) to be applied to LuaRocks after fetching the source code.
     required: false
 
 runs:

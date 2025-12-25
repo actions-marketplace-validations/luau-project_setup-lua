@@ -3,18 +3,22 @@ import { AbstractCreateDirectoriesTarget } from "../../Targets/AbstractCreateDir
 import { ITarget } from "../../Targets/ITarget";
 import { LuaRocksProject } from "../LuaRocksProject";
 import { LuaRocksCheckDependenciesTarget } from "./LuaRocksCheckDependenciesTarget";
+import { Console } from "../../../Console";
 
 export class LuaRocksCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget {
     private parent: ITarget | null;
     private project: LuaRocksProject;
     constructor(project: LuaRocksProject, parent: ITarget | null) {
-        super([project.getBuildDir()]);
+        super([
+            project.getBuildDir(), 
+            project.getRemotePatchesBuildDir()
+        ]);
         this.project = project;
         this.parent = parent;
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -29,7 +33,7 @@ export class LuaRocksCreateBuildDirectoriesTarget extends AbstractCreateDirector
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

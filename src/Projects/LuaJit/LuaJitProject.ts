@@ -16,6 +16,8 @@ export class LuaJitProject implements IProject {
     private buildDir: string;
     private installDir: string;
     private toolchain: IToolchain;
+    /* build directories */
+    private remotePatchesBuildDir: string;
     /* install directories */
     private installBaseIncludeDir: string;
     private installBinDir: string;
@@ -33,6 +35,9 @@ export class LuaJitProject implements IProject {
     }
     getBuildDir(): string {
         return this.buildDir;
+    }
+    getRemotePatchesBuildDir(): string {
+        return this.remotePatchesBuildDir;
     }
     getInstallDir(): string {
         return this.installDir;
@@ -84,6 +89,7 @@ export class LuaJitProject implements IProject {
         this.buildDir = buildDir;
         this.installDir = installDir;
         this.toolchain = toolchain;
+        this.remotePatchesBuildDir = join(this.buildDir, "remote-patches");
         this.installBaseIncludeDir = join(installDir, "include");
         this.installBinDir = join(installDir, "bin");
         this.installLibDir = join(installDir, "lib");

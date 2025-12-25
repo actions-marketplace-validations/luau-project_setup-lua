@@ -3,6 +3,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitCreatePkgConfigTarget } from "./LuaJitCreatePkgConfigTarget";
 import { LuaJitWindowsBuildInfo } from "./LuaJitWindowsBuildInfo";
+import { Console } from "../../../Console";
 
 export class LuaJitFinishBuildingTarget implements ITarget {
     private project: LuaJitProject;
@@ -14,7 +15,7 @@ export class LuaJitFinishBuildingTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -25,10 +26,10 @@ export class LuaJitFinishBuildingTarget implements ITarget {
         return new Promise<void>((resolve, reject) => {
             if (process.platform === "win32") {
                 const buildInfo = <LuaJitWindowsBuildInfo>this.project.buildResult().getValue();
-                console.log(`Shared Library: ${buildInfo.getSharedLibrary()}`);
-                console.log(`Interpreter: ${buildInfo.getInterpreter()}`);
-                console.log(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
-                console.log(`Import Library: ${buildInfo.getImportLibrary()}`);
+                Console.instance().writeLine(`Shared Library: ${buildInfo.getSharedLibrary()}`);
+                Console.instance().writeLine(`Interpreter: ${buildInfo.getInterpreter()}`);
+                Console.instance().writeLine(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
+                Console.instance().writeLine(`Import Library: ${buildInfo.getImportLibrary()}`);
             }
             resolve();
         });
@@ -36,7 +37,7 @@ export class LuaJitFinishBuildingTarget implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

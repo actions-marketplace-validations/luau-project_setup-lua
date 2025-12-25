@@ -40184,6 +40184,19 @@ exports.CacheService = GitHubCacheService_1.GitHubCacheService;
 
 /***/ }),
 
+/***/ 40946:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Console = void 0;
+const GitHubConsole_1 = __nccwpck_require__(32807);
+exports.Console = GitHubConsole_1.GitHubConsole;
+
+
+/***/ }),
+
 /***/ 44281:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -40271,6 +40284,35 @@ exports.GitHubCacheService = GitHubCacheService;
 
 /***/ }),
 
+/***/ 32807:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GitHubConsole = void 0;
+const core_1 = __nccwpck_require__(37484);
+class GitHubConsole {
+    static instance() {
+        if (!GitHubConsole._instance) {
+            GitHubConsole._instance = new GitHubConsole();
+        }
+        return GitHubConsole._instance;
+    }
+    write(message) {
+        (0, core_1.info)(message.replace(/(\r\n|\r|\n)$/, ""));
+    }
+    writeLine(message) {
+        (0, core_1.info)(message);
+    }
+    constructor() {
+    }
+}
+exports.GitHubConsole = GitHubConsole;
+
+
+/***/ }),
+
 /***/ 57787:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -40285,46 +40327,13 @@ exports.GitHubCore = NativeGitHubCore_1.NativeGitHubCore;
 /***/ }),
 
 /***/ 22628:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.NativeGitHubCore = void 0;
-const core = __importStar(__nccwpck_require__(37484));
+const core_1 = __nccwpck_require__(37484);
 class NativeGitHubCore {
     static instance() {
         if (!NativeGitHubCore._instance) {
@@ -40333,13 +40342,13 @@ class NativeGitHubCore {
         return NativeGitHubCore._instance;
     }
     getInput(variable) {
-        return core.getInput(variable);
+        return (0, core_1.getInput)(variable);
     }
     appendToGitHubPath(value) {
         return new Promise((resolve, reject) => {
             let err = undefined;
             try {
-                core.addPath(value);
+                (0, core_1.addPath)(value);
             }
             catch (e) {
                 err = e;
@@ -40356,7 +40365,7 @@ class NativeGitHubCore {
         return new Promise((resolve, reject) => {
             let err = undefined;
             try {
-                core.exportVariable(key, value);
+                (0, core_1.exportVariable)(key, value);
             }
             catch (e) {
                 err = e;
@@ -40396,6 +40405,7 @@ const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
 const CompareVersions_1 = __nccwpck_require__(37654);
 const GitHubInput_1 = __nccwpck_require__(51621);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitBuildTarget {
     constructor(project, parent, sourceInfo) {
         this.project = project;
@@ -40410,7 +40420,7 @@ class LuaJitBuildTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40677,7 +40687,7 @@ class LuaJitBuildTarget {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40700,6 +40710,7 @@ const LuaJitWindowsBuildInfo_1 = __nccwpck_require__(82009);
 const IWin32ImportLibraryDecorator_1 = __nccwpck_require__(68073);
 const LuaJitFinishBuildingTarget_1 = __nccwpck_require__(89440);
 const LuaJitUnixBuildInfo_1 = __nccwpck_require__(97834);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitCreatePkgConfigTarget {
     constructor(project, parent) {
         this.project = project;
@@ -40708,7 +40719,7 @@ class LuaJitCreatePkgConfigTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40828,7 +40839,7 @@ class LuaJitCreatePkgConfigTarget {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Create pkgconfig file for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40839,12 +40850,13 @@ exports.LuaJitCreatePkgConfigTarget = LuaJitCreatePkgConfigTarget;
 /***/ }),
 
 /***/ 89440:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitFinishBuildingTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitFinishBuildingTarget {
     constructor(project, parent) {
         this.project = project;
@@ -40853,7 +40865,7 @@ class LuaJitFinishBuildingTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40864,10 +40876,10 @@ class LuaJitFinishBuildingTarget {
         return new Promise((resolve, reject) => {
             if (process.platform === "win32") {
                 const buildInfo = this.project.buildResult().getValue();
-                console.log(`Shared Library: ${buildInfo.getSharedLibrary()}`);
-                console.log(`Interpreter: ${buildInfo.getInterpreter()}`);
-                console.log(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
-                console.log(`Import Library: ${buildInfo.getImportLibrary()}`);
+                Console_1.Console.instance().writeLine(`Shared Library: ${buildInfo.getSharedLibrary()}`);
+                Console_1.Console.instance().writeLine(`Interpreter: ${buildInfo.getInterpreter()}`);
+                Console_1.Console.instance().writeLine(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
+                Console_1.Console.instance().writeLine(`Import Library: ${buildInfo.getImportLibrary()}`);
             }
             resolve();
         });
@@ -40875,7 +40887,7 @@ class LuaJitFinishBuildingTarget {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Finish the build of ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40962,14 +40974,15 @@ exports.LuaJitApplyPatchesTarget = void 0;
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
 const AbstractApplyPatchesTarget_1 = __nccwpck_require__(83714);
 const LuaJitConfigureSourcesTarget_1 = __nccwpck_require__(85605);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitApplyPatchesTarget extends AbstractApplyPatchesTarget_1.AbstractApplyPatchesTarget {
     constructor(project, parent) {
-        super(project, parent, parent.getExtractedDir(), ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getLuaPatches());
+        super(project, parent, parent.getExtractedDir(), project.getRemotePatchesBuildDir(), ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getLuaPatches());
     }
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.getProject().getVersion();
-            console.log(`[Start] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -40979,7 +40992,7 @@ class LuaJitApplyPatchesTarget extends AbstractApplyPatchesTarget_1.AbstractAppl
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.getProject().getVersion();
-            console.log(`[End] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Apply patches on ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41005,6 +41018,7 @@ const LuaJitVersion_1 = __nccwpck_require__(48477);
 const LuaJitRepositoryVersion_1 = __nccwpck_require__(81721);
 const LuaJitFinishConfigurationTarget_1 = __nccwpck_require__(32470);
 const CheckFiles_1 = __nccwpck_require__(68105);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitConfigureSourcesTarget {
     constructor(project, parent) {
         this.project = project;
@@ -41025,7 +41039,7 @@ class LuaJitConfigureSourcesTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41210,7 +41224,7 @@ class LuaJitConfigureSourcesTarget {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Configure source code for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41229,16 +41243,20 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitCreateBuildDirectoriesTarget = void 0;
 const AbstractCreateDirectoriesTarget_1 = __nccwpck_require__(96763);
 const LuaJitFetchTarget_1 = __nccwpck_require__(75817);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget_1.AbstractCreateDirectoriesTarget {
     constructor(project, parent) {
-        super([project.getBuildDir()]);
+        super([
+            project.getBuildDir(),
+            project.getRemotePatchesBuildDir()
+        ]);
         this.project = project;
         this.parent = parent;
     }
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41254,7 +41272,7 @@ class LuaJitCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41276,6 +41294,7 @@ const promises_1 = __nccwpck_require__(51455);
 const AbstractFetchTarballTarget_1 = __nccwpck_require__(51299);
 const LuaJitRepositoryVersion_1 = __nccwpck_require__(81721);
 const LuaJitApplyPatchesTarget_1 = __nccwpck_require__(30913);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarballTarget {
     constructor(project, parent) {
         super(`${project.getVersion().getRepository()}/archive/${project.getVersion().getRef()}.tar.gz`, project.getBuildDir(), null);
@@ -41285,7 +41304,7 @@ class LuaJitFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarbal
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
+            Console_1.Console.instance().writeLine(`[Start] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
             resolve();
         });
     }
@@ -41347,7 +41366,7 @@ class LuaJitFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarbal
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
+            Console_1.Console.instance().writeLine(`[End] Fetch ${projectVersion.getName()} ${projectVersion.getRef()} source code`);
             resolve();
         });
     }
@@ -41358,12 +41377,13 @@ exports.LuaJitFetchTarget = LuaJitFetchTarget;
 /***/ }),
 
 /***/ 32470:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitFinishConfigurationTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitFinishConfigurationTarget {
     constructor(project, parent) {
         this.project = project;
@@ -41372,7 +41392,7 @@ class LuaJitFinishConfigurationTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41383,21 +41403,21 @@ class LuaJitFinishConfigurationTarget {
         return new Promise((resolve, reject) => {
             const srcInfo = (this.project.configurationResult().getValue());
             let len = 0;
-            console.log(`[Delayed Header] ${srcInfo.getDelayedHeaderFile()}`);
+            Console_1.Console.instance().writeLine(`[Delayed Header] ${srcInfo.getDelayedHeaderFile()}`);
             const headerFiles = srcInfo.getHeaderFiles();
             len = headerFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[Header] ${headerFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[Header] ${headerFiles.getItem(i)}`);
             }
             const jitFiles = srcInfo.getJitFiles();
             len = jitFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[JIT] ${jitFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[JIT] ${jitFiles.getItem(i)}`);
             }
             const manFiles = srcInfo.getManFiles();
             len = manFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[MAN] ${manFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[MAN] ${manFiles.getItem(i)}`);
             }
             resolve();
         });
@@ -41405,7 +41425,7 @@ class LuaJitFinishConfigurationTarget {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Finish ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41479,12 +41499,13 @@ exports.LuaJitSourcesInfo = LuaJitSourcesInfo;
 /***/ }),
 
 /***/ 29768:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitFinishInstallationTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitFinishInstallationTarget {
     constructor(project, parent) {
         this.project = project;
@@ -41493,7 +41514,7 @@ class LuaJitFinishInstallationTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
+            Console_1.Console.instance().writeLine(`[Start] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
             resolve();
         });
     }
@@ -41502,14 +41523,14 @@ class LuaJitFinishInstallationTarget {
     }
     execute() {
         return new Promise((resolve, reject) => {
-            console.log("<< done >>");
+            Console_1.Console.instance().writeLine("<< done >>");
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
+            Console_1.Console.instance().writeLine(`[End] Finish the installation of ${projectVersion.getName()} ${projectVersion.getRef()} installation`);
             resolve();
         });
     }
@@ -41532,14 +41553,18 @@ exports.LuaJitFinishInstallationTarget = LuaJitFinishInstallationTarget;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitPostInstallTarget = void 0;
-const AbstractPkgConfigCMakeEnvVarsTarget_1 = __nccwpck_require__(98628);
+const AbstractUpdateLuaEnvVarsTarget_1 = __nccwpck_require__(86962);
 const LuaJitFinishInstallationTarget_1 = __nccwpck_require__(29768);
-class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.AbstractPkgConfigCMakeEnvVarsTarget {
+const Console_1 = __nccwpck_require__(40946);
+class LuaJitPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget_1.AbstractUpdateLuaEnvVarsTarget {
     constructor(project, parent) {
         super(project, parent);
     }
     getProjectInstallDir() {
         return this.getProject().getInstallDir();
+    }
+    getProjectInstallLibDir() {
+        return this.getProject().getInstallLibDir();
     }
     getProjectInstallBinDir() {
         return this.getProject().getInstallBinDir();
@@ -41550,7 +41575,7 @@ class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.getProject().getVersion();
-            console.log(`[Start] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41560,7 +41585,7 @@ class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.getProject().getVersion();
-            console.log(`[End] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41580,6 +41605,8 @@ exports.LuaJitUnixInstall = void 0;
 const node_path_1 = __nccwpck_require__(76760);
 const ExecuteProcess_1 = __nccwpck_require__(56522);
 const LuaJitPostInstallTarget_1 = __nccwpck_require__(1612);
+const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitUnixInstall {
     constructor(project, parent, buildInfo) {
         this.project = project;
@@ -41589,7 +41616,7 @@ class LuaJitUnixInstall {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41604,16 +41631,13 @@ class LuaJitUnixInstall {
     }
     execute() {
         return new Promise((resolve, reject) => {
-            const defaultStdOutHandler = (chunk) => {
-                process.stdout.write(chunk.toString());
-            };
             const makeArguments = this.buildInfo.getMakeArguments();
             const makeArgs = makeArguments.createCopy();
             const installTarget = "install";
             makeArgs.push(installTarget);
             (0, ExecuteProcess_1.executeProcess)(this.buildInfo.getMake(), {
                 args: makeArgs,
-                stdout: defaultStdOutHandler,
+                stdout: DefaultStdOutHandler_1.defaultStdOutHandler,
                 verbose: true
             })
                 .then(makeCode => {
@@ -41624,7 +41648,7 @@ class LuaJitUnixInstall {
                     (0, ExecuteProcess_1.executeProcess)("ln", {
                         args: ["-s", luajitInterpreter, luaSoftLink],
                         verbose: true,
-                        stdout: defaultStdOutHandler
+                        stdout: DefaultStdOutHandler_1.defaultStdOutHandler
                     })
                         .then(lnCode => {
                         resolve();
@@ -41641,7 +41665,7 @@ class LuaJitUnixInstall {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Install ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41662,6 +41686,7 @@ const promises_1 = __nccwpck_require__(51455);
 const node_path_1 = __nccwpck_require__(76760);
 const SequentialPromises_1 = __nccwpck_require__(10923);
 const LuaJitPostInstallTarget_1 = __nccwpck_require__(1612);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitWindowsCopyInstallableArtifactsTarget {
     constructor(project, parent) {
         this.project = project;
@@ -41670,7 +41695,7 @@ class LuaJitWindowsCopyInstallableArtifactsTarget {
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
+            Console_1.Console.instance().writeLine(`[Start] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
             resolve();
         });
     }
@@ -41811,7 +41836,7 @@ class LuaJitWindowsCopyInstallableArtifactsTarget {
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
+            Console_1.Console.instance().writeLine(`[End] Copy ${projectVersion.getName()} ${projectVersion.getRef()} installation files`);
             resolve();
         });
     }
@@ -41830,6 +41855,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaJitWindowsCreateInstallationDirectoriesTarget = void 0;
 const AbstractCreateDirectoriesTarget_1 = __nccwpck_require__(96763);
 const LuaJitWindowsCopyInstallableArtifactsTarget_1 = __nccwpck_require__(49771);
+const Console_1 = __nccwpck_require__(40946);
 class LuaJitWindowsCreateInstallationDirectoriesTarget extends AbstractCreateDirectoriesTarget_1.AbstractCreateDirectoriesTarget {
     constructor(project, parent, buildInfo) {
         super([
@@ -41849,7 +41875,7 @@ class LuaJitWindowsCreateInstallationDirectoriesTarget extends AbstractCreateDir
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[Start] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41868,7 +41894,7 @@ class LuaJitWindowsCreateInstallationDirectoriesTarget extends AbstractCreateDir
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console_1.Console.instance().writeLine(`[End] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -41898,6 +41924,9 @@ class LuaJitProject {
     }
     getBuildDir() {
         return this.buildDir;
+    }
+    getRemotePatchesBuildDir() {
+        return this.remotePatchesBuildDir;
     }
     getInstallDir() {
         return this.installDir;
@@ -41943,6 +41972,7 @@ class LuaJitProject {
         this.buildDir = buildDir;
         this.installDir = installDir;
         this.toolchain = toolchain;
+        this.remotePatchesBuildDir = (0, node_path_1.join)(this.buildDir, "remote-patches");
         this.installBaseIncludeDir = (0, node_path_1.join)(installDir, "include");
         this.installBinDir = (0, node_path_1.join)(installDir, "bin");
         this.installLibDir = (0, node_path_1.join)(installDir, "lib");
@@ -42196,6 +42226,7 @@ const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
 const LuaRocksSourcesInfo_1 = __nccwpck_require__(5724);
 const LuaRocksBuildInfo_1 = __nccwpck_require__(25168);
 const LuaRocksFinishBuildingTarget_1 = __nccwpck_require__(10692);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksBuildTarget {
     constructor(project, parent, sourcesInfo) {
         this.parent = parent;
@@ -42204,7 +42235,7 @@ class LuaRocksBuildTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42251,7 +42282,7 @@ class LuaRocksBuildTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42262,12 +42293,13 @@ exports.LuaRocksBuildTarget = LuaRocksBuildTarget;
 /***/ }),
 
 /***/ 10692:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaRocksFinishBuildingTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksFinishBuildingTarget {
     constructor(project, parent) {
         this.project = project;
@@ -42275,7 +42307,7 @@ class LuaRocksFinishBuildingTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42290,13 +42322,13 @@ class LuaRocksFinishBuildingTarget {
     }
     execute() {
         return new Promise((resolve, reject) => {
-            console.log("LuaRocks was built successfully.");
+            Console_1.Console.instance().writeLine("LuaRocks was built successfully.");
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Finish the building of LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42316,13 +42348,14 @@ exports.LuaRocksApplyPatchesTarget = void 0;
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
 const AbstractApplyPatchesTarget_1 = __nccwpck_require__(83714);
 const LuaRocksConfigureSourcesTarget_1 = __nccwpck_require__(23775);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksApplyPatchesTarget extends AbstractApplyPatchesTarget_1.AbstractApplyPatchesTarget {
     constructor(project, parent) {
-        super(project, parent, parent.getLuaRocksSourcesInfo().getDir(), ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getLuaRocksPatches());
+        super(project, parent, parent.getLuaRocksSourcesInfo().getDir(), project.getRemotePatchesBuildDir(), ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getLuaRocksPatches());
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Apply patches on LuaRocks ${this.getProject().getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Apply patches on LuaRocks ${this.getProject().getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42334,7 +42367,7 @@ class LuaRocksApplyPatchesTarget extends AbstractApplyPatchesTarget_1.AbstractAp
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Apply patches on LuaRocks ${this.getProject().getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Apply patches on LuaRocks ${this.getProject().getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42354,6 +42387,7 @@ exports.LuaRocksCheckDependenciesTarget = void 0;
 const FindProgram_1 = __nccwpck_require__(72437);
 const SequentialPromises_1 = __nccwpck_require__(10923);
 const LuaRocksFetchTarget_1 = __nccwpck_require__(45955);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksCheckDependenciesTarget {
     constructor(project, parent) {
         this.project = project;
@@ -42361,7 +42395,7 @@ class LuaRocksCheckDependenciesTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42395,7 +42429,7 @@ class LuaRocksCheckDependenciesTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42416,6 +42450,7 @@ const ExecuteProcess_1 = __nccwpck_require__(56522);
 const LuaRocksFinishConfigurationTarget_1 = __nccwpck_require__(92764);
 const LuaRocksSourcesInfo_1 = __nccwpck_require__(5724);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksConfigureSourcesTarget {
     constructor(project, parent) {
         this.project = project;
@@ -42423,7 +42458,7 @@ class LuaRocksConfigureSourcesTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42474,7 +42509,7 @@ class LuaRocksConfigureSourcesTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Configure LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42493,15 +42528,19 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaRocksCreateBuildDirectoriesTarget = void 0;
 const AbstractCreateDirectoriesTarget_1 = __nccwpck_require__(96763);
 const LuaRocksCheckDependenciesTarget_1 = __nccwpck_require__(46878);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget_1.AbstractCreateDirectoriesTarget {
     constructor(project, parent) {
-        super([project.getBuildDir()]);
+        super([
+            project.getBuildDir(),
+            project.getRemotePatchesBuildDir()
+        ]);
         this.project = project;
         this.parent = parent;
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42516,7 +42555,7 @@ class LuaRocksCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarg
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Create build directories for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42542,6 +42581,7 @@ const CheckFiles_1 = __nccwpck_require__(68105);
 const LuaRocksSourcesInfo_1 = __nccwpck_require__(5724);
 const LuaRocksVersion_1 = __nccwpck_require__(93527);
 const LuaRocksApplyPatchesTarget_1 = __nccwpck_require__(9199);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksFetchTarget extends AbstractFetchCompressedTarget_1.AbstractFetchCompressedTarget {
     constructor(project, parent) {
         super(project.getVersion().getDownloadUrl(), project.getBuildDir(), project.getVersion() instanceof LuaRocksVersion_1.LuaRocksReleaseVersion ? `luarocks-${project.getVersion().getIdentifier()}` : null, (0, node_path_1.extname)((0, node_path_1.basename)(project.getVersion().getDownloadUrl())) === ".zip" ? ExtractZip_1.extractZip : ExtractTarGz_1.extractTarGz, project.getVersion() instanceof LuaRocksVersion_1.LuaRocksReleaseVersion ? {
@@ -42556,7 +42596,7 @@ class LuaRocksFetchTarget extends AbstractFetchCompressedTarget_1.AbstractFetchC
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42657,7 +42697,7 @@ class LuaRocksFetchTarget extends AbstractFetchCompressedTarget_1.AbstractFetchC
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Fetch LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42675,6 +42715,7 @@ exports.LuaRocksFetchTarget = LuaRocksFetchTarget;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaRocksFinishConfigurationTarget = void 0;
 const LuaRocksSourcesInfo_1 = __nccwpck_require__(5724);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksFinishConfigurationTarget {
     constructor(project, parent) {
         this.project = project;
@@ -42682,7 +42723,7 @@ class LuaRocksFinishConfigurationTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Finish LuaRocks ${this.project.getVersion().getIdentifier()} configuration`);
+            Console_1.Console.instance().writeLine(`[Start] Finish LuaRocks ${this.project.getVersion().getIdentifier()} configuration`);
             resolve();
         });
     }
@@ -42698,21 +42739,21 @@ class LuaRocksFinishConfigurationTarget {
     execute() {
         return new Promise((resolve, reject) => {
             const srcInfo = (this.project.configurationResult().getValue());
-            console.log(`[Directory] ${srcInfo.getDir()}`);
+            Console_1.Console.instance().writeLine(`[Directory] ${srcInfo.getDir()}`);
             const details = srcInfo.getDetails();
             if (details instanceof LuaRocksSourcesInfo_1.LuaRocksWindowsSourcesInfoDetails) {
-                console.log(`[LuaRocks] ${details.getLuaRocks()}`);
-                console.log(`[LuaRocks admin] ${details.getLuaRocksAdmin()}`);
+                Console_1.Console.instance().writeLine(`[LuaRocks] ${details.getLuaRocks()}`);
+                Console_1.Console.instance().writeLine(`[LuaRocks admin] ${details.getLuaRocksAdmin()}`);
             }
             else {
-                console.log(`[Configure script] ${details.getConfigureScript()}`);
+                Console_1.Console.instance().writeLine(`[Configure script] ${details.getConfigureScript()}`);
             }
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Finish LuaRocks ${this.project.getVersion().getIdentifier()} configuration`);
+            Console_1.Console.instance().writeLine(`[End] Finish LuaRocks ${this.project.getVersion().getIdentifier()} configuration`);
             resolve();
         });
     }
@@ -42769,12 +42810,13 @@ exports.LuaRocksSourcesInfo = LuaRocksSourcesInfo;
 /***/ }),
 
 /***/ 27563:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LuaRocksFinishInstallationTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksFinishInstallationTarget {
     constructor(project, parent) {
         this.project = project;
@@ -42782,7 +42824,7 @@ class LuaRocksFinishInstallationTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Finishing the installation of LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Finishing the installation of LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42797,13 +42839,13 @@ class LuaRocksFinishInstallationTarget {
     }
     execute() {
         return new Promise((resolve, reject) => {
-            console.log("<< done >>");
+            Console_1.Console.instance().writeLine("<< done >>");
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Finishing the installation of LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Finishing the installation of LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42827,6 +42869,7 @@ const ExecuteProcess_1 = __nccwpck_require__(56522);
 const LuaRocksSourcesInfo_1 = __nccwpck_require__(5724);
 const LuaRocksPostInstallTarget_1 = __nccwpck_require__(88444);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
+const Console_1 = __nccwpck_require__(40946);
 class LuaRocksInstallTarget {
     constructor(project, parent, buildInfo) {
         this.project = project;
@@ -42835,7 +42878,7 @@ class LuaRocksInstallTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42900,7 +42943,7 @@ class LuaRocksInstallTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Install LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -42929,6 +42972,7 @@ const ReadOnlyArray_1 = __nccwpck_require__(32483);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const LuaRocksFinishInstallationTarget_1 = __nccwpck_require__(27563);
+const Console_1 = __nccwpck_require__(40946);
 const LUA_INTERPRETER_CANDIDATES = new ReadOnlyArray_1.ReadOnlyArray([
     "lua.exe",
     "luajit.exe"
@@ -42940,7 +42984,7 @@ class LuaRocksPostInstallTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[Start] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -43258,7 +43302,7 @@ class LuaRocksPostInstallTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console_1.Console.instance().writeLine(`[End] Post install for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -43288,6 +43332,9 @@ class LuaRocksProject {
     getBuildDir() {
         return this.buildDir;
     }
+    getRemotePatchesBuildDir() {
+        return this.remotePatchesBuildDir;
+    }
     getInstallDir() {
         return this.installDir;
     }
@@ -43308,6 +43355,7 @@ class LuaRocksProject {
         this.buildDir = buildDir;
         this.installDir = installDir;
         this.toolchain = toolchain;
+        this.remotePatchesBuildDir = (0, node_path_1.join)(this.buildDir, "remote-patches");
         this.installBinDir = (0, node_path_1.join)(installDir, "bin");
         this._configurationResult = new GetSetProperty_1.GetSetProperty(null);
         this._buildResult = new GetSetProperty_1.GetSetProperty(null);
@@ -43540,6 +43588,7 @@ exports.PucLuaArchiveStaticLibTarget = void 0;
 const node_path_1 = __nccwpck_require__(76760);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaCompileInterpreterTarget_1 = __nccwpck_require__(99202);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaArchiveStaticLibTarget {
     constructor(project, parent) {
         this.project = project;
@@ -43548,7 +43597,7 @@ class PucLuaArchiveStaticLibTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Archive Lua ${this.project.getVersion().getString()} static library`);
+            Console_1.Console.instance().writeLine(`[Start] Archive Lua ${this.project.getVersion().getString()} static library`);
             resolve();
         });
     }
@@ -43621,7 +43670,7 @@ class PucLuaArchiveStaticLibTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Archive Lua ${this.project.getVersion().getString()} static library`);
+            Console_1.Console.instance().writeLine(`[End] Archive Lua ${this.project.getVersion().getString()} static library`);
             resolve();
         });
     }
@@ -43688,6 +43737,7 @@ const PucLuaLinkCompilerTarget_1 = __nccwpck_require__(17782);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaVersion_1 = __nccwpck_require__(75991);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCompileCompilerTarget {
     constructor(project, parent) {
         this.project = project;
@@ -43697,7 +43747,7 @@ class PucLuaCompileCompilerTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Compile Lua ${this.project.getVersion().getString()} compiler`);
+            Console_1.Console.instance().writeLine(`[Start] Compile Lua ${this.project.getVersion().getString()} compiler`);
             resolve();
         });
     }
@@ -43819,7 +43869,7 @@ class PucLuaCompileCompilerTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Compile Lua ${this.project.getVersion().getString()} compiler`);
+            Console_1.Console.instance().writeLine(`[End] Compile Lua ${this.project.getVersion().getString()} compiler`);
             resolve();
         });
     }
@@ -43842,6 +43892,7 @@ const ReadOnlyArray_1 = __nccwpck_require__(32483);
 const PucLuaLinkInterpreterTarget_1 = __nccwpck_require__(22011);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCompileInterpreterTarget {
     constructor(project, parent) {
         this.project = project;
@@ -43851,7 +43902,7 @@ class PucLuaCompileInterpreterTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Compile Lua ${this.project.getVersion().getString()} interpreter`);
+            Console_1.Console.instance().writeLine(`[Start] Compile Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }
@@ -43971,7 +44022,7 @@ class PucLuaCompileInterpreterTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Compile Lua ${this.project.getVersion().getString()} interpreter`);
+            Console_1.Console.instance().writeLine(`[End] Compile Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }
@@ -43994,6 +44045,7 @@ const PucLuaLinkSharedLibTarget_1 = __nccwpck_require__(27493);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaVersion_1 = __nccwpck_require__(75991);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCompileSharedLibTarget {
     constructor(project, parent, sourcesInfo) {
         this.project = project;
@@ -44003,7 +44055,7 @@ class PucLuaCompileSharedLibTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Compile Lua ${this.project.getVersion().getString()} shared library`);
+            Console_1.Console.instance().writeLine(`[Start] Compile Lua ${this.project.getVersion().getString()} shared library`);
             resolve();
         });
     }
@@ -44121,7 +44173,7 @@ class PucLuaCompileSharedLibTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Compile Lua ${this.project.getVersion().getString()} shared library`);
+            Console_1.Console.instance().writeLine(`[End] Compile Lua ${this.project.getVersion().getString()} shared library`);
             resolve();
         });
     }
@@ -44144,6 +44196,7 @@ const PucLuaArchiveStaticLibTarget_1 = __nccwpck_require__(86084);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaVersion_1 = __nccwpck_require__(75991);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCompileStaticLibTarget {
     constructor(project, parent) {
         this.project = project;
@@ -44153,7 +44206,7 @@ class PucLuaCompileStaticLibTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Compile Lua ${this.project.getVersion().getString()} static library`);
+            Console_1.Console.instance().writeLine(`[Start] Compile Lua ${this.project.getVersion().getString()} static library`);
             resolve();
         });
     }
@@ -44274,7 +44327,7 @@ class PucLuaCompileStaticLibTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Compile Lua ${this.project.getVersion().getString()} static library`);
+            Console_1.Console.instance().writeLine(`[End] Compile Lua ${this.project.getVersion().getString()} static library`);
             resolve();
         });
     }
@@ -44296,6 +44349,7 @@ const node_path_1 = __nccwpck_require__(76760);
 const PucLuaBuildInfo_1 = __nccwpck_require__(83988);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaFinishBuildingTarget_1 = __nccwpck_require__(59496);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCreatePkgConfigTarget {
     constructor(project, parent) {
         this.project = project;
@@ -44303,7 +44357,7 @@ class PucLuaCreatePkgConfigTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
+            Console_1.Console.instance().writeLine(`[Start] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
             resolve();
         });
     }
@@ -44394,7 +44448,7 @@ class PucLuaCreatePkgConfigTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
+            Console_1.Console.instance().writeLine(`[End] Create pkgconfig file for Lua ${this.project.getVersion().getString()} building`);
             resolve();
         });
     }
@@ -44411,12 +44465,13 @@ exports.PucLuaCreatePkgConfigTarget = PucLuaCreatePkgConfigTarget;
 /***/ }),
 
 /***/ 59496:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaFinishBuildingTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaFinishBuildingTarget {
     constructor(project, parent) {
         this.project = project;
@@ -44424,7 +44479,7 @@ class PucLuaFinishBuildingTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Finish the build of Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[Start] Finish the build of Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -44434,21 +44489,21 @@ class PucLuaFinishBuildingTarget {
     execute() {
         return new Promise((resolve, reject) => {
             const buildInfo = this.project.buildResult().getValue();
-            console.log(`Shared Library: ${buildInfo.getSharedLibrary()}`);
-            console.log(`Static Library: ${buildInfo.getStaticLibrary()}`);
-            console.log(`Interpreter: ${buildInfo.getInterpreter()}`);
-            console.log(`Compiler: ${buildInfo.getCompiler()}`);
-            console.log(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
+            Console_1.Console.instance().writeLine(`Shared Library: ${buildInfo.getSharedLibrary()}`);
+            Console_1.Console.instance().writeLine(`Static Library: ${buildInfo.getStaticLibrary()}`);
+            Console_1.Console.instance().writeLine(`Interpreter: ${buildInfo.getInterpreter()}`);
+            Console_1.Console.instance().writeLine(`Compiler: ${buildInfo.getCompiler()}`);
+            Console_1.Console.instance().writeLine(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
             const impLib = buildInfo.getImportLibrary();
             if (impLib) {
-                console.log(`Import Library: ${impLib}`);
+                Console_1.Console.instance().writeLine(`Import Library: ${impLib}`);
             }
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Finish the build of Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[End] Finish the build of Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -44475,6 +44530,7 @@ const node_path_1 = __nccwpck_require__(76760);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaCreatePkgConfigTarget_1 = __nccwpck_require__(81233);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaLinkCompilerTarget {
     constructor(project, parent) {
         this.project = project;
@@ -44483,7 +44539,7 @@ class PucLuaLinkCompilerTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Link Lua ${this.project.getVersion().getString()} compiler`);
+            Console_1.Console.instance().writeLine(`[Start] Link Lua ${this.project.getVersion().getString()} compiler`);
             resolve();
         });
     }
@@ -44583,7 +44639,7 @@ class PucLuaLinkCompilerTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Link Lua ${this.project.getVersion().getString()} compiler`);
+            Console_1.Console.instance().writeLine(`[End] Link Lua ${this.project.getVersion().getString()} compiler`);
             resolve();
         });
     }
@@ -44604,6 +44660,7 @@ const node_path_1 = __nccwpck_require__(76760);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaCompileCompilerTarget_1 = __nccwpck_require__(5509);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaLinkInterpreterTarget {
     constructor(project, parent) {
         this.project = project;
@@ -44612,7 +44669,7 @@ class PucLuaLinkInterpreterTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Link Lua ${this.project.getVersion().getString()} interpreter`);
+            Console_1.Console.instance().writeLine(`[Start] Link Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }
@@ -44715,7 +44772,7 @@ class PucLuaLinkInterpreterTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Link Lua ${this.project.getVersion().getString()} interpreter`);
+            Console_1.Console.instance().writeLine(`[End] Link Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }
@@ -44737,6 +44794,7 @@ const IWin32ImportLibraryDecorator_1 = __nccwpck_require__(68073);
 const IGccLikeToolchain_1 = __nccwpck_require__(69372);
 const PucLuaCompileStaticLibTarget_1 = __nccwpck_require__(79285);
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaLinkSharedLibTarget {
     constructor(project, parent) {
         this.project = project;
@@ -44745,7 +44803,7 @@ class PucLuaLinkSharedLibTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Link Lua ${this.project.getVersion().getString()} shared library`);
+            Console_1.Console.instance().writeLine(`[Start] Link Lua ${this.project.getVersion().getString()} shared library`);
             resolve();
         });
     }
@@ -44902,7 +44960,7 @@ class PucLuaLinkSharedLibTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Link Lua ${this.project.getVersion().getString()} shared library`);
+            Console_1.Console.instance().writeLine(`[End] Link Lua ${this.project.getVersion().getString()} shared library`);
             resolve();
         });
     }
@@ -44922,13 +44980,14 @@ exports.PucLuaApplyPatchesTarget = void 0;
 const ToolchainEnvironmentVariables_1 = __nccwpck_require__(65921);
 const AbstractApplyPatchesTarget_1 = __nccwpck_require__(83714);
 const PucLuaConfigureSourcesTarget_1 = __nccwpck_require__(97819);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaApplyPatchesTarget extends AbstractApplyPatchesTarget_1.AbstractApplyPatchesTarget {
     constructor(project, parent) {
-        super(project, parent, parent.getExtractedDir(), ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getLuaPatches());
+        super(project, parent, parent.getExtractedDir(), project.getRemotePatchesBuildDir(), ToolchainEnvironmentVariables_1.ToolchainEnvironmentVariables.instance().getLuaPatches());
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Apply patches on Lua ${this.getProject().getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[Start] Apply patches on Lua ${this.getProject().getVersion().getString()}`);
             resolve();
         });
     }
@@ -44937,7 +44996,7 @@ class PucLuaApplyPatchesTarget extends AbstractApplyPatchesTarget_1.AbstractAppl
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Apply patches on Lua ${this.getProject().getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[End] Apply patches on Lua ${this.getProject().getVersion().getString()}`);
             resolve();
         });
     }
@@ -44960,6 +45019,7 @@ const promises_1 = __nccwpck_require__(51455);
 const PucLuaFetchTarget_1 = __nccwpck_require__(86327);
 const ExecuteProcess_1 = __nccwpck_require__(56522);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCheckDependenciesTarget {
     constructor(project, parent) {
         this.parent = parent;
@@ -44967,7 +45027,7 @@ class PucLuaCheckDependenciesTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Check dependencies for Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[Start] Check dependencies for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -45085,7 +45145,7 @@ class PucLuaCheckDependenciesTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Check dependencies for Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[End] Check dependencies for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -45109,6 +45169,7 @@ const promises_2 = __nccwpck_require__(51455);
 const PucLuaSourcesInfo_1 = __nccwpck_require__(47464);
 const PucLuaVersion_1 = __nccwpck_require__(75991);
 const PucLuaFinishConfigurationTarget_1 = __nccwpck_require__(49944);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaConfigureSourcesTarget {
     constructor(project, parent) {
         this.project = project;
@@ -45122,7 +45183,7 @@ class PucLuaConfigureSourcesTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
+            Console_1.Console.instance().writeLine(`[Start] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
             resolve();
         });
     }
@@ -45338,7 +45399,7 @@ class PucLuaConfigureSourcesTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
+            Console_1.Console.instance().writeLine(`[End] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
             resolve();
         });
     }
@@ -45357,6 +45418,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaCreateBuildDirectoriesTarget = void 0;
 const AbstractCreateDirectoriesTarget_1 = __nccwpck_require__(96763);
 const PucLuaCheckDependenciesTarget_1 = __nccwpck_require__(88418);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget_1.AbstractCreateDirectoriesTarget {
     constructor(project, parent) {
         super([
@@ -45364,6 +45426,7 @@ class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget
             project.getLibBuildDir(),
             project.getSharedLibBuildDir(),
             project.getStaticLibBuildDir(),
+            project.getRemotePatchesBuildDir(),
             project.getInterpreterBuildDir(),
             project.getCompilerBuildDir()
         ]);
@@ -45372,7 +45435,7 @@ class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Create build directories for Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[Start] Create build directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -45387,7 +45450,7 @@ class PucLuaCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Create build directories for Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[End] Create build directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -45408,6 +45471,7 @@ const node_path_1 = __nccwpck_require__(76760);
 const AbstractFetchTarballTarget_1 = __nccwpck_require__(51299);
 const PucLuaApplyPatchesTarget_1 = __nccwpck_require__(1371);
 const PucLuaVersion_1 = __nccwpck_require__(75991);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarballTarget {
     constructor(project, parent) {
         super(project.getVersion().getDownloadUrl(), project.getBuildDir(), `lua-${project.getVersion().getString()}`, {
@@ -45421,7 +45485,7 @@ class PucLuaFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarbal
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Fetch Lua ${this.project.getVersion().getString()} source code`);
+            Console_1.Console.instance().writeLine(`[Start] Fetch Lua ${this.project.getVersion().getString()} source code`);
             resolve();
         });
     }
@@ -45447,7 +45511,7 @@ class PucLuaFetchTarget extends AbstractFetchTarballTarget_1.AbstractFetchTarbal
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Fetch Lua ${this.project.getVersion().getString()} source code`);
+            Console_1.Console.instance().writeLine(`[End] Fetch Lua ${this.project.getVersion().getString()} source code`);
             resolve();
         });
     }
@@ -45458,12 +45522,13 @@ exports.PucLuaFetchTarget = PucLuaFetchTarget;
 /***/ }),
 
 /***/ 49944:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaFinishConfigurationTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaFinishConfigurationTarget {
     constructor(project, parent) {
         this.project = project;
@@ -45471,7 +45536,7 @@ class PucLuaFinishConfigurationTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Finish Lua ${this.project.getVersion().getString()} configuration`);
+            Console_1.Console.instance().writeLine(`[Start] Finish Lua ${this.project.getVersion().getString()} configuration`);
             resolve();
         });
     }
@@ -45483,40 +45548,40 @@ class PucLuaFinishConfigurationTarget {
             const srcInfo = this.project.configurationResult().getValue();
             const compat = srcInfo.getCompatFlag();
             if (compat) {
-                console.log(`[Compat] ${compat}`);
+                Console_1.Console.instance().writeLine(`[Compat] ${compat}`);
             }
             const libSrcFiles = srcInfo.getLibSrcFiles();
             let len = libSrcFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[Library] ${libSrcFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[Library] ${libSrcFiles.getItem(i)}`);
             }
-            console.log(`[Header Dir] ${srcInfo.getHeadersDir()}`);
+            Console_1.Console.instance().writeLine(`[Header Dir] ${srcInfo.getHeadersDir()}`);
             const headerFiles = srcInfo.getHeaderFiles();
             len = headerFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[Header] ${headerFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[Header] ${headerFiles.getItem(i)}`);
             }
             const interpreterSrcFiles = srcInfo.getInterpreterSrcFiles();
             len = interpreterSrcFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[Interpreter] ${interpreterSrcFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[Interpreter] ${interpreterSrcFiles.getItem(i)}`);
             }
             const compilerFiles = srcInfo.getCompilerSrcFiles();
             len = compilerFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[Compiler] ${compilerFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[Compiler] ${compilerFiles.getItem(i)}`);
             }
             const manFiles = srcInfo.getManFiles();
             len = manFiles.getLenght();
             for (let i = 0; i < len; i++) {
-                console.log(`[MAN] ${manFiles.getItem(i)}`);
+                Console_1.Console.instance().writeLine(`[MAN] ${manFiles.getItem(i)}`);
             }
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Finish Lua ${this.project.getVersion().getString()} configuration`);
+            Console_1.Console.instance().writeLine(`[End] Finish Lua ${this.project.getVersion().getString()} configuration`);
             resolve();
         });
     }
@@ -45588,6 +45653,7 @@ const promises_1 = __nccwpck_require__(51455);
 const node_path_1 = __nccwpck_require__(76760);
 const SequentialPromises_1 = __nccwpck_require__(10923);
 const PucLuaPostInstallTarget_1 = __nccwpck_require__(75308);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCopyInstallableArtifactsTarget {
     constructor(project, parent) {
         this.project = project;
@@ -45595,7 +45661,7 @@ class PucLuaCopyInstallableArtifactsTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Copy Lua ${this.project.getVersion().getString()} installation files`);
+            Console_1.Console.instance().writeLine(`[Start] Copy Lua ${this.project.getVersion().getString()} installation files`);
             resolve();
         });
     }
@@ -45739,7 +45805,7 @@ class PucLuaCopyInstallableArtifactsTarget {
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Copy Lua ${this.project.getVersion().getString()} installation files`);
+            Console_1.Console.instance().writeLine(`[End] Copy Lua ${this.project.getVersion().getString()} installation files`);
             resolve();
         });
     }
@@ -45758,6 +45824,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaCreateInstallationDirectoriesTarget = void 0;
 const PucLuaCopyInstallableArtifactsTarget_1 = __nccwpck_require__(37032);
 const AbstractCreateDirectoriesTarget_1 = __nccwpck_require__(96763);
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaCreateInstallationDirectoriesTarget extends AbstractCreateDirectoriesTarget_1.AbstractCreateDirectoriesTarget {
     constructor(project, parent, buildInfo) {
         super([
@@ -45776,7 +45843,7 @@ class PucLuaCreateInstallationDirectoriesTarget extends AbstractCreateDirectorie
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Create installation directories for Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[Start] Create installation directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -45794,7 +45861,7 @@ class PucLuaCreateInstallationDirectoriesTarget extends AbstractCreateDirectorie
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Create installation directories for Lua ${this.project.getVersion().getString()}`);
+            Console_1.Console.instance().writeLine(`[End] Create installation directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -45805,12 +45872,13 @@ exports.PucLuaCreateInstallationDirectoriesTarget = PucLuaCreateInstallationDire
 /***/ }),
 
 /***/ 47336:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaFinishInstallationTarget = void 0;
+const Console_1 = __nccwpck_require__(40946);
 class PucLuaFinishInstallationTarget {
     constructor(project, parent) {
         this.project = project;
@@ -45818,7 +45886,7 @@ class PucLuaFinishInstallationTarget {
     }
     init() {
         return new Promise((resolve, reject) => {
-            console.log(`[Start] Finish Lua ${this.project.getVersion().getString()} installation`);
+            Console_1.Console.instance().writeLine(`[Start] Finish Lua ${this.project.getVersion().getString()} installation`);
             resolve();
         });
     }
@@ -45827,13 +45895,13 @@ class PucLuaFinishInstallationTarget {
     }
     execute() {
         return new Promise((resolve, reject) => {
-            console.log("<< done >>");
+            Console_1.Console.instance().writeLine("<< done >>");
             resolve();
         });
     }
     finalize() {
         return new Promise((resolve, reject) => {
-            console.log(`[End] Finish Lua ${this.project.getVersion().getString()} installation`);
+            Console_1.Console.instance().writeLine(`[End] Finish Lua ${this.project.getVersion().getString()} installation`);
             resolve();
         });
     }
@@ -45856,14 +45924,18 @@ exports.PucLuaFinishInstallationTarget = PucLuaFinishInstallationTarget;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PucLuaPostInstallTarget = void 0;
-const AbstractPkgConfigCMakeEnvVarsTarget_1 = __nccwpck_require__(98628);
+const AbstractUpdateLuaEnvVarsTarget_1 = __nccwpck_require__(86962);
 const PucLuaFinishInstallationTarget_1 = __nccwpck_require__(47336);
-class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.AbstractPkgConfigCMakeEnvVarsTarget {
+const Console_1 = __nccwpck_require__(40946);
+class PucLuaPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget_1.AbstractUpdateLuaEnvVarsTarget {
     constructor(project, parent) {
         super(project, parent);
     }
     getProjectInstallDir() {
         return this.getProject().getInstallDir();
+    }
+    getProjectInstallLibDir() {
+        return this.getProject().getInstallLibDir();
     }
     getProjectInstallBinDir() {
         return this.getProject().getInstallBinDir();
@@ -45874,7 +45946,7 @@ class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     init() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.getProject().getVersion();
-            console.log(`[Start] Post install for Lua ${projectVersion.getString()}`);
+            Console_1.Console.instance().writeLine(`[Start] Post install for Lua ${projectVersion.getString()}`);
             resolve();
         });
     }
@@ -45884,7 +45956,7 @@ class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget_1.Abst
     finalize() {
         return new Promise((resolve, reject) => {
             const projectVersion = this.getProject().getVersion();
-            console.log(`[End] Post install for Lua ${projectVersion.getString()}`);
+            Console_1.Console.instance().writeLine(`[End] Post install for Lua ${projectVersion.getString()}`);
             resolve();
         });
     }
@@ -45936,6 +46008,9 @@ class PucLuaProject {
     getStaticLibBuildDir() {
         return this.staticLibBuildDir;
     }
+    getRemotePatchesBuildDir() {
+        return this.remotePatchesBuildDir;
+    }
     getInstallIncludeDir() {
         return this.installIncludeDir;
     }
@@ -45973,6 +46048,7 @@ class PucLuaProject {
         this.libBuildDir = (0, node_path_1.join)(buildDir, "lib");
         this.sharedLibBuildDir = (0, node_path_1.join)(this.libBuildDir, "shared");
         this.staticLibBuildDir = (0, node_path_1.join)(this.libBuildDir, "static");
+        this.remotePatchesBuildDir = (0, node_path_1.join)(this.buildDir, "remote-patches");
         this.installIncludeDir = (0, node_path_1.join)(installDir, "include");
         this.installBinDir = (0, node_path_1.join)(installDir, "bin");
         this.installLibDir = (0, node_path_1.join)(installDir, "lib");
@@ -46028,7 +46104,7 @@ exports.PucLuaProject = PucLuaProject;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.LUA_54_VERSION = exports.LUA_53_VERSION = exports.LUA_52_VERSION = exports.LUA_51_VERSION = exports.PucLuaWorkVersion = exports.PucLuaReleaseVersion = exports.AbstractPucLuaVersion = void 0;
+exports.LUA_55_VERSION = exports.LUA_54_VERSION = exports.LUA_53_VERSION = exports.LUA_52_VERSION = exports.LUA_51_VERSION = exports.PucLuaWorkVersion = exports.PucLuaReleaseVersion = exports.AbstractPucLuaVersion = void 0;
 exports.parsePucLuaVersion = parsePucLuaVersion;
 const CompareVersions_1 = __nccwpck_require__(37654);
 const LATEST_LUA_RELEASE_VERSION = "5.4.8";
@@ -46036,9 +46112,11 @@ const CONVERT_LUA_RELEASE_VERSION = {
     "5.1": "5.1.5",
     "5.2": "5.2.4",
     "5.3": "5.3.6",
-    "5.4": LATEST_LUA_RELEASE_VERSION
+    "5.4": LATEST_LUA_RELEASE_VERSION,
+    "5.5": "5.5.0"
 };
 const LUA_RELEASES = {
+    "5.5.0": { "version": "5.5.0", "hash": { "algorithm": "sha256", "value": "57ccc32bbbd005cab75bcc52444052535af691789dba2b9016d5c50640d68b3d" } },
     "5.4.8": { "version": "5.4.8", "hash": { "algorithm": "sha256", "value": "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae" } },
     "5.4.7": { "version": "5.4.7", "hash": { "algorithm": "sha256", "value": "9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30" } },
     "5.4.6": { "version": "5.4.6", "hash": { "algorithm": "sha256", "value": "7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88" } },
@@ -46223,7 +46301,7 @@ function parsePucLuaVersion(version) {
                         const build = Number(workMatch[3]);
                         const suffix = workMatch[4];
                         const v = LUA_WORKS[pucLuaVersion];
-                        resolve(new PucLuaWorkVersion(major, minor, build, v.hash.algorithm, v.hash.value, suffix, workMatch[0].startsWith("5.5.0-")));
+                        resolve(new PucLuaWorkVersion(major, minor, build, v.hash.algorithm, v.hash.value, suffix, false));
                     }
                 }
                 else {
@@ -46311,10 +46389,12 @@ const LUA_5_1_1_VERSION = LUA_RELEASES["5.1.1"];
 const LUA_5_2_0_VERSION = LUA_RELEASES["5.2.0"];
 const LUA_5_3_0_VERSION = LUA_RELEASES["5.3.0"];
 const LUA_5_4_0_VERSION = LUA_RELEASES["5.4.0"];
+const LUA_5_5_0_VERSION = LUA_RELEASES["5.5.0"];
 exports.LUA_51_VERSION = new PucLuaReleaseVersion(5, 1, 1, LUA_5_1_1_VERSION.hash.algorithm, LUA_5_1_1_VERSION.hash.value);
 exports.LUA_52_VERSION = new PucLuaReleaseVersion(5, 2, 0, LUA_5_2_0_VERSION.hash.algorithm, LUA_5_2_0_VERSION.hash.value);
 exports.LUA_53_VERSION = new PucLuaReleaseVersion(5, 3, 0, LUA_5_3_0_VERSION.hash.algorithm, LUA_5_3_0_VERSION.hash.value);
 exports.LUA_54_VERSION = new PucLuaReleaseVersion(5, 4, 0, LUA_5_4_0_VERSION.hash.algorithm, LUA_5_4_0_VERSION.hash.value);
+exports.LUA_55_VERSION = new PucLuaReleaseVersion(5, 5, 0, LUA_5_5_0_VERSION.hash.algorithm, LUA_5_5_0_VERSION.hash.value);
 
 
 /***/ }),
@@ -46327,17 +46407,20 @@ exports.LUA_54_VERSION = new PucLuaReleaseVersion(5, 4, 0, LUA_5_4_0_VERSION.has
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AbstractApplyPatchesTarget = void 0;
 const node_path_1 = __nccwpck_require__(76760);
+const promises_1 = __nccwpck_require__(51455);
 const DefaultStdOutHandler_1 = __nccwpck_require__(50840);
 const ExecuteProcess_1 = __nccwpck_require__(56522);
 const FindGitForWindowsInstallDir_1 = __nccwpck_require__(95407);
 const FindProgram_1 = __nccwpck_require__(72437);
 const ReadOnlyArray_1 = __nccwpck_require__(32483);
 const CheckFiles_1 = __nccwpck_require__(68105);
+const DownloadFile_1 = __nccwpck_require__(43864);
 class AbstractApplyPatchesTarget {
-    constructor(project, parent, dir, patches) {
+    constructor(project, parent, dir, remotePatchesDir, patches) {
         this.project = project;
         this.parent = parent;
         this.dir = dir;
+        this.remotePatchesDir = remotePatchesDir;
         this.patches = new ReadOnlyArray_1.ReadOnlyArray(patches);
     }
     getProject() {
@@ -46353,35 +46436,52 @@ class AbstractApplyPatchesTarget {
         return new Promise((resolve, reject) => {
             if (this.patches.getLenght() > 0) {
                 const applyPatches = (patch) => {
-                    const file_iter = (i) => {
+                    const patches_iter = (i) => {
                         if (i < this.patches.getLenght()) {
                             const patchName = this.patches.getItem(i);
-                            const patchPath = (0, node_path_1.isAbsolute)(patchName) ? patchName : (0, node_path_1.join)(process.cwd(), patchName);
-                            (0, CheckFiles_1.checkFiles)([patchPath])
-                                .then(() => {
-                                (0, ExecuteProcess_1.executeProcess)(patch, {
-                                    cwd: this.dir,
-                                    args: [
-                                        "-Np1",
-                                        "--force",
-                                        "-i",
-                                        patchPath
-                                    ],
-                                    verbose: true,
-                                    stdout: DefaultStdOutHandler_1.defaultStdOutHandler
-                                })
-                                    .then(code => {
-                                    file_iter(i + 1);
+                            const processPatch = (patchPath) => {
+                                (0, CheckFiles_1.checkFiles)([patchPath])
+                                    .then(() => {
+                                    (0, ExecuteProcess_1.executeProcess)(patch, {
+                                        cwd: this.dir,
+                                        args: [
+                                            "-Np1",
+                                            "--force",
+                                            "-i",
+                                            patchPath
+                                        ],
+                                        verbose: true,
+                                        stdout: DefaultStdOutHandler_1.defaultStdOutHandler
+                                    })
+                                        .then(code => {
+                                        patches_iter(i + 1);
+                                    })
+                                        .catch(reject);
                                 })
                                     .catch(reject);
-                            })
-                                .catch(reject);
+                            };
+                            if (/^https?:\/\//.test(patchName)) {
+                                const patchPrefix = (0, node_path_1.join)(this.remotePatchesDir, "p-");
+                                (0, promises_1.mkdtemp)(patchPrefix)
+                                    .then(patchDir => {
+                                    (0, DownloadFile_1.downloadFile)(patchName, (0, node_path_1.join)(patchDir, "main.patch"))
+                                        .then(patchPath => {
+                                        processPatch(patchPath);
+                                    })
+                                        .catch(reject);
+                                })
+                                    .catch(reject);
+                            }
+                            else {
+                                const patchPath = (0, node_path_1.isAbsolute)(patchName) ? patchName : (0, node_path_1.join)(process.cwd(), patchName);
+                                processPatch(patchPath);
+                            }
                         }
                         else {
                             resolve();
                         }
                     };
-                    file_iter(0);
+                    patches_iter(0);
                 };
                 if (process.platform === 'win32') {
                     (0, FindProgram_1.findProgram)("patch", true)
@@ -46472,17 +46572,17 @@ exports.AbstractCreateDirectoriesTarget = AbstractCreateDirectoriesTarget;
 
 /***/ }),
 
-/***/ 98628:
+/***/ 86962:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AbstractPkgConfigCMakeEnvVarsTarget = void 0;
+exports.AbstractUpdateLuaEnvVarsTarget = void 0;
 const node_path_1 = __nccwpck_require__(76760);
 const GitHub_1 = __nccwpck_require__(65249);
 const SequentialPromises_1 = __nccwpck_require__(10923);
-class AbstractPkgConfigCMakeEnvVarsTarget {
+class AbstractUpdateLuaEnvVarsTarget {
     constructor(project, parent) {
         this.project = project;
         this.parent = parent;
@@ -46500,11 +46600,18 @@ class AbstractPkgConfigCMakeEnvVarsTarget {
     }
     execute() {
         return new Promise((resolve, reject) => {
-            (0, SequentialPromises_1.sequentialPromises)([
+            const changes = [
                 () => this.setConfigPathToGitHub("PKG_CONFIG_PATH", this.getProjectInstallPkgConfigDir()),
-                () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH", this.getProjectInstallDir()),
-                () => (0, GitHub_1.appendToGitHubPath)(this.getProjectInstallBinDir())
-            ])
+                () => this.setConfigPathToGitHub("CMAKE_PREFIX_PATH", this.getProjectInstallDir())
+            ];
+            if (process.platform === "darwin") {
+                changes.push(() => this.setConfigPathToGitHub("DYLD_LIBRARY_PATH", this.getProjectInstallLibDir()));
+            }
+            else if (process.platform !== "win32") {
+                changes.push(() => this.setConfigPathToGitHub("LD_LIBRARY_PATH", this.getProjectInstallLibDir()));
+            }
+            changes.push(() => (0, GitHub_1.appendToGitHubPath)(this.getProjectInstallBinDir()));
+            (0, SequentialPromises_1.sequentialPromises)(changes)
                 .then(_ => {
                 resolve();
             })
@@ -46518,7 +46625,7 @@ class AbstractPkgConfigCMakeEnvVarsTarget {
         return this.parent;
     }
 }
-exports.AbstractPkgConfigCMakeEnvVarsTarget = AbstractPkgConfigCMakeEnvVarsTarget;
+exports.AbstractUpdateLuaEnvVarsTarget = AbstractUpdateLuaEnvVarsTarget;
 
 
 /***/ }),
@@ -47824,14 +47931,15 @@ function compareVersions(v1, v2) {
 /***/ }),
 
 /***/ 50840:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultStdOutHandler = defaultStdOutHandler;
+const Console_1 = __nccwpck_require__(40946);
 function defaultStdOutHandler(chunk) {
-    process.stdout.write(chunk.toString());
+    Console_1.Console.instance().write(chunk.toString());
 }
 
 
@@ -47933,6 +48041,7 @@ exports.executeProcess = executeProcess;
 exports.getStdOutFromProcessExecution = getStdOutFromProcessExecution;
 exports.getFirstLineFromProcessExecution = getFirstLineFromProcessExecution;
 const node_child_process_1 = __nccwpck_require__(31421);
+const Console_1 = __nccwpck_require__(40946);
 function executeProcess(tool, opts) {
     return new Promise((resolve, reject) => {
         const spawnOpts = { cwd: opts === null || opts === void 0 ? void 0 : opts.cwd };
@@ -47942,7 +48051,7 @@ function executeProcess(tool, opts) {
             for (const a of opts.args) {
                 values.push(`"${a.replace(/"/g, "\\\"")}"`);
             }
-            console.log(values.join(" "));
+            Console_1.Console.instance().writeLine(values.join(" "));
         }
         if (opts && opts.stdout) {
             p.stdout.on("data", opts.stdout);
@@ -47973,7 +48082,7 @@ function getStdOutFromProcessExecution(tool, opts) {
             for (const a of opts.args) {
                 values.push(`"${a.replace(/"/g, "\\\"")}"`);
             }
-            console.log(values.join(" "));
+            Console_1.Console.instance().writeLine(values.join(" "));
         }
         p.stdout.on("data", (chunk) => {
             stdOutput.push((chunk.toString()));
@@ -91799,6 +91908,7 @@ const LuaRocksVersion_1 = __nccwpck_require__(93527);
 const LuaRocksProject_1 = __nccwpck_require__(11146);
 const SequentialPromises_1 = __nccwpck_require__(10923);
 const GitHubInput_1 = __nccwpck_require__(51621);
+const Console_1 = __nccwpck_require__(40946);
 function getTempDir() {
     return new Promise((promiseResolve, reject) => {
         const runnerTemp = process.env["RUNNER_TEMP"];
@@ -91947,10 +92057,10 @@ function main() {
 }
 main()
     .then(() => {
-    console.log("finished");
+    Console_1.Console.instance().writeLine("finished");
 })
     .catch(err => {
-    console.log(err);
+    Console_1.Console.instance().writeLine(err);
     process.exitCode = 1;
 });
 

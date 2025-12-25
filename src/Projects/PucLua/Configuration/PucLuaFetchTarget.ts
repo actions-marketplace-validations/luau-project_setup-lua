@@ -5,6 +5,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaApplyPatchesTarget } from "./PucLuaApplyPatchesTarget";
 import { PucLuaWorkVersion } from "../PucLuaVersion";
+import { Console } from "../../../Console";
 
 export class PucLuaFetchTarget extends AbstractFetchTarballTarget {
     private parent: ITarget | null;
@@ -25,7 +26,7 @@ export class PucLuaFetchTarget extends AbstractFetchTarballTarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Fetch Lua ${this.project.getVersion().getString()} source code`);
+            Console.instance().writeLine(`[Start] Fetch Lua ${this.project.getVersion().getString()} source code`);
             resolve();
         });
     }
@@ -51,7 +52,7 @@ export class PucLuaFetchTarget extends AbstractFetchTarballTarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Fetch Lua ${this.project.getVersion().getString()} source code`);
+            Console.instance().writeLine(`[End] Fetch Lua ${this.project.getVersion().getString()} source code`);
             resolve();
         });
     }

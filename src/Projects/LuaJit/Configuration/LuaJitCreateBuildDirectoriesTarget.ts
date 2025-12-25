@@ -3,19 +3,23 @@ import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
 import { AbstractCreateDirectoriesTarget } from "../../Targets/AbstractCreateDirectoriesTarget";
 import { LuaJitFetchTarget } from "./LuaJitFetchTarget";
+import { Console } from "../../../Console";
 
 export class LuaJitCreateBuildDirectoriesTarget extends AbstractCreateDirectoriesTarget {
     private parent: ITarget | null;
     private project: LuaJitProject;
     constructor(project: LuaJitProject, parent: ITarget | null) {
-        super([project.getBuildDir()]);
+        super([
+            project.getBuildDir(),
+            project.getRemotePatchesBuildDir()
+        ]);
         this.project = project;
         this.parent = parent;
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -31,7 +35,7 @@ export class LuaJitCreateBuildDirectoriesTarget extends AbstractCreateDirectorie
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Create build directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

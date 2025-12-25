@@ -5,14 +5,15 @@ import { LuaRocksProject } from "../LuaRocksProject";
 import { LuaRocksConfigureSourcesTarget } from "./LuaRocksConfigureSourcesTarget";
 import { LuaRocksFetchTarget } from "./LuaRocksFetchTarget";
 import { LuaRocksSourcesInfo } from "./LuaRocksSourcesInfo";
+import { Console } from "../../../Console";
 
 export class LuaRocksApplyPatchesTarget extends AbstractApplyPatchesTarget {
     constructor(project: LuaRocksProject, parent: LuaRocksFetchTarget) {
-        super(project, parent, parent.getLuaRocksSourcesInfo().getDir(), ToolchainEnvironmentVariables.instance().getLuaRocksPatches());
+        super(project, parent, parent.getLuaRocksSourcesInfo().getDir(), project.getRemotePatchesBuildDir(), ToolchainEnvironmentVariables.instance().getLuaRocksPatches());
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Apply patches on LuaRocks ${(<LuaRocksProject>this.getProject()).getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Apply patches on LuaRocks ${(<LuaRocksProject>this.getProject()).getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -24,7 +25,7 @@ export class LuaRocksApplyPatchesTarget extends AbstractApplyPatchesTarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Apply patches on LuaRocks ${(<LuaRocksProject>this.getProject()).getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Apply patches on LuaRocks ${(<LuaRocksProject>this.getProject()).getVersion().getIdentifier()}`);
             resolve();
         });
     }

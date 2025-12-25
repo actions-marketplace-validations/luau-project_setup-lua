@@ -15,6 +15,7 @@ import { ToolchainEnvironmentVariables } from "../../../Toolchains/ToolchainEnvi
 import { compareVersions } from "../../../Util/CompareVersions";
 import { GitHubInput } from "../../../Util/GitHubInput";
 import { defaultStdOutHandler } from "../../../Util/DefaultStdOutHandler";
+import { Console } from "../../../Console";
 
 export class LuaJitBuildTarget implements ITarget {
     private project: LuaJitProject;
@@ -38,7 +39,7 @@ export class LuaJitBuildTarget implements ITarget {
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -315,7 +316,7 @@ export class LuaJitBuildTarget implements ITarget {
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Build ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

@@ -3,6 +3,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaBuildInfo } from "./PucLuaBuildInfo";
 import { PucLuaCreatePkgConfigTarget } from "./PucLuaCreatePkgConfigTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaFinishBuildingTarget implements ITarget {
     private parent: PucLuaCreatePkgConfigTarget;
@@ -13,7 +14,7 @@ export class PucLuaFinishBuildingTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Finish the build of Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[Start] Finish the build of Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -23,21 +24,21 @@ export class PucLuaFinishBuildingTarget implements ITarget {
     execute(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const buildInfo = <PucLuaBuildInfo>this.project.buildResult().getValue();
-            console.log(`Shared Library: ${buildInfo.getSharedLibrary()}`);
-            console.log(`Static Library: ${buildInfo.getStaticLibrary()}`);
-            console.log(`Interpreter: ${buildInfo.getInterpreter()}`);
-            console.log(`Compiler: ${buildInfo.getCompiler()}`);
-            console.log(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
+            Console.instance().writeLine(`Shared Library: ${buildInfo.getSharedLibrary()}`);
+            Console.instance().writeLine(`Static Library: ${buildInfo.getStaticLibrary()}`);
+            Console.instance().writeLine(`Interpreter: ${buildInfo.getInterpreter()}`);
+            Console.instance().writeLine(`Compiler: ${buildInfo.getCompiler()}`);
+            Console.instance().writeLine(`PkgConfig: ${buildInfo.getPkgConfigFile()}`);
             const impLib = buildInfo.getImportLibrary();
             if (impLib) {
-                console.log(`Import Library: ${impLib}`);
+                Console.instance().writeLine(`Import Library: ${impLib}`);
             }
             resolve();
         });
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Finish the build of Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[End] Finish the build of Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }

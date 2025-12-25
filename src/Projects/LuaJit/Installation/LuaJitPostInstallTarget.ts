@@ -1,14 +1,18 @@
 import { ITarget } from "../../Targets/ITarget";
 import { LuaJitProject } from "../LuaJitProject";
-import { AbstractPkgConfigCMakeEnvVarsTarget } from "../../Targets/AbstractPkgConfigCMakeEnvVarsTarget";
+import { AbstractUpdateLuaEnvVarsTarget } from "../../Targets/AbstractUpdateLuaEnvVarsTarget";
 import { LuaJitFinishInstallationTarget } from "./LuaJitFinishInstallationTarget";
+import { Console } from "../../../Console";
 
-export class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget {
+export class LuaJitPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     constructor(project: LuaJitProject, parent: ITarget | null) {
         super(project, parent);
     }
     getProjectInstallDir(): string {
         return (<LuaJitProject>this.getProject()).getInstallDir();
+    }
+    getProjectInstallLibDir(): string {
+        return (<LuaJitProject>this.getProject()).getInstallLibDir();
     }
     getProjectInstallBinDir(): string {
         return (<LuaJitProject>this.getProject()).getInstallBinDir();
@@ -19,7 +23,7 @@ export class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<LuaJitProject>this.getProject()).getVersion();
-            console.log(`[Start] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -29,7 +33,7 @@ export class LuaJitPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<LuaJitProject>this.getProject()).getVersion();
-            console.log(`[End] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Post install for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

@@ -4,6 +4,7 @@ import { PucLuaProject } from "../PucLuaProject";
 import { PucLuaCopyInstallableArtifactsTarget } from "./PucLuaCopyInstallableArtifactsTarget";
 import { PucLuaBuildInfo } from "../Building/PucLuaBuildInfo";
 import { AbstractCreateDirectoriesTarget } from "../../Targets/AbstractCreateDirectoriesTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaCreateInstallationDirectoriesTarget extends AbstractCreateDirectoriesTarget {
     private parent: ITarget | null;
@@ -26,7 +27,7 @@ export class PucLuaCreateInstallationDirectoriesTarget extends AbstractCreateDir
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Create installation directories for Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[Start] Create installation directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }
@@ -44,7 +45,7 @@ export class PucLuaCreateInstallationDirectoriesTarget extends AbstractCreateDir
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Create installation directories for Lua ${this.project.getVersion().getString()}`);
+            Console.instance().writeLine(`[End] Create installation directories for Lua ${this.project.getVersion().getString()}`);
             resolve();
         });
     }

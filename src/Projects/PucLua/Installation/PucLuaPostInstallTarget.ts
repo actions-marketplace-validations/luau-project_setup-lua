@@ -1,14 +1,18 @@
 import { ITarget } from "../../Targets/ITarget";
 import { PucLuaProject } from "../PucLuaProject";
-import { AbstractPkgConfigCMakeEnvVarsTarget } from "../../Targets/AbstractPkgConfigCMakeEnvVarsTarget";
+import { AbstractUpdateLuaEnvVarsTarget } from "../../Targets/AbstractUpdateLuaEnvVarsTarget";
 import { PucLuaFinishInstallationTarget } from "./PucLuaFinishInstallationTarget";
+import { Console } from "../../../Console";
 
-export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget {
+export class PucLuaPostInstallTarget extends AbstractUpdateLuaEnvVarsTarget {
     constructor(project: PucLuaProject, parent: ITarget | null) {
         super(project, parent);
     }
     getProjectInstallDir(): string {
         return (<PucLuaProject>this.getProject()).getInstallDir();
+    }
+    getProjectInstallLibDir(): string {
+        return (<PucLuaProject>this.getProject()).getInstallLibDir();
     }
     getProjectInstallBinDir(): string {
         return (<PucLuaProject>this.getProject()).getInstallBinDir();
@@ -19,7 +23,7 @@ export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<PucLuaProject>this.getProject()).getVersion();
-            console.log(`[Start] Post install for Lua ${projectVersion.getString()}`);
+            Console.instance().writeLine(`[Start] Post install for Lua ${projectVersion.getString()}`);
             resolve();
         });
     }
@@ -29,7 +33,7 @@ export class PucLuaPostInstallTarget extends AbstractPkgConfigCMakeEnvVarsTarget
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = (<PucLuaProject>this.getProject()).getVersion();
-            console.log(`[End] Post install for Lua ${projectVersion.getString()}`);
+            Console.instance().writeLine(`[End] Post install for Lua ${projectVersion.getString()}`);
             resolve();
         });
     }

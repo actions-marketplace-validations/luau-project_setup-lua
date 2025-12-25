@@ -9,6 +9,7 @@ import { PucLuaSourcesInfo } from "./PucLuaSourcesInfo";
 import { LUA_52_VERSION } from "../PucLuaVersion";
 import { PucLuaFinishConfigurationTarget } from "./PucLuaFinishConfigurationTarget";
 import { PucLuaApplyPatchesTarget } from "./PucLuaApplyPatchesTarget";
+import { Console } from "../../../Console";
 
 export class PucLuaConfigureSourcesTarget implements ITarget {
     private parent: PucLuaApplyPatchesTarget;
@@ -32,7 +33,7 @@ export class PucLuaConfigureSourcesTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
+            Console.instance().writeLine(`[Start] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
             resolve();
         });
     }
@@ -265,7 +266,7 @@ export class PucLuaConfigureSourcesTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
+            Console.instance().writeLine(`[End] Configure source code for the Lua ${this.project.getVersion().getString()} library`);
             resolve();
         });
     }

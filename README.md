@@ -93,17 +93,13 @@ In order to skip LuaRocks installation, use `none` as the value for the `luarock
 
 > [!TIP]
 > 
-> `setup-lua` also handles work versions of Lua (&ge; 5.1.1):
->    * current work: [https://lua.org/work/](https://lua.org/work/)
->    * legacy work: [https://lua.org/work/old/](https://lua.org/work/old/)
-
-Thus, you can test your project on the upcoming Lua 5.5.0. However, be aware that LuaRocks does not support it yet:
+> To use Lua 5.5.0 recently released, since LuaRocks does not support it yet, you have to skip LuaRocks installation:
 
 ```yaml
-      - name: Install Lua 5.5.0 (RC4)
+      - name: Install Lua
         uses: luau-project/setup-lua@v1
         with:
-          lua-version: 5.5.0-rc4
+          lua-version: 5.5
           luarocks-version: none
 ```
 
@@ -129,6 +125,22 @@ Use the syntax `openresty@ref` with `ref` meaning a branch name, a tag or the `s
         with:
           lua-version: openresty@v2.1-20250826
           luarocks-version: 3.12.2
+```
+
+### Install work versions of Lua
+
+> [!TIP]
+> 
+> `setup-lua` also handles work versions of Lua (&ge; 5.1.1):
+>    * current work: [https://lua.org/work/](https://lua.org/work/)
+>    * legacy work: [https://lua.org/work/old/](https://lua.org/work/old/)
+
+```yaml
+      - name: Install Lua 5.4.7 (RC3)
+        uses: luau-project/setup-lua@v1
+        with:
+          lua-version: 5.4.7-rc3
+          luarocks-version: 3.12.1
 ```
 
 ## Working modes

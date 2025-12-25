@@ -8,6 +8,7 @@ import { PucLuaCompileInterpreterTarget } from "./PucLuaCompileInterpreterTarget
 import { isGccLikeToolchain } from "../../../Toolchains/GCC/IGccLikeToolchain";
 import { PucLuaCompileCompilerTarget } from "./PucLuaCompileCompilerTarget";
 import { ToolchainEnvironmentVariables } from "../../../Toolchains/ToolchainEnvironmentVariables";
+import { Console } from "../../../Console";
 
 export class PucLuaLinkInterpreterTarget implements ITarget {
     private parent: PucLuaCompileInterpreterTarget;
@@ -21,7 +22,7 @@ export class PucLuaLinkInterpreterTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Link Lua ${this.project.getVersion().getString()} interpreter`);
+            Console.instance().writeLine(`[Start] Link Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }
@@ -130,7 +131,7 @@ export class PucLuaLinkInterpreterTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Link Lua ${this.project.getVersion().getString()} interpreter`);
+            Console.instance().writeLine(`[End] Link Lua ${this.project.getVersion().getString()} interpreter`);
             resolve();
         });
     }

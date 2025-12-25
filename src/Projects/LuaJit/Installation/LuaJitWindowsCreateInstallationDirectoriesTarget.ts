@@ -4,6 +4,7 @@ import { ITarget } from "../../Targets/ITarget";
 import { LuaJitWindowsBuildInfo } from "../Building/LuaJitWindowsBuildInfo";
 import { LuaJitProject } from "../LuaJitProject";
 import { LuaJitWindowsCopyInstallableArtifactsTarget } from "./LuaJitWindowsCopyInstallableArtifactsTarget";
+import { Console } from "../../../Console";
 
 export class LuaJitWindowsCreateInstallationDirectoriesTarget extends AbstractCreateDirectoriesTarget {
     private project: LuaJitProject;
@@ -27,7 +28,7 @@ export class LuaJitWindowsCreateInstallationDirectoriesTarget extends AbstractCr
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[Start] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[Start] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }
@@ -46,7 +47,7 @@ export class LuaJitWindowsCreateInstallationDirectoriesTarget extends AbstractCr
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             const projectVersion = this.project.getVersion();
-            console.log(`[End] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
+            Console.instance().writeLine(`[End] Create installation directories for ${projectVersion.getName()} ${projectVersion.getRef()}`);
             resolve();
         });
     }

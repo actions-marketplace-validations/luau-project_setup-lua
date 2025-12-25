@@ -7,6 +7,7 @@ import { LuaRocksSourcesInfo, LuaRocksUnixSourcesInfoDetails } from "../Configur
 import { LuaRocksProject } from "../LuaRocksProject";
 import { LuaRocksUnixBuildInfo, LuaRocksWindowsBuildInfo } from "./LuaRocksBuildInfo";
 import { LuaRocksFinishBuildingTarget } from "./LuaRocksFinishBuildingTarget";
+import { Console } from "../../../Console";
 
 export class LuaRocksBuildTarget implements ITarget {
     private parent: ITarget | null;
@@ -19,7 +20,7 @@ export class LuaRocksBuildTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -70,7 +71,7 @@ export class LuaRocksBuildTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Build LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }

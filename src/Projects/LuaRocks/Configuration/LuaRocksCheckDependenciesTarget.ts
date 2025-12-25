@@ -4,6 +4,7 @@ import { IProject } from "../../IProject";
 import { ITarget } from "../../Targets/ITarget";
 import { LuaRocksProject } from "../LuaRocksProject";
 import { LuaRocksFetchTarget } from "./LuaRocksFetchTarget";
+import { Console } from "../../../Console";
 
 export class LuaRocksCheckDependenciesTarget implements ITarget {
     private parent: ITarget | null;
@@ -14,7 +15,7 @@ export class LuaRocksCheckDependenciesTarget implements ITarget {
     }
     init(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[Start] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[Start] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
@@ -48,7 +49,7 @@ export class LuaRocksCheckDependenciesTarget implements ITarget {
     }
     finalize(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            console.log(`[End] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
+            Console.instance().writeLine(`[End] Check dependencies for LuaRocks ${this.project.getVersion().getIdentifier()}`);
             resolve();
         });
     }
