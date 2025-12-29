@@ -22,6 +22,7 @@ jobs:
           - 5.2
           - 5.3
           - 5.4
+          - 5.5
           - luajit
           - openresty
         is-msvc:
@@ -88,18 +89,6 @@ In order to skip LuaRocks installation, use `none` as the value for the `luarock
         uses: luau-project/setup-lua@v1
         with:
           lua-version: 5.4.7
-          luarocks-version: none
-```
-
-> [!TIP]
-> 
-> To use Lua 5.5.0 recently released, since LuaRocks does not support it yet, you have to skip LuaRocks installation:
-
-```yaml
-      - name: Install Lua
-        uses: luau-project/setup-lua@v1
-        with:
-          lua-version: 5.5
           luarocks-version: none
 ```
 
