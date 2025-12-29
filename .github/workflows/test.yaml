@@ -278,13 +278,14 @@ jobs:
 
       - name: Patch lua-zlib rockspec to build on Lua 5.5+
         shell: pwsh
+        working-directory: lua-zlib-1.3
         run: |
-          if ("${{ matrix.lua-version }}" -match "^(\d+)\.(\d+)(\.\d+)?$")
+          if ("${{ matrix.lua-version }}" -match "^(\d+)\.(\d+)(\.\d+)?")
           {
             $major = [int]::Parse($Matches[1]);
             $minor = [int]::Parse($Matches[2]);
 
-            if ([System.Version]::new("${{ matrix.lua-version }}") -ge [System.Version]::new("5.5"))
+            if ([System.Version]::new("${major}.${minor}") -ge [System.Version]::new("5.5"))
             {
               $rockspecTxt = (Get-Content "lua-zlib-scm-0.rockspec") -replace "5.4", "${major}.${minor}";
               Set-Content "lua-zlib-scm-0.rockspec" $rockspecTxt -NoNewline;
