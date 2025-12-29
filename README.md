@@ -141,5 +141,17 @@ In order to ease navigation and avoid excess of information, a complete referenc
 1. [GitHub Actions docs](./docs/GitHub.md);
 2. [CLI docs](./docs/CLI.md).
 
+## Security
+
+Have you found a security issue on this software? Visit the [security](./SECURITY.md) page for instructions to report privately.
+
+## Contributing
+
+Do you want to fix a bug or have an idea to improve this project? See the [contribution](./CONTRIBUTING.md) page.
+
+## History
+
+Browse the [changelog](./CHANGELOG.md).
+
 ---
 [Back to Top](#overview)
