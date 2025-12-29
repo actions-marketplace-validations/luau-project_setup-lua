@@ -1,3 +1,8 @@
+## setup-lua v1.0.9
+
+* Added support for LuaRocks 3.13.0;
+* Turned Lua 5.5.0 the default version when it is omitted by the user.
+
 ## setup-lua v1.0.8
 
 * Added support to apply remote patches to Lua / LuaJIT / OpenResty / LuaRocks after fetching the source code;
