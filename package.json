@@ -1,6 +1,6 @@
 {
   "name": "setup-lua",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "devDependencies": {
     "@actions/core": "1.11.1",
     "@actions/cache": "4.1.0",
