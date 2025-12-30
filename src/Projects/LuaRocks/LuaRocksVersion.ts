@@ -5,7 +5,7 @@ export interface ILuaRocksVersion {
     getIdentifier(): string;
 }
 
-const LATEST_LUAROCKS = "3.12.2";
+const LATEST_LUAROCKS = "3.13.0";
 
 interface LuaRocksReleaseVersionHash {
     algorithm: string;
@@ -19,25 +19,27 @@ interface LuaRocksReleaseVersionInfo {
 }
 
 const LUAROCKS_RELEASES_WINDOWS_X86: {[key: string]: LuaRocksReleaseVersionInfo} = {
+    "3.9.1": { "filename": "luarocks-3.9.1-windows-32.zip", "version": "3.9.1", "hash": { "algorithm": "sha256", "value": "1b473fd3b9494cec31d98f7642babf12cc832551fd69fb7081e8baf4c54e0fa5" } },
+    "3.9.2": { "filename": "luarocks-3.9.2-windows-32.zip", "version": "3.9.2", "hash": { "algorithm": "sha256", "value": "e7bf11b9f7d3942db806b3f57d7dfacbe4f7a5b558f3e200b061a1d6e1f62255" } },
     "3.10.0": { "filename": "luarocks-3.10.0-windows-32.zip", "version": "3.10.0", "hash": { "algorithm": "sha256", "value": "51058b21221dd96642de16d8d17967086761409c257c6d6bb32741dc2243ce84" } },
     "3.11.0": { "filename": "luarocks-3.11.0-windows-32.zip", "version": "3.11.0", "hash": { "algorithm": "sha256", "value": "64014ff939510614c5836b678f121b39a626f56bc5c88366ccbc130deacd1637" } },
     "3.11.1": { "filename": "luarocks-3.11.1-windows-32.zip", "version": "3.11.1", "hash": { "algorithm": "sha256", "value": "44c7034d720a3767df964683722bd303311db9dabed11773dafbfa96add2eda7" } },
     "3.12.0": { "filename": "luarocks-3.12.0-windows-32.zip", "version": "3.12.0", "hash": { "algorithm": "sha256", "value": "f70344d7e88102ebe12c1b2b5c153f2e32fcaf663a90d12fb6cc2b994054ffe0" } },
     "3.12.1": { "filename": "luarocks-3.12.1-windows-32.zip", "version": "3.12.1", "hash": { "algorithm": "sha256", "value": "bf73b9f3576f20d47aeeaa5bee5adac8b4cd7ec3bae8534906735b2bd34bba3e" } },
     "3.12.2": { "filename": "luarocks-3.12.2-windows-32.zip", "version": "3.12.2", "hash": { "algorithm": "sha256", "value": "514f8a9700a98ec11a48adc21bb3afa8a8443018640e3221e124834f056bf6f4" } },
-    "3.9.1": { "filename": "luarocks-3.9.1-windows-32.zip", "version": "3.9.1", "hash": { "algorithm": "sha256", "value": "1b473fd3b9494cec31d98f7642babf12cc832551fd69fb7081e8baf4c54e0fa5" } },
-    "3.9.2": { "filename": "luarocks-3.9.2-windows-32.zip", "version": "3.9.2", "hash": { "algorithm": "sha256", "value": "e7bf11b9f7d3942db806b3f57d7dfacbe4f7a5b558f3e200b061a1d6e1f62255" } }
+    "3.13.0": { "filename": "luarocks-3.13.0-windows-32.zip", "version": "3.13.0", "hash": { "algorithm": "sha256", "value": "84b31cd1c870ee125d7b6ca0052d5c32305ee05d227222bb28a2fbf440ac66b9" } }
 }
 
 const LUAROCKS_RELEASES_WINDOWS_X64: {[key: string]: LuaRocksReleaseVersionInfo} = {
+    "3.9.1": { "filename": "luarocks-3.9.1-windows-64.zip", "version": "3.9.1", "hash": { "algorithm": "sha256", "value": "f41218504c2c7a0335793cb5e0c0b2295972e261d38d21bdd4045a0c6fc1716d" } },
+    "3.9.2": { "filename": "luarocks-3.9.2-windows-64.zip", "version": "3.9.2", "hash": { "algorithm": "sha256", "value": "ab7e34332eedd6270b97f44df462e4584d3a60377205d88ea2806ecc547f074f" } },
     "3.10.0": { "filename": "luarocks-3.10.0-windows-64.zip", "version": "3.10.0", "hash": { "algorithm": "sha256", "value": "fe0bc950187f67e22f237bc144e92a01993128749fd9adfc1764a6b4f4ca900d" } },
     "3.11.0": { "filename": "luarocks-3.11.0-windows-64.zip", "version": "3.11.0", "hash": { "algorithm": "sha256", "value": "a638ea4c8e858106e8e2598e50e9b3fd563c111b44c36d33fe0f0e64d9f42685" } },
     "3.11.1": { "filename": "luarocks-3.11.1-windows-64.zip", "version": "3.11.1", "hash": { "algorithm": "sha256", "value": "c71dba3d03e12305e9ccd022c621c8869aba3d124d9249e214aed5c16f3682a3" } },
     "3.12.0": { "filename": "luarocks-3.12.0-windows-64.zip", "version": "3.12.0", "hash": { "algorithm": "sha256", "value": "76aa3d4943e1d5204f311b232d6b6b72eb00027c54968643b5571d6ec56db57c" } },
     "3.12.1": { "filename": "luarocks-3.12.1-windows-64.zip", "version": "3.12.1", "hash": { "algorithm": "sha256", "value": "8106307ab7fd1a87cc4c6c7898b15231a35ed0353426e15eb0e060cd12ab34ad" } },
     "3.12.2": { "filename": "luarocks-3.12.2-windows-64.zip", "version": "3.12.2", "hash": { "algorithm": "sha256", "value": "d3f4ddda6926618cadf560170a7c18a5ceead5997ba10832cd0e3b624c7de886" } },
-    "3.9.1": { "filename": "luarocks-3.9.1-windows-64.zip", "version": "3.9.1", "hash": { "algorithm": "sha256", "value": "f41218504c2c7a0335793cb5e0c0b2295972e261d38d21bdd4045a0c6fc1716d" } },
-    "3.9.2": { "filename": "luarocks-3.9.2-windows-64.zip", "version": "3.9.2", "hash": { "algorithm": "sha256", "value": "ab7e34332eedd6270b97f44df462e4584d3a60377205d88ea2806ecc547f074f" } }
+    "3.13.0": { "filename": "luarocks-3.13.0-windows-64.zip", "version": "3.13.0", "hash": { "algorithm": "sha256", "value": "0897ade5d459d55cd1962a948153745a6749feb345403c68aaa9207388557ab9" } }
 }
 
 const LUAROCKS_RELEASES_UNIX: {[key: string]: LuaRocksReleaseVersionInfo} = {
@@ -67,7 +69,8 @@ const LUAROCKS_RELEASES_UNIX: {[key: string]: LuaRocksReleaseVersionInfo} = {
     "3.11.1": { "filename": "luarocks-3.11.1.tar.gz", "version": "3.11.1", "hash": { "algorithm": "sha256", "value": "c3fb3d960dffb2b2fe9de7e3cb004dc4d0b34bb3d342578af84f84325c669102" } },
     "3.12.0": { "filename": "luarocks-3.12.0.tar.gz", "version": "3.12.0", "hash": { "algorithm": "sha256", "value": "3d4c8acddf9b975e77da68cbf748d5baf483d0b6e9d703a844882db25dd61cdf" } },
     "3.12.1": { "filename": "luarocks-3.12.1.tar.gz", "version": "3.12.1", "hash": { "algorithm": "sha256", "value": "f56b85a2a7a481f0321845807b79a05237860b04e4a9d186da632770029b3290" } },
-    "3.12.2": { "filename": "luarocks-3.12.2.tar.gz", "version": "3.12.2", "hash": { "algorithm": "sha256", "value": "b0e0c85205841ddd7be485f53d6125766d18a81d226588d2366931e9a1484492" } }
+    "3.12.2": { "filename": "luarocks-3.12.2.tar.gz", "version": "3.12.2", "hash": { "algorithm": "sha256", "value": "b0e0c85205841ddd7be485f53d6125766d18a81d226588d2366931e9a1484492" } },
+    "3.13.0": { "filename": "luarocks-3.13.0.tar.gz", "version": "3.13.0", "hash": { "algorithm": "sha256", "value": "245bf6ec560c042cb8948e3d661189292587c5949104677f1eecddc54dbe7e37" } }
 }
 
 export function parseLuaRocksVersion(version: string): Promise<ILuaRocksVersion | undefined> {

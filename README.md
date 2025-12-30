@@ -22,6 +22,7 @@ jobs:
           - 5.2
           - 5.3
           - 5.4
+          - 5.5
           - luajit
           - openresty
         is-msvc:
@@ -91,18 +92,6 @@ In order to skip LuaRocks installation, use `none` as the value for the `luarock
           luarocks-version: none
 ```
 
-> [!TIP]
-> 
-> To use Lua 5.5.0 recently released, since LuaRocks does not support it yet, you have to skip LuaRocks installation:
-
-```yaml
-      - name: Install Lua
-        uses: luau-project/setup-lua@v1
-        with:
-          lua-version: 5.5
-          luarocks-version: none
-```
-
 ### Install specific LuaJIT and LuaRocks version
 
 Use the syntax `luajit@ref` with `ref` meaning a branch name, a tag or the `sha` of a commit. The example below installs LuaJIT from the commit `871db2c84ecefd70a850e03a6c340214a81739f0`: 
@@ -151,6 +140,18 @@ In order to ease navigation and avoid excess of information, a complete referenc
 
 1. [GitHub Actions docs](./docs/GitHub.md);
 2. [CLI docs](./docs/CLI.md).
+
+## Security
+
+Have you found a security issue on this software? Visit the [security](./SECURITY.md) page for instructions to report privately.
+
+## Contributing
+
+Do you want to fix a bug or have an idea to improve this project? See the [contribution](./CONTRIBUTING.md) page.
+
+## History
+
+Browse the [changelog](./CHANGELOG.md).
 
 ---
 [Back to Top](#overview)

@@ -1,13 +1,13 @@
 import { compareVersions } from "../../Util/CompareVersions";
 
-const LATEST_LUA_RELEASE_VERSION = "5.4.8";
+const LATEST_LUA_RELEASE_VERSION = "5.5.0";
 
 const CONVERT_LUA_RELEASE_VERSION: {[key: string]: string} = {
     "5.1": "5.1.5",
     "5.2": "5.2.4",
     "5.3": "5.3.6",
-    "5.4": LATEST_LUA_RELEASE_VERSION,
-    "5.5": "5.5.0"
+    "5.4": "5.4.8",
+    "5.5": LATEST_LUA_RELEASE_VERSION
 };
 
 interface LuaVersionHash {
